@@ -8,6 +8,7 @@ const colors = {
   no_account: '#BEBEBE',
   inputFocus: '#7F7E81',
   plan_color: '#2C2C2C',
+  bottom_tabs: 'rgba(0, 0, 0, 0.57)',
 };
 
 export default colors;

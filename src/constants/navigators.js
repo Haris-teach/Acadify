@@ -6,3 +6,4 @@ export const PLAN_SCREEN = 'PLAN_SCREEN';
 export const HOME_SCREEN = 'HOME_SCREEN';
 export const CREDIT_CARD = 'CREDIT_CARD';
 export const ADD_CARD = 'ADD_CARD';
+export const MY_TABS = 'MY_TABS';
