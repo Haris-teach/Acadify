@@ -1,6 +1,6 @@
 //================================ React Native Imported Files ======================================//
 
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,9 @@ import {
   StatusBar,
 } from 'react-native';
 import {TextInput} from 'react-native-paper';
+import {useDispatch} from 'react-redux';
+import {widthPercentageToDP as wp} from "react-native-responsive-screen";
+import PhoneInput from "react-native-phone-number-input";
 
 //================================ Local Imported Files ======================================//
 
@@ -20,24 +23,31 @@ import colors from '../../../assets/colors/colors';
 import fonts from '../../../assets/fonts/fonts';
 import Toast from 'react-native-simple-toast';
 import AppHeader from '../../../components/AppHeader';
-import images from '../../../assets/images/images';
 import {LOGIN_SCREEN, PLAN_SCREEN} from '../../../constants/navigators';
 import * as ApiDataActions from '../../../../redux/store/actions/ApiData';
-import {useDispatch} from 'react-redux';
 
 const SignUpScreen = props => {
   const dispatch = useDispatch();
+  const phoneInput = useRef();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [formattedValue, setFormattedValue] = useState("");
+  const [valid, setValid] = useState(false);
+  const [showMessage, setShowMessage] = useState(false);
 
   const onPressSignUp = () => {
+    console.log('Data',formattedValue)
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     let testAddress = /^[^-\s][a-zA-Z_\s-]+$/;
     let password_Reg =
       /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[_#?!@$%^&*-]).{6,}$/;
+    const checkValid = phoneInput.current?.isValidNumber(phoneNumber);
+    setShowMessage(true);
+    setValid(checkValid ? checkValid : false)
+
     if (firstName === '' || firstName === ' ') {
       Toast.show('Please Enter First Name', Toast.LONG);
     } else if (testAddress.test(firstName) !== true) {
@@ -61,8 +71,8 @@ const SignUpScreen = props => {
       Toast.show('Password must have 8 characters long', Toast.LONG);
     } else if (phoneNumber === '' || phoneNumber === ' ') {
       Toast.show('Please Enter Phone Number', Toast.LONG);
-    } else if (phoneNumber.length < 11) {
-      Toast.show('PhoneNumber must have 11 digits long', Toast.LONG);
+    } else if (valid === false) {
+      Toast.show('Please Enter Valid Phone Number', Toast.LONG);
     } else {
       let data = {
         firstName: firstName,
@@ -70,7 +80,7 @@ const SignUpScreen = props => {
         email: email,
         password: password,
         userName: firstName + lastName,
-        phoneNumber: phoneNumber,
+        phoneNumber: formattedValue,
       };
       dispatch(ApiDataActions.SetSignUpData(data));
       props.navigation.navigate(PLAN_SCREEN);
@@ -200,35 +210,27 @@ const SignUpScreen = props => {
             />
           </View>
           <View style={styles.inputSection}>
-            <TextInput
-              style={styles.inputText}
-              label="Phone Number"
-              mode={'outlined'}
-              selectionColor={colors.white}
-              theme={{
-                roundness: 6,
-                colors: {
-                  primary: colors.inputFocus,
-                  placeholder: colors.white,
-                  text: colors.white,
-                },
-                fonts: {
-                  regular: {
-                    fontFamily: fonts.regular,
-                  },
-                },
-              }}
-              maxLength={11}
-              outlineColor={colors.app_border}
-              keyboardType={'phone-pad'}
-              underlineColorAndroid="transparent"
-              onChangeText={text => setPhoneNumber(text)}
-              value={phoneNumber}
+            <PhoneInput
+                ref={phoneInput}
+                defaultValue={phoneNumber}
+                defaultCode="US"
+                layout="first"
+                onChangeText={(text) => {
+                  setPhoneNumber(text);
+                }}
+                onChangeFormattedText={(text) => {
+                  setFormattedValue(text);
+                }}
+                disableArrowIcon={true}
+                textContainerStyle={{backgroundColor:colors.app_background,borderRadius:wp(2)}}
+                codeTextStyle={{color:colors.white}}
+                textInputProps={{color:colors.white,placeholderTextColor:colors.white,maxLength:11}}
+                containerStyle={styles.numberView}
             />
           </View>
         </View>
         <View style={styles.bottomView}>
-          <Button buttonText={'Sign Up'} onPress={() => onPressSignUp()} />
+          <Button buttonText={'Sign Up'} onPress={() => onPressSignUp()}/>
           <View style={styles.noAccountView}>
             <Text style={styles.noAccountText}>Already have an Account? </Text>
             <Text

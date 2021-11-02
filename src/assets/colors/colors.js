@@ -9,6 +9,7 @@ const colors = {
   inputFocus: '#7F7E81',
   plan_color: '#2C2C2C',
   bottom_tabs: 'rgba(0, 0, 0, 0.57)',
+  image_background:'#1F1F1F'
 };
 
 export default colors;

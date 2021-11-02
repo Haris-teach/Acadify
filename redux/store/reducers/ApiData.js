@@ -1,9 +1,10 @@
 import React from 'react';
-import {SET_LOGIN_DATA, SET_SIGNUP_DATA} from '../actions/ApiData';
+import {SET_LOGIN_DATA, SET_SIGNUP_DATA, SET_USER_TOKEN} from '../actions/ApiData';
 
 const initialState = {
   loginData: '',
   signUpData: '',
+  token:''
 };
 
 const ApiData = (state = initialState, action) => {
@@ -12,7 +13,10 @@ const ApiData = (state = initialState, action) => {
       state.loginData = action.response;
       return state;
     case SET_SIGNUP_DATA:
-      state.signUpData = action.signUpData;
+      state.signUpData = action.response;
+      return state;
+    case SET_USER_TOKEN:
+      state.token = action.response;
       return state;
 
     default:

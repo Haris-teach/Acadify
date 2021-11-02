@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     paddingLeft: wp(10),
   },
   headingText: {
-    fontFamily: fonts.uiFont,
+    fontFamily: fonts.semi,
     fontWeight: '700',
     color: colors.white,
     fontSize: hp(3),

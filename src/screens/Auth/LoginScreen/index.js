@@ -21,7 +21,7 @@ import Button from '../../../components/Button/Button';
 import LoginLogo from '../../../assets/images/login_screen.svg';
 import {
   FORGOT_PASSWORD,
-  HOME_SCREEN,
+  HOME_SCREEN, MY_TABS,
   SIGNUP_SCREEN,
 } from '../../../constants/navigators';
 import AppLoading from '../../../components/AppLoading';
@@ -32,8 +32,8 @@ import * as ApiDataActions from '../../../../redux/store/actions/ApiData';
 
 const LoginScreen = props => {
   const dispatch = useDispatch();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('user@gmail.com');
+  const [password, setPassword] = useState('Dvorak123!');
   const [loading, setLoading] = useState(false);
 
   const onPressLogin = () => {
@@ -52,20 +52,19 @@ const LoginScreen = props => {
 
   const onLoginApi = () => {
     setLoading(true);
-
     ApiHelper.onLoginApi(email, password, response => {
       if (response.isSuccess) {
         dispatch(ApiDataActions.SetLoginData(response.response.data.data));
         setLoading(false);
         console.log('DATA', response);
         if (response.response.data.status === 200) {
-          Toast.show('User successfully login', Toast.LONG);
           console.log('Success ===>', response.response.data.data);
-          // dispatch(ApiDataActions.SetLoginData(response.response.data.data));
+          dispatch(ApiDataActions.SetLoginData(response.response.data.data));
+          dispatch(ApiDataActions.SetUserToken(response.response.data.data.token));
           props.navigation.dispatch(
             CommonActions.reset({
               index: 0,
-              routes: [{name: HOME_SCREEN}],
+              routes: [{name: MY_TABS}],
             }),
           );
           setPassword('');

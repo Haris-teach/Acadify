@@ -88,6 +88,17 @@ const styles = StyleSheet.create({
     fontSize: wp(4),
     fontFamily: fonts.semi,
   },
+  numberView:{
+    alignSelf: 'center',
+    width: wp(85),
+    backgroundColor: colors.app_background,
+    borderWidth: 1,
+    borderColor: colors.app_border,
+    color: colors.white,
+    borderRadius: wp(2),
+    height: hp(7.5),
+  }
+
 });
 
 export default styles;

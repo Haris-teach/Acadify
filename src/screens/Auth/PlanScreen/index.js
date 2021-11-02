@@ -12,6 +12,7 @@ import {
 import {widthPercentageToDP} from 'react-native-responsive-screen';
 import Toast from 'react-native-simple-toast';
 import {CommonActions} from '@react-navigation/native';
+import {useDispatch, useSelector} from "react-redux";
 
 //================================ Local Imported Files ======================================//
 
@@ -19,7 +20,6 @@ import styles from './style';
 import colors from '../../../assets/colors/colors';
 import Button from '../../../components/Button/Button';
 import AppHeader from '../../../components/AppHeader';
-import images from '../../../assets/images/images';
 import AppLoading from '../../../components/AppLoading';
 import ApiHelper from '../../../api/ApiHelper';
 import Yearly from '../../../assets/images/yearly.svg';
@@ -27,10 +27,14 @@ import Free from '../../../assets/images/free.svg';
 import Tick from '../../../assets/images/tick.svg';
 import Monthly from '../../../assets/images/monthly.svg';
 import LIFETIME from '../../../assets/images/LIFETIME.svg';
-import {CREDIT_CARD, HOME_SCREEN} from '../../../constants/navigators';
+import {CREDIT_CARD, MY_TABS} from '../../../constants/navigators';
+import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
 
 const PlanScreen = props => {
-  const [loading, setLoading] = useState(false);
+
+    const dispatch = useDispatch();
+    const data = useSelector(state => state.ApiData.signUpData);
+    const [loading, setLoading] = useState(false);
   const [packages, setPackages] = useState('');
   const [indexFeature, setIndexFeature] = useState('');
   const [stripeId, setStripeId] = useState('');
@@ -87,15 +91,17 @@ const PlanScreen = props => {
       });
     } else {
       setLoading(true);
-      ApiHelper.onSignUpApi(stripeId, props.route.params.data, response => {
+      console.log('Enter', data)
+      ApiHelper.onSignUpApi(stripeId, data, response => {
         if (response.isSuccess) {
           setLoading(false);
           if (response.response.data.code === 200) {
-            console.log('Success ===>', response.response.data.data);
-            props.navigation.dispatch(
+            console.log('Success ===>', response.response.data);
+              dispatch(ApiDataActions.SetUserToken(response.response.data.token));
+              props.navigation.dispatch(
               CommonActions.reset({
                 index: 0,
-                routes: [{name: HOME_SCREEN}],
+                routes: [{name: MY_TABS}],
               }),
             );
           } else {

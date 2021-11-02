@@ -4,7 +4,6 @@ const fonts = {
   black: 'Montserrat-Black',
   medium: 'Montserrat-Medium',
   semi: 'Montserrat-SemiBold',
-  uiFont: 'msyh_0',
 };
 
 export default fonts;

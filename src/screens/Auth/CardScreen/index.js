@@ -1,7 +1,7 @@
 //================================ React Native Imported Files ======================================//
 
 import * as React from 'react';
-import {View, Text, StatusBar, Image} from 'react-native';
+import {View, Text, StatusBar} from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -19,7 +19,7 @@ import {ADD_CARD} from '../../../constants/navigators';
 const CardScreen = props => {
   const onPressYes = () => {
     props.navigation.navigate(ADD_CARD, {
-      price: props.route.params.planName.amount,
+        planName: props.route.params.planName,
     });
   };
 

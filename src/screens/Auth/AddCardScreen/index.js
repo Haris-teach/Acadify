@@ -15,8 +15,9 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Toast from 'react-native-simple-toast';
+import {CommonActions} from "@react-navigation/native";
 import moment from 'moment';
 
 //================================ Local Imported Files ======================================//
@@ -29,14 +30,19 @@ import ApiHelper from '../../../api/ApiHelper';
 import Button from '../../../components/Button/Button';
 import AppHeader from '../../../components/AppHeader';
 import AppLoading from '../../../components/AppLoading';
+import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
+import {MY_TABS} from "../../../constants/navigators";
 
 const AddCardScreen = props => {
   const data = useSelector(state => state.ApiData.signUpData);
+  const dispatch = useDispatch();
   const [cardNumber, setCardNumber] = useState('');
   const [cvc, setCvc] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
   const [cvcLength, setCvcLength] = useState(3);
   const [loading, setLoading] = useState(false);
+
+  console.log('Props',props.route.params.planName);
 
   const onPay = () => {
     if (cardNumber.length < 19) {
@@ -51,21 +57,52 @@ const AddCardScreen = props => {
   };
 
   const onPayApi = async () => {
-    setLoading(false);
+    setLoading(true);
     let data = expiryDate.split('/');
     console.log('cardNumber', cardNumber);
     let token = await ApiHelper.getToken(
-      data.userName,
+        `${data.firstName} ${data.lastName}`,
       cardNumber,
       cvc,
       data[0],
       data[1],
     );
-    if (token.id !== undefined) {
+    console.log('Token', token);
+    if (token.error) {
       setLoading(false);
+      Toast.show(token.error.code,Toast.LONG);
+    }else{
       console.log('Token', token.id);
+      startSignUp(token.id)
     }
   };
+
+
+  const startSignUp = (id) => {
+    setLoading(true);
+    console.log('Enter', data)
+    ApiHelper.onSignUpPaidApi(id,props.route.params.planName.Rights[0].StripeId, data, response => {
+      if (response.isSuccess) {
+        setLoading(false);
+        if (response.response.data.code === 200) {
+          console.log('Success ===>', response.response.data);
+          dispatch(ApiDataActions.SetUserToken(response.response.data.token));
+          props.navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{name: MY_TABS}],
+              }),
+          );
+        } else {
+          console.log('Error inner ==>', response.response);
+          Toast.show(response.response.data.error.email, Toast.LONG);
+        }
+      } else {
+        setLoading(false);
+        console.log('Error ==>', response.response);
+      }
+    });
+  }
 
   return (
     <KeyboardAvoidingView
@@ -95,7 +132,7 @@ const AddCardScreen = props => {
                     },
                   ]}
                   numberOfLines={1}>
-                  Hassan Inayat
+                  {data.firstName} {data.lastName}
                 </Text>
               </View>
               <View style={styles.rightBox}>
@@ -105,7 +142,7 @@ const AddCardScreen = props => {
                     styles.nameText,
                     {marginTop: wp(1), fontSize: 18, fontWeight: '600'},
                   ]}>
-                  $ 90.00
+                  $ {props.route.params.planName.amount / 100}.00
                 </Text>
               </View>
             </View>
@@ -115,7 +152,8 @@ const AddCardScreen = props => {
                   styles.nameText,
                   {marginTop: wp(1), fontSize: 18, fontWeight: '600'},
                 ]}>
-                **** **** **** {cardNumber.slice(15, 19)}
+                {/***** **** **** {cardNumber.slice(15, 19)}*/}
+                {cardNumber}
               </Text>
             </View>
             <View style={styles.expiryDate}>
