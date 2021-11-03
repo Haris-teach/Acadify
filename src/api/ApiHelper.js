@@ -71,7 +71,7 @@ class ApiServices {
       password: data.password,
       phone: data.phoneNumber,
       username: `${data.firstName} ${data.lastName}`,
-      profilePictureURL: '/',
+      profilePictureURL: 'null',
     });
 
     var config = {
@@ -100,9 +100,74 @@ class ApiServices {
   };
 
 
-  onSignUpPaidApi = (id,stripeId, data, callback) => {
+  createImageUrl = (token, type,name, callback) => {
+    console.log('Data',type,name)
+    var data = JSON.stringify({
+      "ContentType": type,
+      "Key": name,
+      "title": "dogs"
+    });
 
-    console.log('Stripe ID',stripeId)
+    console.log('Data',data)
+
+    var config = {
+      method: 'post',
+      url: BASE_URL + '/api/v1/media/signed/url',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      data : data
+    };
+
+    console.log('Data',config)
+
+    axios(config)
+        .then(response => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch(error => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  };
+
+
+  updateProfile = (token,value, callback) => {
+    var config = {
+      method: 'put',
+      url: BASE_URL + '/api/v1/users/profile',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      data: value,
+    };
+
+    console.log('Config', config);
+
+    axios(config)
+        .then(response => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch(error => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  };
+
+
+  onSignUpPaidApi = (id,stripeId, data, callback) => {
     let value = JSON.stringify({
       "email": data.email,
       "firstName": data.firstName,
@@ -139,6 +204,7 @@ class ApiServices {
           });
         });
   };
+
 
 
   getToken = async (cardName, cardNumber, cvc, month, year) => {

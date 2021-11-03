@@ -22,16 +22,15 @@ import colors from '../../assets/colors/colors';
 import fonts from '../../assets/fonts/fonts';
 import AppHeader from '../../components/AppHeader';
 import images from '../../assets/images/images';
-import {EDIT_PROFILE_SCREEN, PLAN_SCREEN} from '../../constants/navigators';
-import * as ApiDataActions from '../../../redux/store/actions/ApiData';
+import {EDIT_PROFILE_SCREEN} from '../../constants/navigators';
 import ApiHelper from "../../api/ApiHelper";
 import AppLoading from "../../components/AppLoading";
-import Camera from "../../assets/images/camera.svg";
+import {useIsFocused} from "@react-navigation/native";
 
 const ProfileScreen = props => {
 
+    const isFocused = useIsFocused();
     const token = useSelector(state => state.ApiData.token);
-    const dispatch = useDispatch();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -44,7 +43,7 @@ const ProfileScreen = props => {
 
     useEffect(() => {
         getUserProfile()
-    },[])
+    },[isFocused])
 
 
     const getUserProfile = () => {

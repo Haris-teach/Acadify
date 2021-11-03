@@ -23,7 +23,7 @@ import {
     CREDIT_CARD, EDIT_PROFILE_SCREEN,
     FORGOT_PASSWORD,
     LANDING_SCREEN,
-    LOGIN_SCREEN, MY_TABS, OPEN_DRAWER,
+    LOGIN_SCREEN, MY_TABS, OPEN_DRAWER, PASSWORD_UPDATE,
     PLAN_SCREEN, PROFILE_SCREEN,
     SIGNUP_SCREEN,
 } from './constants/navigators';
@@ -34,6 +34,7 @@ import DashboardScreen from './screens/DashboardScreen';
 import SettingScreen from "./screens/SettingScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import EditProfileScreen from "./screens/EditProfile";
+import PasswordUpdate from "./screens/PasswordUpdate";
 import HomeActive from './assets/images/home_active.svg';
 import HomeInActive from './assets/images/home_inactive.svg';
 import PlayActive from './assets/images/play_active.svg';
@@ -246,6 +247,7 @@ const Stack = () => {
           <RootStack.Screen name={PROFILE_SCREEN} component={ProfileScreen} />
           <RootStack.Screen name={EDIT_PROFILE_SCREEN} component={EditProfileScreen} />
           <RootStack.Screen name={OPEN_DRAWER} component={DrawerNav} />
+          <RootStack.Screen name={PASSWORD_UPDATE} component={PasswordUpdate} />
       </RootStack.Navigator>
     </NavigationContainer>
   );

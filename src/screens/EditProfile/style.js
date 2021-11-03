@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
     inputView: {
-        height: hp(90),
+        height: hp(60),
         width: wp(100),
     },
     inputSection: {

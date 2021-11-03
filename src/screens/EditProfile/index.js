@@ -6,14 +6,16 @@ import {
     ScrollView,
     KeyboardAvoidingView,
     Platform,
-    StatusBar, Image, TouchableOpacity,
+    StatusBar,
+    Image,
+    TouchableOpacity,
+    Keyboard,
 } from 'react-native';
 import {TextInput} from 'react-native-paper';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {heightPercentageToDP as hp} from "react-native-responsive-screen";
 import Toast from 'react-native-simple-toast';
 import {launchImageLibrary} from "react-native-image-picker";
-import {CommonActions} from "@react-navigation/native";
 
 //================================ Local Imported Files ======================================//
 
@@ -21,7 +23,6 @@ import styles from './style';
 import colors from '../../assets/colors/colors';
 import fonts from '../../assets/fonts/fonts';
 import images from '../../assets/images/images';
-import {MY_TABS} from '../../constants/navigators';
 import ApiHelper from "../../api/ApiHelper";
 import AppLoading from "../../components/AppLoading";
 import Camera from "../../assets/images/camera.svg";
@@ -34,6 +35,7 @@ const EditProfileScreen = props => {
 
     let user  = props.route.params;
     const dispatch = useDispatch();
+    const token = useSelector(state => state.ApiData.token);
     const [firstName, setFirstName] = useState(user.userResponse.user.firstName);
     const [lastName, setLastName] = useState(user.userResponse.user.lastName);
     const [email, setEmail] = useState(user.userResponse.user.email);
@@ -44,10 +46,6 @@ const EditProfileScreen = props => {
 
     const [image,setImage] = useState('');
     const [hasImage,setHasImage] = useState(false);
-
-    const [oldPassword,setOldPassword] = useState('');
-    const [newPassword,setNewPassword] = useState('');
-    const [confirmPassword,setConfirmPassword] = useState('');
 
 
     const onPressSignUp = () => {
@@ -65,35 +63,16 @@ const EditProfileScreen = props => {
         } else if (phoneNumber.length < 11) {
             Toast.show('PhoneNumber must have 11 digits long', Toast.LONG);
         } else if(hasImage){
-            if((oldPassword !== ' ') || (newPassword !== '') || (confirmPassword !== '')){
-
-            }else {
-                let image = {
-                    uri: image.uri,
-                    type: image.type,
-                    name: image.fileName
-                };
-                let values = {
-                    firstName:firstName,
-                    lastName:lastName,
-                    description: description,
-                    email: email,
-                    profilePictureURL:image
-                };
-                onUpdateDetails(values);
-            }
+            createUrl();
         }else{
-            if((oldPassword !== ' ') || (newPassword !== '') || (confirmPassword !== '')){
-
-            }else {
-                let values = {
-                    firstName:firstName,
-                    lastName:lastName,
-                    description: description,
-                    email: email
-                };
-                onUpdateDetails(values);
-            }
+            let values = {
+                firstName:firstName,
+                lastName:lastName,
+                phone:phoneNumber,
+                description: description,
+                email: email
+            };
+            onUpdateDetails(values);
         }
     };
 
@@ -110,41 +89,79 @@ const EditProfileScreen = props => {
                 console.log("ImagePicker Error: ", res.errorMessage);
             } else {
                 setImage(res.assets[0])
-                setHasImage(true)
+                setHasImage(true);
             }
         });
     };
 
 
-    const onUpdateDetails = () => {
-        setLoading(true);
-        ApiHelper.onLoginApi(email, password, response => {
-            if (response.isSuccess) {
-                dispatch(ApiDataActions.SetLoginData(response.response.data.data));
+    const createUrl = () => {
+        ApiHelper.createImageUrl(token,image.type,image.fileName,(response) => {
+            if(response.isSuccess){
                 setLoading(false);
-                console.log('DATA', response);
-                if (response.response.data.status === 200) {
-                    console.log('Success ===>', response.response.data.data);
-                    dispatch(ApiDataActions.SetLoginData(response.response.data.data));
-                    dispatch(ApiDataActions.SetUserToken(response.response.data.data.token));
-                    props.navigation.dispatch(
-                        CommonActions.reset({
-                            index: 0,
-                            routes: [{name: MY_TABS}],
-                        }),
-                    );
-                    setPassword('');
-                    setEmail('');
-                } else {
-                    setTimeout(() => {
-                        Toast.show(response.response.data.message, Toast.LONG);
-                    }, 200);
+                if(response.response.data.code === 200){
+                    console.log('Success Data URL ===>',response.response.data.data.url)
+                    let values = {
+                        firstName:firstName,
+                        lastName:lastName,
+                        description: description,
+                        email: email,
+                        phone:phoneNumber,
+                        profilePictureURL:response.response.data.data.url
+                    };
+                    onUpdateDetails(values);
                 }
-            } else {
+            }else{
                 setLoading(false);
-                console.log('Error ==>', response.response);
+                console.log('False Data ===>',response.response.response)
+                setTimeout(() => {
+                    Toast.show(response.response.response.data.message,Toast.LONG)
+                },200)
             }
-        });
+        })
+
+    }
+
+
+    const onUpdateDetails = (userData) => {
+        setLoading(true);
+        let value;
+        if(hasImage){
+             value = JSON.stringify({
+                'description':userData.description,
+                'firstName': userData.firstName,
+                'lastName': userData.lastName,
+                'phone': userData.phone,
+                'profilePictureURL': userData.profilePictureURL
+            });
+        }else {
+            value = JSON.stringify({
+                'description':userData.description,
+                'firstName': userData.firstName,
+                'lastName': userData.lastName,
+                'phone': userData.phone,
+            });
+        }
+
+        ApiHelper.updateProfile(token,value,(response) => {
+            if(response.isSuccess){
+                setLoading(false);
+                if(response.response.data.code === 200){
+                    console.log('Success Data ===>',response.response)
+                    dispatch(ApiDataActions.SetUserToken(response.response.data.token));
+                    Keyboard.dismiss()
+                    setTimeout(() => {
+                        Toast.show('Profile Updated Successfully',Toast.LONG)
+                    },200)
+                }
+            }else{
+                setLoading(false);
+                console.log('False Data ===>',response.response.response)
+                setTimeout(() => {
+                    Toast.show(response.response.response.data.message,Toast.LONG)
+                },200)
+            }
+        })
     };
 
 
@@ -166,7 +183,7 @@ const EditProfileScreen = props => {
                 </View>
                 <View style={styles.imageBackground}>
                     <View style={styles.imageStyle}>
-                        <Image source={hasImage ? {uri: image.uri} : (profileImage !== '/' ? {uri:profileImage} : images.placeHolder)} style={styles.imageStyle} />
+                        <Image source={hasImage ? {uri: image.uri} : (profileImage !== 'null' ? {uri:profileImage} : images.placeHolder)} style={styles.imageStyle} />
                         <TouchableOpacity activeOpacity={0.7} style={styles.editView} onPress={() => ImagePickerFromGallery()}>
                             <Camera height={22} width={22}/>
                         </TouchableOpacity>
@@ -279,84 +296,7 @@ const EditProfileScreen = props => {
                             value={phoneNumber}
                         />
                     </View>
-                    <View style={styles.inputSection}>
-                        <TextInput
-                            style={styles.inputText}
-                            label="Old Password"
-                            mode={'outlined'}
-                            selectionColor={colors.white}
-                            theme={{
-                                roundness: 6,
-                                colors: {
-                                    primary: colors.inputFocus,
-                                    placeholder: colors.white,
-                                    text: colors.white,
-                                },
-                                fonts: {
-                                    regular: {
-                                        fontFamily: fonts.regular,
-                                    },
-                                },
-                            }}
-                            outlineColor={colors.app_border}
-                            autoCapitalize={'none'}
-                            underlineColorAndroid="transparent"
-                            onChangeText={text => setOldPassword(text)}
-                            value={oldPassword}
-                        />
-                    </View>
-                    <View style={styles.inputSection}>
-                        <TextInput
-                            style={styles.inputText}
-                            label="New Password"
-                            mode={'outlined'}
-                            selectionColor={colors.white}
-                            theme={{
-                                roundness: 6,
-                                colors: {
-                                    primary: colors.inputFocus,
-                                    placeholder: colors.white,
-                                    text: colors.white,
-                                },
-                                fonts: {
-                                    regular: {
-                                        fontFamily: fonts.regular,
-                                    },
-                                },
-                            }}
-                            outlineColor={colors.app_border}
-                            autoCapitalize={'none'}
-                            underlineColorAndroid="transparent"
-                            onChangeText={text => setNewPassword(text)}
-                            value={newPassword}
-                        />
-                    </View>
-                    <View style={styles.inputSection}>
-                        <TextInput
-                            style={styles.inputText}
-                            label="Confirm Password"
-                            mode={'outlined'}
-                            selectionColor={colors.white}
-                            theme={{
-                                roundness: 6,
-                                colors: {
-                                    primary: colors.inputFocus,
-                                    placeholder: colors.white,
-                                    text: colors.white,
-                                },
-                                fonts: {
-                                    regular: {
-                                        fontFamily: fonts.regular,
-                                    },
-                                },
-                            }}
-                            outlineColor={colors.app_border}
-                            autoCapitalize={'none'}
-                            underlineColorAndroid="transparent"
-                            onChangeText={text => setConfirmPassword(text)}
-                            value={confirmPassword}
-                        />
-                    </View>
+
                     <View style={[styles.inputSection,{height:hp(17)}]}>
                         <TextInput
                             style={[styles.inputText,{height:hp(15)}]}

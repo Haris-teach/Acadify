@@ -15,7 +15,7 @@ import { DrawerActions } from '@react-navigation/native';
 
 import styles from './style';
 import SettingTabComponent from "../../components/SettingTabComponent";
-import {LOGIN_SCREEN, OPEN_DRAWER, PROFILE_SCREEN} from "../../constants/navigators";
+import {LOGIN_SCREEN, OPEN_DRAWER, PASSWORD_UPDATE, PROFILE_SCREEN} from "../../constants/navigators";
 import * as ApiDataActions from "../../../redux/store/actions/ApiData";
 import AppHeaderNative from "../../components/AppHeaderNative";
 
@@ -48,13 +48,16 @@ const SettingScreen = (props) => {
         },
         {
             id:5,
-            title:'Help'
+            title:'Password Update'
         },
         {
             id:6,
+            title:'Help'
+        },
+        {
+            id:7,
             title:'Sign out'
         },
-
     ])
 
     const renderItems = (item,index) => {
@@ -81,8 +84,10 @@ const SettingScreen = (props) => {
         } else if(item.id === 4){
 
         } else if(item.id === 5){
-
+            props.navigation.navigate(PASSWORD_UPDATE)
         } else if(item.id === 6){
+
+        } else if(item.id === 7){
             onSignOut();
         }
     }

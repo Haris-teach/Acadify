@@ -1,10 +1,7 @@
 //================================ React Native Imported Files ======================================//
 
 import React, {useState} from "react";
-import {
-    widthPercentageToDP as wp,
-    heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 
 //================================ Local Imported Files ======================================//
@@ -18,13 +15,14 @@ import Payment from "../../assets/images/payment.svg";
 import Task from "../../assets/images/task.svg";
 import Help from "../../assets/images/help.svg";
 import SignOut from "../../assets/images/signout.svg";
+import Shield from "../../assets/images/shield.svg";
+
 
 const SettingTabComponent = (props) => {
 
     const [index,setIndex] = useState('');
 
     const onPress = (value) => {
-        // setIndex(value);
         props.onPressCard()
     }
 
@@ -41,6 +39,7 @@ const SettingTabComponent = (props) => {
                 {props.title === 'Task' ? <Task/> : null}
                 {props.title === 'Help' ? <Help/> : null}
                 {props.title === 'Sign out' ? <SignOut/> : null}
+                {props.title === 'Password Update' ? <Shield/> : null}
             </View>
             <View style={styles.nameView}>
                 <Text style={[styles.nameText, { fontSize: wp(5) }]} numberOfLines={1}>
