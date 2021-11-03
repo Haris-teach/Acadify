@@ -8,3 +8,4 @@ export const ADD_CARD = 'ADD_CARD';
 export const MY_TABS = 'MY_TABS';
 export const PROFILE_SCREEN = 'PROFILE_SCREEN';
 export const EDIT_PROFILE_SCREEN = 'EDIT_PROFILE_SCREEN';
+export const OPEN_DRAWER = 'OPEN_DRAWER';

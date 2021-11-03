@@ -13,21 +13,21 @@ import {useDispatch} from 'react-redux';
 import {heightPercentageToDP as hp} from "react-native-responsive-screen";
 import Toast from 'react-native-simple-toast';
 import {launchImageLibrary} from "react-native-image-picker";
+import {CommonActions} from "@react-navigation/native";
 
 //================================ Local Imported Files ======================================//
 
-import Button from "../../components/Button/Button";
 import styles from './style';
 import colors from '../../assets/colors/colors';
 import fonts from '../../assets/fonts/fonts';
-import AppHeader from '../../components/AppHeader';
 import images from '../../assets/images/images';
-import {MY_TABS, PLAN_SCREEN} from '../../constants/navigators';
-import * as ApiDataActions from '../../../redux/store/actions/ApiData';
+import {MY_TABS} from '../../constants/navigators';
 import ApiHelper from "../../api/ApiHelper";
 import AppLoading from "../../components/AppLoading";
 import Camera from "../../assets/images/camera.svg";
-import {CommonActions} from "@react-navigation/native";
+import Button from "../../components/Button/Button";
+import AppHeader from '../../components/AppHeader';
+import * as ApiDataActions from '../../../redux/store/actions/ApiData';
 
 
 const EditProfileScreen = props => {
@@ -51,7 +51,6 @@ const EditProfileScreen = props => {
 
 
     const onPressSignUp = () => {
-        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         let testAddress = /^[^-\s][a-zA-Z_\s-]+$/;
         if (firstName === '' || firstName === ' ') {
             Toast.show('Please Enter First Name', Toast.LONG);
@@ -70,15 +69,18 @@ const EditProfileScreen = props => {
 
             }else {
                 let image = {
-
+                    uri: image.uri,
+                    type: image.type,
+                    name: image.fileName
                 };
                 let values = {
                     firstName:firstName,
                     lastName:lastName,
                     description: description,
                     email: email,
+                    profilePictureURL:image
                 };
-                onUpdateDetails();
+                onUpdateDetails(values);
             }
         }else{
             if((oldPassword !== ' ') || (newPassword !== '') || (confirmPassword !== '')){
@@ -90,7 +92,7 @@ const EditProfileScreen = props => {
                     description: description,
                     email: email
                 };
-                onUpdateDetails();
+                onUpdateDetails(values);
             }
         }
     };

@@ -32,7 +32,7 @@ import * as ApiDataActions from '../../../../redux/store/actions/ApiData';
 
 const LoginScreen = props => {
   const dispatch = useDispatch();
-  const [email, setEmail] = useState('user@gmail.com');
+  const [email, setEmail] = useState('user@mailinator.com');
   const [password, setPassword] = useState('Dvorak123!');
   const [loading, setLoading] = useState(false);
 

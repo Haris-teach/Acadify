@@ -6,9 +6,23 @@ import {View} from 'react-native';
 //================================ Local Imported Files ======================================//
 
 import styles from './style';
+import AppHeaderNative from "../../components/AppHeaderNative";
 
 const DashboardScreen = props => {
-  return <View style={styles.mainContainer}></View>;
+  console.log('Props',props)
+
+  return(
+    <View style={styles.mainContainer}>
+      <View style={styles.headerView}>
+        <AppHeaderNative
+            leftIconPath={true}
+            rightIconOnePath={true}
+            onLeftIconPress={() => props.navigation.toggleDrawer()}
+            onRightIconPress={() => console.log('Data on Ring')}
+        />
+    </View>
+  </View>
+  )
 };
 
 export default DashboardScreen;

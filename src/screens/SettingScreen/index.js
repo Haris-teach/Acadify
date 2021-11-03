@@ -8,18 +8,21 @@ import {
     Alert,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
+import {CommonActions} from "@react-navigation/native";
+import { DrawerActions } from '@react-navigation/native';
 
 //================================ Local Imported Files ======================================//
 
 import styles from './style';
 import SettingTabComponent from "../../components/SettingTabComponent";
-import AppHeader from "../../components/AppHeader";
-import {CommonActions} from "@react-navigation/native";
-import {LOGIN_SCREEN, PROFILE_SCREEN} from "../../constants/navigators";
+import {LOGIN_SCREEN, OPEN_DRAWER, PROFILE_SCREEN} from "../../constants/navigators";
 import * as ApiDataActions from "../../../redux/store/actions/ApiData";
+import AppHeaderNative from "../../components/AppHeaderNative";
 
 
-const SettingScreen = props => {
+const SettingScreen = (props) => {
+
+    console.log('Props',props)
 
     const dispatch = useDispatch();
     const [data,setData] = useState([
@@ -115,7 +118,12 @@ const SettingScreen = props => {
     return (
         <View style={styles.mainContainer}>
             <View style={styles.headerView}>
-
+                <AppHeaderNative
+                    leftIconPath={true}
+                    rightIconOnePath={true}
+                    onLeftIconPress={() => props.navigation.navigate(OPEN_DRAWER)}
+                    onRightIconPress={() => console.log('Data on Ring')}
+                />
             </View>
             <View style={styles.listView}>
                 <FlatList

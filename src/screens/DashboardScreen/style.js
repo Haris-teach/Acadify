@@ -11,6 +11,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.app_background,
   },
+  headerView:{
+    flex:0.1
+  }
 });
 
 export default styles;
