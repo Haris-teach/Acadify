@@ -254,6 +254,64 @@ class ApiServices {
         });
 
   }
+
+  newJourney = (token,title,description,callback) => {
+    var data = JSON.stringify({
+      "title": title,
+      "description": description
+    });
+
+    var config = {
+      method: 'post',
+      url: BASE_URL + '/api/v1/journey/newjourney',
+      headers: {
+        'Authorization': `Bearer ${token}` ,
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+
+  }
+
+
+  getJourney = (token,callback) => {
+    var config = {
+      method: 'get',
+      url: BASE_URL + '/api/v1/journey/alljourney',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  }
 }
 
 const apiService = new ApiServices();

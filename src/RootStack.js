@@ -19,7 +19,7 @@ import SignUpScreen from './screens/Auth/SignUpScreen';
 import ForgotPasswordScreen from './screens/Auth/ForgotPassword';
 import LandingScreen from './screens/Auth/LandingScreen';
 import {
-    ADD_CARD,
+    ADD_CARD, ADD_JOURNEY,
     CREDIT_CARD, EDIT_PROFILE_SCREEN,
     FORGOT_PASSWORD,
     LANDING_SCREEN,
@@ -43,6 +43,8 @@ import MessageActive from './assets/images/message_active.svg';
 import MessageInActive from './assets/images/message_inactive.svg';
 import SettingActive from './assets/images/setting_active.svg';
 import SettingInActive from './assets/images/setting_inactive.svg';
+import JourneyScreen from "./screens/JourneyScreen";
+import AddJourney from "./screens/AddJourney";
 
 let homeFocus = true,
     accountFocus = false,
@@ -209,7 +211,7 @@ const MyTabs = () => {
         />
         <Tab.Screen
             name="Chat"
-            component={DashboardScreen}
+            component={JourneyScreen}
             options={{
               tabBarIcon: ({focused}) =>
                   focused ? <MessageActive /> : <MessageInActive />,
@@ -248,6 +250,7 @@ const Stack = () => {
           <RootStack.Screen name={EDIT_PROFILE_SCREEN} component={EditProfileScreen} />
           <RootStack.Screen name={OPEN_DRAWER} component={DrawerNav} />
           <RootStack.Screen name={PASSWORD_UPDATE} component={PasswordUpdate} />
+          <RootStack.Screen name={ADD_JOURNEY} component={AddJourney} />
       </RootStack.Navigator>
     </NavigationContainer>
   );

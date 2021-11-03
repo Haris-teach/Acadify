@@ -93,7 +93,7 @@ const SignUpScreen = props => {
       behavior={Platform.OS === 'ios' ? 'padding' : null}>
       <StatusBar backgroundColor={colors.app_background} />
       <ScrollView
-        style={styles.mainContainer}
+        style={[styles.mainContainer,{paddingTop:0}]}
         showsVerticalScrollIndicator={false}>
         {/*<View style={styles.headerView}>*/}
         {/*  <AppHeader*/}

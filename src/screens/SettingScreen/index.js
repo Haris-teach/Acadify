@@ -126,7 +126,8 @@ const SettingScreen = (props) => {
                 <AppHeaderNative
                     leftIconPath={true}
                     rightIconOnePath={true}
-                    onLeftIconPress={() => props.navigation.navigate(OPEN_DRAWER)}
+                    // onLeftIconPress={() => props.navigation.navigate(OPEN_DRAWER)}
+                    onLeftIconPress={() => console.log('Drawer')}
                     onRightIconPress={() => console.log('Data on Ring')}
                 />
             </View>

@@ -88,7 +88,7 @@ const LoginScreen = props => {
       {AppLoading.renderLoading(loading)}
       <StatusBar backgroundColor={colors.app_background} />
       <ScrollView
-        style={styles.mainContainer}
+        style={[styles.mainContainer,{paddingTop:0}]}
         showsVerticalScrollIndicator={false}>
         <View style={styles.imageView}>
           <LoginLogo />
