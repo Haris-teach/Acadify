@@ -31,7 +31,7 @@ const DashboardScreen = (props) => {
   const [loading, setLoading] = useState(false);
   const [coursesData, setCoursesData] = useState();
 
-  const getUserProfile = () => {
+  const getUserProfile = (props) => {
     let params = "/courses/?page=1";
     setLoading(true);
 
@@ -62,7 +62,7 @@ const DashboardScreen = (props) => {
           <Text style={styles.topHeading}>All Courses</Text>
 
           <TouchableOpacity
-            onPress={() => setVisible(!visible)}
+            onPress={() => props.navigation.openDrawer()}
             style={{ marginTop: 14, marginLeft: 5 }}
           >
             <Drop />
