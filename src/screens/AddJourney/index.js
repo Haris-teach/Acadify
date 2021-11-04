@@ -3,6 +3,8 @@
 import React,{useState} from 'react';
 import {View, Text, StatusBar, TextInput, Platform, ScrollView, KeyboardAvoidingView, Keyboard} from 'react-native';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import {useSelector} from "react-redux";
+import Toast from "react-native-simple-toast";
 
 //================================ Local Imported Files ======================================//
 
@@ -11,8 +13,6 @@ import colors from '../../assets/colors/colors';
 import Button from '../../components/Button/Button';
 import AppLoading from "../../components/AppLoading";
 import ApiHelper from "../../api/ApiHelper";
-import {useSelector} from "react-redux";
-import Toast from "react-native-simple-toast";
 
 
 const AddJourney = props => {
@@ -41,6 +41,8 @@ const AddJourney = props => {
                 if(response.response.data.code === 200){
                     setLoading(false);
                     Keyboard.dismiss();
+                    setTitle('');
+                    setDescription('');
                     setTimeout(() => {
                         Toast.show('Journey Successfully Created',Toast.LONG)
                     },200)

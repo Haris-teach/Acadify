@@ -96,10 +96,8 @@ const ProfileScreen = props => {
                 </View>
                 <View style={styles.imageBackground}>
                     <View style={styles.imageStyle}>
-                        <Image source={profileImage !== '/' ? {uri:profileImage} : images.placeHolder} style={styles.imageStyle} />
-                        {/*<View style={styles.editView}>*/}
-                        {/*    <Camera height={22} width={22}/>*/}
-                        {/*</View>*/}
+                        <Image source={images.placeHolder} style={styles.imageStyle} />
+                        {/*<Image source={profileImage !== '/' ? {uri:profileImage} : images.placeHolder} style={styles.imageStyle} />*/}
                     </View>
                 </View>
                 <View style={styles.inputView}>

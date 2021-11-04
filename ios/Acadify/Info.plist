@@ -36,7 +36,9 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Acadiy want to access your location for showing courses</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Acadify wants to access your photo library for Profile Pictures</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Montserrat-Black.ttf</string>

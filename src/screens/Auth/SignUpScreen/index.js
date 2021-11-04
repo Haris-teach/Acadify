@@ -27,19 +27,19 @@ import {LOGIN_SCREEN, PLAN_SCREEN} from '../../../constants/navigators';
 import * as ApiDataActions from '../../../../redux/store/actions/ApiData';
 
 const SignUpScreen = props => {
+
   const dispatch = useDispatch();
   const phoneInput = useRef();
   const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [lastName, setLastName]   = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [formattedValue, setFormattedValue] = useState("");
+  const [formattedValue, setFormattedValue] = useState('');
   const [valid, setValid] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
 
   const onPressSignUp = () => {
-    console.log('Data',formattedValue)
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     let testAddress = /^[^-\s][a-zA-Z_\s-]+$/;
     let password_Reg =
@@ -71,16 +71,20 @@ const SignUpScreen = props => {
       Toast.show('Password must have 8 characters long', Toast.LONG);
     } else if (phoneNumber === '' || phoneNumber === ' ') {
       Toast.show('Please Enter Phone Number', Toast.LONG);
-    } else if (valid === false) {
+    } else if(phoneNumber.length < 11){
       Toast.show('Please Enter Valid Phone Number', Toast.LONG);
-    } else {
+    }
+    // else if (valid === false) {
+    //   Toast.show('Please Enter Valid Phone Number', Toast.LONG);
+    // }
+    else {
       let data = {
         firstName: firstName,
         lastName: lastName,
         email: email,
         password: password,
-        userName: firstName + lastName,
-        phoneNumber: formattedValue,
+        userName: `${firstName} + ${lastName}`,
+        phoneNumber: phoneNumber,
       };
       dispatch(ApiDataActions.SetSignUpData(data));
       props.navigation.navigate(PLAN_SCREEN);
@@ -210,23 +214,48 @@ const SignUpScreen = props => {
             />
           </View>
           <View style={styles.inputSection}>
-            <PhoneInput
-                ref={phoneInput}
-                defaultValue={phoneNumber}
-                defaultCode="US"
-                layout="first"
-                onChangeText={(text) => {
-                  setPhoneNumber(text);
+            <TextInput
+                style={styles.inputText}
+                label="Phone Number"
+                mode={'outlined'}
+                selectionColor={colors.white}
+                theme={{
+                  roundness: 6,
+                  colors: {
+                    primary: colors.inputFocus,
+                    placeholder: colors.white,
+                    text: colors.white,
+                  },
+                  fonts: {
+                    regular: {
+                      fontFamily: fonts.regular,
+                    },
+                  },
                 }}
-                onChangeFormattedText={(text) => {
-                  setFormattedValue(text);
-                }}
-                disableArrowIcon={true}
-                textContainerStyle={{backgroundColor:colors.app_background,borderRadius:wp(2)}}
-                codeTextStyle={{color:colors.white}}
-                textInputProps={{color:colors.white,placeholderTextColor:colors.white,maxLength:11}}
-                containerStyle={styles.numberView}
+                outlineColor={colors.app_border}
+                maxLength={15}
+                keyboardType={'phone-pad'}
+                underlineColorAndroid="transparent"
+                onChangeText={text => setPhoneNumber(text)}
+                value={phoneNumber}
             />
+            {/*<PhoneInput*/}
+            {/*    ref={phoneInput}*/}
+            {/*    defaultValue={phoneNumber}*/}
+            {/*    defaultCode="US"*/}
+            {/*    layout="first"*/}
+            {/*    onChangeText={(text) => {*/}
+            {/*      setPhoneNumber(text);*/}
+            {/*    }}*/}
+            {/*    onChangeFormattedText={(text) => {*/}
+            {/*      setFormattedValue(text);*/}
+            {/*    }}*/}
+            {/*    disableArrowIcon={true}*/}
+            {/*    textContainerStyle={{backgroundColor:colors.app_background,borderRadius:wp(2)}}*/}
+            {/*    codeTextStyle={{color:colors.white}}*/}
+            {/*    textInputProps={{color:colors.white,placeholderTextColor:colors.white,maxLength:11}}*/}
+            {/*    containerStyle={styles.numberView}*/}
+            {/*/>*/}
           </View>
         </View>
         <View style={styles.bottomView}>

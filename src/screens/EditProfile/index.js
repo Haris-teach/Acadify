@@ -165,6 +165,7 @@ const EditProfileScreen = props => {
     };
 
 
+
     return (
         <KeyboardAvoidingView
             style={styles.mainContainer}
@@ -183,7 +184,8 @@ const EditProfileScreen = props => {
                 </View>
                 <View style={styles.imageBackground}>
                     <View style={styles.imageStyle}>
-                        <Image source={hasImage ? {uri: image.uri} : (profileImage !== 'null' ? {uri:profileImage} : images.placeHolder)} style={styles.imageStyle} />
+                        <Image source={hasImage ? {uri: image.uri} : images.placeHolder} style={styles.imageStyle} />
+                        {/*<Image source={hasImage ? {uri: image.uri} : (profileImage !== 'null' ? {uri:profileImage} : images.placeHolder)} style={styles.imageStyle} />*/}
                         <TouchableOpacity activeOpacity={0.7} style={styles.editView} onPress={() => ImagePickerFromGallery()}>
                             <Camera height={22} width={22}/>
                         </TouchableOpacity>
@@ -288,7 +290,7 @@ const EditProfileScreen = props => {
                                     },
                                 },
                             }}
-                            maxLength={11}
+                            maxLength={15}
                             outlineColor={colors.app_border}
                             keyboardType={'phone-pad'}
                             underlineColorAndroid="transparent"
@@ -326,7 +328,7 @@ const EditProfileScreen = props => {
                     </View>
                 </View>
                 <View style={styles.bottomView}>
-                    <Button buttonText={'Edit'} onPress={() => onPressSignUp()} />
+                    <Button buttonText={'Save'} onPress={() => onPressSignUp()} />
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>

@@ -8,35 +8,31 @@ import {
     TouchableOpacity
 } from 'react-native';
 import {useSelector} from "react-redux";
-import Toast from "react-native-simple-toast";
+import moment from "moment";
+import {useIsFocused} from "@react-navigation/native";
 
 //================================ Local Imported Files ======================================//
 
 import styles from './style';
+import {ADD_JOURNEY} from "../../constants/navigators";
+import ApiHelper from "../../api/ApiHelper";
+import JourneyComponent from "../../components/JourneyComponent";
 import Add from "../../assets/images/addIcon.svg";
 import AppHeaderNative from "../../components/AppHeaderNative";
-import {ADD_JOURNEY} from "../../constants/navigators";
-import SettingTabComponent from "../../components/SettingTabComponent";
-import ApiHelper from "../../api/ApiHelper";
 import AppLoading from "../../components/AppLoading";
 
 
 const JourneyScreen = (props) => {
 
+    const isFocused = useIsFocused();
     const token = useSelector(state => state.ApiData.token);
     const [loading,setLoading] = useState(false);
-    const [data,setData] = useState([
-        {
-            id:0,
-            title:'Profile',
-        },
-
-    ])
+    const [data,setData] = useState([])
 
 
     useEffect(() => {
        getJourney()
-    }, []);
+    }, [isFocused]);
 
 
     const getJourney = () => {
@@ -44,11 +40,9 @@ const JourneyScreen = (props) => {
         ApiHelper.getJourney(token,(response) => {
             if(response.isSuccess){
                 if(response.response.data.code === 200){
-                    console.log('Response',response.response)
+                    console.log('Response',response.response.data.data.docs)
+                    setData(response.response.data.data.docs)
                     setLoading(false);
-                    setTimeout(() => {
-                        Toast.show('Journey Successfully Created',Toast.LONG)
-                    },200)
                 }
             }else {
                 setLoading(false);
@@ -59,15 +53,20 @@ const JourneyScreen = (props) => {
 
 
     const renderItems = (item,index) => {
+        let date = moment(item.createdAt).format('DD/MM/YYYY');
+        let time = moment(item.createdAt).format('HH:MM')
         return(
-            <SettingTabComponent
+            <JourneyComponent
                 id={item.id}
                 index={index}
                 title={item.title}
-                onPressCard={() => console.log(item)}
+                time={time}
+                date={date}
+                description={item.description}
             />
         )
     }
+
 
     return (
         <View style={styles.mainContainer}>

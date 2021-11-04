@@ -10,7 +10,9 @@ const colors = {
   plan_color: '#2C2C2C',
   bottom_tabs: 'rgba(0, 0, 0, 0.57)',
   image_background:'#1F1F1F',
-  inputColor:'#AAAAAA'
+  inputColor:'#AAAAAA',
+  date_text:'#C8C8C8',
+  date_background:'#181818'
 };
 
 export default colors;
