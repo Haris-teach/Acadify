@@ -20,13 +20,27 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         alignItems:'center'
     },
+    upperView:{
+        height:hp(15),
+        width:wp(100),
+    },
     headerStyle:{
         height:hp(10),
         width:wp(100),
-        paddingHorizontal:wp(10),
+        paddingHorizontal:wp(7.5),
         flexDirection:'row',
         justifyContent:'space-between',
         alignItems:'center',
+    },
+    activityView:{
+        height:hp(5),
+        width:wp(100),
+        paddingHorizontal:wp(7.5),
+    },
+    activityText:{
+        fontSize:14,
+        color:colors.white,
+        fontFamily:fonts.semi
     },
     headerTextStyle:{
         fontFamily:fonts.semi,

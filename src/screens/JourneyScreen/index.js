@@ -8,8 +8,8 @@ import {
     TouchableOpacity
 } from 'react-native';
 import {useSelector} from "react-redux";
-import moment from "moment";
 import {useIsFocused} from "@react-navigation/native";
+import moment from "moment";
 
 //================================ Local Imported Files ======================================//
 
@@ -20,7 +20,6 @@ import JourneyComponent from "../../components/JourneyComponent";
 import Add from "../../assets/images/addIcon.svg";
 import AppHeaderNative from "../../components/AppHeaderNative";
 import AppLoading from "../../components/AppLoading";
-
 
 const JourneyScreen = (props) => {
 
@@ -85,11 +84,16 @@ const JourneyScreen = (props) => {
                     extraData={data}
                     ListHeaderComponent={() => {
                         return(
-                            <View style={styles.headerStyle}>
-                                <Text style={styles.headerTextStyle}>Journey</Text>
-                                <TouchableOpacity activeOpacity={0.7} onPress={() => props.navigation.navigate(ADD_JOURNEY)}>
-                                    <Add/>
-                                </TouchableOpacity>
+                            <View style={styles.upperView}>
+                                <View style={styles.headerStyle}>
+                                    <Text style={styles.headerTextStyle}>Journey</Text>
+                                    <TouchableOpacity activeOpacity={0.7} onPress={() => props.navigation.navigate(ADD_JOURNEY)}>
+                                        <Add/>
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={styles.activityView}>
+                                    <Text style={styles.activityText}>Activities</Text>
+                                </View>
                             </View>
                         )
                     }}
