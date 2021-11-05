@@ -20,6 +20,7 @@ import Home from "../../assets/images/home.svg";
 import Globe from "../../assets/images/globe.svg";
 import Msg from "../../assets/images/msg.svg";
 import { useState } from "react";
+import { height_screen } from "../../utils/Dimentions";
 
 const MenuBar = (props) => {
   const [home, setHome] = useState(false);
@@ -32,6 +33,7 @@ const MenuBar = (props) => {
   const [links, setLinks] = useState(false);
 
   const onHome = () => {
+    console.log("height", height_screen);
     setHome(true);
     setLive(false);
     setCourse(false);
@@ -186,7 +188,7 @@ const styles = StyleSheet.create({
   activeIconHolder2: {
     justifyContent: "center",
     alignItems: "center",
-    borderLeftWidth: 6,
+    borderLeftWidth: 8,
     borderLeftColor: "#B7A675",
     width: 100,
   },
@@ -200,7 +202,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderLeftColor: "#B7A675",
-    borderLeftWidth: 6,
+    borderLeftWidth: 8,
     width: 100,
   },
   txt: { color: "white", fontSize: 10, marginTop: 3 },

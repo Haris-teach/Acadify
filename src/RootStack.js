@@ -5,6 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
+  heightPercentageToDP,
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
@@ -45,6 +46,7 @@ import SettingInActive from "./assets/images/setting_inactive.svg";
 import ProfileScreen from "./screens/ProfileScreen";
 import EditProfileScreen from "./screens/EditProfile";
 import MenuBar from "./components/MenuBar";
+import { height_screen } from "./utils/Dimentions";
 
 const Tab = createBottomTabNavigator();
 const MyTabs = () => {
@@ -144,13 +146,12 @@ const Stack = () => {
           headerShown: false,
           drawerPosition: "left",
           drawerType: "front",
-          drawerActiveTintColor: "red",
+
           drawerStyle: {
-            drawerBackgroundColor: "#0000FF",
             backgroundColor: "rgba(36, 37, 41, 0.62)",
-            width: 100,
-            height: 600,
-            marginTop: 110,
+            width: 90,
+            height: height_screen < 675 ? 550 : 610,
+            marginTop: height_screen < 670 ? 60 : 100,
             borderTopRightRadius: 60,
             borderBottomRightRadius: 60,
           },
