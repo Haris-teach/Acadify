@@ -167,7 +167,6 @@ class ApiServices {
 
 
   onSignUpPaidApi = (id,stripeId, data, callback) => {
-  onSignUpPaidApi = (id, stripeId, data, callback) => {
     console.log("Stripe ID", stripeId);
     let value = JSON.stringify({
       email: data.email,
@@ -254,7 +253,6 @@ class ApiServices {
       });
   };
 
-  }
 
   newJourney = (token,title,description,callback) => {
     var data = JSON.stringify({

@@ -5,12 +5,12 @@ import {
   View,
   Text,
   SafeAreaView,
-  ScrollView,
   TouchableOpacity,
   FlatList,
 } from "react-native";
 import { useState } from "react";
 import { Picker } from "@react-native-picker/picker";
+import { useSelector } from "react-redux";
 
 //================================ Local Imported Files ======================================//
 
@@ -21,7 +21,7 @@ import Drop from "../../assets/images/dropdown.svg";
 import CourseCard from "../../components/CourseCard/CourseCard";
 import colors from "../../assets/colors/colors";
 import ApiHelper from "../../api/ApiHelper";
-import { useSelector } from "react-redux";
+import AppHeaderNative from "../../components/AppHeaderNative";
 
 const DashboardScreen = (props) => {
   const [toggle, setToggle] = useState(true);
@@ -32,7 +32,6 @@ const DashboardScreen = (props) => {
   const [coursesData, setCoursesData] = useState();
 
   const getUserProfile = (props) => {
-    let params = "/courses/?page=1";
     setLoading(true);
 
     ApiHelper.getCoursesData(token, (response) => {
@@ -57,12 +56,20 @@ const DashboardScreen = (props) => {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
+<View style={{height:35}}>
+  <AppHeaderNative
+      leftIconPath={true}
+      rightIconOnePath={true}
+      onLeftIconPress={() => props.navigation.openDrawer()}
+      onRightIconPress={() => console.log('Data on Ring')}
+  />
+</View>
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <View style={{ flexDirection: "row" }}>
           <Text style={styles.topHeading}>All Courses</Text>
 
           <TouchableOpacity
-            onPress={() => props.navigation.openDrawer()}
+            onPress={() => setVisible(!visible)}
             style={{ marginTop: 14, marginLeft: 5 }}
           >
             <Drop />
@@ -94,7 +101,7 @@ const DashboardScreen = (props) => {
             width: 180,
             justifyContent: "center",
             position: "absolute",
-            top: 30,
+            top: 110,
             left: 20,
           }}
           itemStyle={{

@@ -11,3 +11,4 @@ export const EDIT_PROFILE_SCREEN = 'EDIT_PROFILE_SCREEN';
 export const OPEN_DRAWER = 'OPEN_DRAWER';
 export const PASSWORD_UPDATE = 'PASSWORD_UPDATE';
 export const ADD_JOURNEY = 'ADD_JOURNEY';
+export const JOURNEY = 'JOURNEY';

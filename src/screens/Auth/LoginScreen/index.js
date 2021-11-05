@@ -29,9 +29,8 @@ import {
 } from "../../../constants/navigators";
 import AppLoading from "../../../components/AppLoading";
 import ApiHelper from "../../../api/ApiHelper";
-import { CommonActions } from "@react-navigation/native";
-import Toast from "react-native-simple-toast";
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
+
 
 const LoginScreen = (props) => {
   const dispatch = useDispatch();

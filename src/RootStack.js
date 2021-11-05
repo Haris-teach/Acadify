@@ -6,195 +6,27 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {heightPercentageToDP as hp,widthPercentageToDP as wp} from "react-native-responsive-screen";
-import {createDrawerNavigator, DrawerContentScrollView, DrawerItem} from "@react-navigation/drawer";
-import {Image, ImageBackground, Text, TouchableOpacity, View} from "react-native";
-import * as React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import {
-  heightPercentageToDP,
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from "react-native-responsive-screen";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import {createDrawerNavigator} from "@react-navigation/drawer";
 
 //================================ Local Imported Files ======================================//
 
 import colors from "./assets/colors/colors";
-import images from "./assets/images/images";
-import styles from './style';
-import LoginScreen from './screens/Auth/LoginScreen';
-import SignUpScreen from './screens/Auth/SignUpScreen';
-import ForgotPasswordScreen from './screens/Auth/ForgotPassword';
-import LandingScreen from './screens/Auth/LandingScreen';
-import {
-    ADD_CARD, ADD_JOURNEY,
-    CREDIT_CARD, EDIT_PROFILE_SCREEN,
-    FORGOT_PASSWORD,
-    LANDING_SCREEN,
-    LOGIN_SCREEN, MY_TABS, OPEN_DRAWER, PASSWORD_UPDATE,
-    PLAN_SCREEN, PROFILE_SCREEN,
-    SIGNUP_SCREEN,
-} from './constants/navigators';
-import PlanScreen from './screens/Auth/PlanScreen';
-import CardScreen from './screens/Auth/CardScreen';
-import AddCardScreen from './screens/Auth/AddCardScreen';
-import DashboardScreen from './screens/DashboardScreen';
-import SettingScreen from "./screens/SettingScreen";
-import ProfileScreen from "./screens/ProfileScreen";
-import EditProfileScreen from "./screens/EditProfile";
-import PasswordUpdate from "./screens/PasswordUpdate";
-import HomeActive from './assets/images/home_active.svg';
-import HomeInActive from './assets/images/home_inactive.svg';
-import PlayActive from './assets/images/play_active.svg';
-import PlayInActive from './assets/images/play_inactive.svg';
-import MessageActive from './assets/images/message_active.svg';
-import MessageInActive from './assets/images/message_inactive.svg';
-import SettingActive from './assets/images/setting_active.svg';
-import SettingInActive from './assets/images/setting_inactive.svg';
 import JourneyScreen from "./screens/JourneyScreen";
-import AddJourney from "./screens/AddJourney";
-
-let homeFocus = true,
-    accountFocus = false,
-    myCartFocus = false,
-    trackOrderFocus = false,
-    orderHistoryFocus = false,
-    settingsScreenFocus = false,
-    rateScreenFocus = false,
-    menuScreenFocus = false,
-    logoutScreenFocus = false;
-
-
-const CustomDrawerContent = (props) => {
-    return (
-        <DrawerContentScrollView {...props}>
-        <View style={styles.drawerMainContainer}>
-            <ImageBackground
-                style={styles.backgroundImageContainer}
-                source={images.back_icon}>
-                <View style={styles.userInfoContainer}>
-                    <View
-                        style={styles.userImageContainer}
-                        onPress={() => props.navigation.navigate('ProfileScreen')}>
-                        <Image
-                            source={{uri: images.card_icon}}
-                            style={styles.userProfileImage}
-                        />
-                    </View>
-                    <TouchableOpacity style={styles.userTextContainer}>
-                        <Text style={styles.userNameText}>
-                            Hi
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.drawerItemsContainer}>
-                    <DrawerItem
-                        label={() => (
-                            <Text
-                                style={[
-                                    styles.drawerItemLabelText,
-                                    {color: homeFocus ? colors.white : colors.black},
-                                ]}>
-                                {'Dashboard'}
-                            </Text>
-                        )}
-                        icon={() => (
-                            <Image
-                                source={
-                                    homeFocus ? images.back_icon : images.card_icon
-                                }
-                                style={styles.drawerItemImage}
-                            />
-                        )}
-                        onPress={() => {
-                            (homeFocus = true),
-                                (accountFocus = false),
-                                (myCartFocus = false),
-                                (trackOrderFocus = false),
-                                (orderHistoryFocus = false),
-                                (settingsScreenFocus = false),
-                                (rateScreenFocus = false),
-                                (menuScreenFocus = false),
-                                (logoutScreenFocus = false);
-                            props.navigation.navigate('Dashboard');
-                        }}
-                    />
-
-                    <DrawerItem
-                        style={styles.drawerItemStyles}
-                        label={() => (
-                            <Text
-                                style={[
-                                    styles.drawerItemLabelText,
-                                    {color: accountFocus ? colors.white : colors.black},
-                                ]}>
-                                {'Live training'}
-                            </Text>
-                        )}
-                        icon={() => (
-                            <Image
-                                source={
-                                    accountFocus
-                                        ? images.card_icon
-                                        : images.back_icon
-                                }
-                                style={styles.drawerItemImage}
-                            />
-                        )}
-                        onPress={() => {
-                            (homeFocus = false),
-                                (accountFocus = true),
-                                (myCartFocus = false),
-                                (trackOrderFocus = false),
-                                (orderHistoryFocus = false),
-                                (settingsScreenFocus = false),
-                                (rateScreenFocus = false),
-                                (menuScreenFocus = false),
-                                (logoutScreenFocus = false),
-                                props.navigation.navigate('Like');
-                        }}
-                    />
-
-                </View>
-            </ImageBackground>
-        </View>
-        </DrawerContentScrollView>
-    );
-
-}
-
-
-const Drawer = createDrawerNavigator();
-function DrawerNav (){
-    return (
-        <Drawer.Navigator
-            screenOptions={{
-                headerShown:false
-            }}
-            drawerContent={(props) => <CustomDrawerContent {...props} />}>
-            {/*<Drawer.Screen name="Dashboard" component={DashboardScreen} />*/}
-            {/*<Drawer.Screen name="Like" component={SettingScreen} />*/}
-        </Drawer.Navigator>
-    );
-}
-
 import LoginScreen from "./screens/Auth/LoginScreen";
 import SignUpScreen from "./screens/Auth/SignUpScreen";
 import ForgotPasswordScreen from "./screens/Auth/ForgotPassword";
 import LandingScreen from "./screens/Auth/LandingScreen";
 import {
-  ADD_CARD,
-  CREDIT_CARD,
-  EDIT_PROFILE_SCREEN,
-  FORGOT_PASSWORD,
-  LANDING_SCREEN,
-  LOGIN_SCREEN,
-  MY_TABS,
-  PLAN_SCREEN,
-  PROFILE_SCREEN,
-  SIGNUP_SCREEN,
+    ADD_CARD, ADD_JOURNEY,
+    CREDIT_CARD,
+    EDIT_PROFILE_SCREEN,
+    FORGOT_PASSWORD, JOURNEY,
+    LANDING_SCREEN,
+    LOGIN_SCREEN,
+    MY_TABS, PASSWORD_UPDATE,
+    PLAN_SCREEN,
+    PROFILE_SCREEN,
+    SIGNUP_SCREEN,
 } from "./constants/navigators";
 import PlanScreen from "./screens/Auth/PlanScreen";
 import CardScreen from "./screens/Auth/CardScreen";
@@ -213,6 +45,8 @@ import ProfileScreen from "./screens/ProfileScreen";
 import EditProfileScreen from "./screens/EditProfile";
 import MenuBar from "./components/MenuBar";
 import { height_screen } from "./utils/Dimentions";
+import AddJourney from "./screens/AddJourney";
+import PasswordUpdate from "./screens/PasswordUpdate";
 
 const Tab = createBottomTabNavigator();
 const MyTabs = () => {
@@ -299,6 +133,18 @@ const MyNewStack = () => {
         name={EDIT_PROFILE_SCREEN}
         component={EditProfileScreen}
       />
+        <RootStack.Screen
+            name={ADD_JOURNEY}
+            component={AddJourney}
+        />
+        <RootStack.Screen
+            name={JOURNEY}
+            component={JourneyScreen}
+        />
+        <RootStack.Screen
+            name={PASSWORD_UPDATE}
+            component={PasswordUpdate}
+        />
     </RootStack.Navigator>
   );
 };
