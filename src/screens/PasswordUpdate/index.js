@@ -80,7 +80,7 @@ const PasswordUpdate = props => {
         } else if (confirmPassword.length < 8) {
             Toast.show('Password must have 8 characters long', Toast.LONG);
         } else if(newPassword !== confirmPassword){
-            Toast.show('Password Not Matched', Toast.LONG);
+    Toast.show('Password Not Matched', Toast.LONG);
         }else{
             onUpdateApi()
         }
@@ -102,6 +102,7 @@ const PasswordUpdate = props => {
                     setTimeout(() => {
                         Toast.show('Password Updated Successfully',Toast.LONG)
                     },200)
+                    props.navigation.goBack()
                 }
             }else{
                 setLoading(false);

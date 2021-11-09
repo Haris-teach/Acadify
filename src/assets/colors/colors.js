@@ -14,6 +14,7 @@ const colors = {
   date_text:'#C8C8C8',
   date_background:'#181818',
   greyTxt: "#D1D1D1",
+  card_background: "#171717",
 };
 
 export default colors;

@@ -45,13 +45,14 @@ const styles = StyleSheet.create({
     height: hp(21),
     width: wp(100),
     justifyContent: 'center',
-    alignItems: 'center',
+    // alignItems: 'center',
     flexDirection: 'row',
   },
   btnView: {
     height: hp(20),
     width: wp(45),
-    justifyContent: 'center',
+    paddingTop:hp(3),
+    // justifyContent: 'center',
     alignItems: 'center',
   },
 });

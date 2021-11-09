@@ -153,6 +153,7 @@ const EditProfileScreen = props => {
                     setTimeout(() => {
                         Toast.show('Profile Updated Successfully',Toast.LONG)
                     },200)
+                    props.navigation.goBack();
                 }
             }else{
                 setLoading(false);

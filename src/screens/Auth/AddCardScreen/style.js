@@ -30,6 +30,14 @@ const styles = StyleSheet.create({
     height: hp(40),
     width: wp(100),
     justifyContent: 'center',
+    borderTopRightRadius:wp(12),
+    borderTopLeftRadius:wp(12),
+    backgroundColor:colors.card_background
+  },
+  cardTextView:{
+    height: hp(10),
+    width: wp(100),
+    justifyContent: 'center',
   },
   inputSection: {
     marginTop: hp(5),
@@ -39,7 +47,7 @@ const styles = StyleSheet.create({
   },
   inputText: {
     width: wp(85),
-    backgroundColor: colors.app_background,
+    backgroundColor: colors.card_background,
     borderWidth: 0,
     borderColor: colors.app_background,
     color: colors.white,
@@ -110,6 +118,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
+    backgroundColor:colors.card_background
   },
   btnView: {
     height: hp(20),
@@ -120,7 +129,7 @@ const styles = StyleSheet.create({
   cardNumberView: {
     height: hp(8),
     width: wp(100),
-    justifyContent: 'flex-end',
+    paddingTop:hp(3),
     paddingLeft: wp(23),
   },
   expiryDate: {
@@ -133,10 +142,16 @@ const styles = StyleSheet.create({
   dataView: {
     height: hp(8),
     width: wp(50),
-    justifyContent: 'center',
+    paddingTop:hp(2),
     alignItems: 'center',
     paddingLeft: wp(10),
   },
+  cardText:{
+    fontSize: 24,
+    paddingLeft:wp(10),
+    color:colors.white,
+    fontFamily:fonts.semi
+  }
 });
 
 export default styles;

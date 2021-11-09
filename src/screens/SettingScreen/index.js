@@ -9,13 +9,12 @@ import {
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 import {CommonActions} from "@react-navigation/native";
-import { DrawerActions } from '@react-navigation/native';
 
 //================================ Local Imported Files ======================================//
 
 import styles from './style';
 import SettingTabComponent from "../../components/SettingTabComponent";
-import {LOGIN_SCREEN, OPEN_DRAWER, PASSWORD_UPDATE, PROFILE_SCREEN} from "../../constants/navigators";
+import {LOGIN_SCREEN, PASSWORD_UPDATE, PROFILE_SCREEN} from "../../constants/navigators";
 import * as ApiDataActions from "../../../redux/store/actions/ApiData";
 import AppHeaderNative from "../../components/AppHeaderNative";
 
@@ -126,8 +125,7 @@ const SettingScreen = (props) => {
                 <AppHeaderNative
                     leftIconPath={true}
                     rightIconOnePath={true}
-                    // onLeftIconPress={() => props.navigation.navigate(OPEN_DRAWER)}
-                    onLeftIconPress={() => console.log('Drawer')}
+                    onLeftIconPress={() => props.navigation.openDrawer()}
                     onRightIconPress={() => console.log('Data on Ring')}
                 />
             </View>

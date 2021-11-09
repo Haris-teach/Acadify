@@ -65,7 +65,6 @@ const styles = StyleSheet.create({
     bottomView: {
         height: hp(10),
         width: wp(100),
-        justifyContent: 'center',
         alignItems: 'center',
     },
     noAccountView: {

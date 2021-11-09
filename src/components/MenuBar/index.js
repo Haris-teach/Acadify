@@ -1,15 +1,11 @@
 import React from "react";
 import {
-  createDrawerNavigator,
   DrawerContentScrollView,
 } from "@react-navigation/drawer";
 import {
-  View,
   Text,
   StyleSheet,
-  Dimensions,
   TouchableOpacity,
-  SafeAreaView,
 } from "react-native";
 import Live from "../../assets/images/live.svg";
 import Settings from "../../assets/images/settings.svg";
@@ -17,13 +13,24 @@ import Bag from "../../assets/images/bag.svg";
 import Trophy from "../../assets/images/trophy.svg";
 import Second from "../../assets/images/second.svg";
 import Home from "../../assets/images/home.svg";
-import Globe from "../../assets/images/globe.svg";
 import Msg from "../../assets/images/msg.svg";
+import LiveBold from "../../assets/images/509.svg";
+import CoursesBold from "../../assets/images/566.svg";
+import Chat from "../../assets/images/935.svg";
+import SettingsBold from "../../assets/images/setting_inactive.svg";
+import Gear from "../../assets/images/setting_inactive-false.svg";
+import RenchBold from "../../assets/images/renchbold.svg";
+import TrophyBold from "../../assets/images/tophyBold.svg";
+import HomeBold from "../../assets/images/home-bold.svg";
+import BagBold from "../../assets/images/bagBold.svg";
+import ChatBold from "../../assets/images/msg-1.svg";
+import MyChatBold from "../../assets/images/myChatBold.svg";
+
 import { useState } from "react";
-import { height_screen } from "../../utils/Dimentions";
+import {ADD_GOAL, COURSE_SCREEN, DASHBOARD_SCREEN, GET_ACCOUNTABILITY, JOURNEY} from "../../constants/navigators";
 
 const MenuBar = (props) => {
-  const [home, setHome] = useState(false);
+  const [home, setHome] = useState(true);
   const [live, setLive] = useState(false);
   const [course, setCourse] = useState(false);
   const [accountibility, setAccountibility] = useState(false);
@@ -31,9 +38,10 @@ const MenuBar = (props) => {
   const [journey, setJourney] = useState(false);
   const [forum, setForum] = useState(false);
   const [links, setLinks] = useState(false);
+  const [chat, setChat] = useState(false);
+  const [gear, setGear] = useState(false);
 
   const onHome = () => {
-    console.log("height", height_screen);
     setHome(true);
     setLive(false);
     setCourse(false);
@@ -42,6 +50,9 @@ const MenuBar = (props) => {
     setJourney(false);
     setForum(false);
     setLinks(false);
+    setChat(false);
+    setGear(false);
+    props.navigation.navigate(COURSE_SCREEN)
   };
   const onLive = () => {
     setHome(false);
@@ -52,6 +63,8 @@ const MenuBar = (props) => {
     setJourney(false);
     setForum(false);
     setLinks(false);
+    setChat(false);
+    setGear(false);
   };
   const onSettings = () => {
     setHome(false);
@@ -62,6 +75,8 @@ const MenuBar = (props) => {
     setJourney(false);
     setForum(false);
     setLinks(false);
+    setGear(false);
+    props.navigation.navigate(GET_ACCOUNTABILITY)
   };
   const onCourse = () => {
     setHome(false);
@@ -72,6 +87,9 @@ const MenuBar = (props) => {
     setJourney(false);
     setForum(false);
     setLinks(false);
+    setChat(false);
+    setGear(false);
+    props.navigation.navigate(DASHBOARD_SCREEN)
   };
   const onResource = () => {
     setHome(false);
@@ -92,6 +110,9 @@ const MenuBar = (props) => {
     setJourney(true);
     setForum(false);
     setLinks(false);
+    setChat(false);
+    setGear(false);
+    props.navigation.navigate(JOURNEY);
   };
   const onForum = () => {
     setHome(false);
@@ -102,8 +123,11 @@ const MenuBar = (props) => {
     setJourney(false);
     setForum(true);
     setLinks(false);
+    setChat(false);
+    setGear(false);
   };
-  const onLinks = () => {
+
+  const onChat = () => {
     setHome(false);
     setLive(false);
     setCourse(false);
@@ -111,73 +135,88 @@ const MenuBar = (props) => {
     setResources(false);
     setJourney(false);
     setForum(false);
-    setLinks(true);
+    setLinks(false);
+    setGear(false);
+    setChat(true);
+  };
+  const onGear = () => {
+    setHome(false);
+    setLive(false);
+    setCourse(false);
+    setAccountibility(false);
+    setResources(false);
+    setJourney(false);
+    setForum(false);
+    setLinks(false);
+    setChat(false);
+    setGear(true);
   };
   return (
-    <DrawerContentScrollView {...props} showsVerticalScrollIndicator={false}>
-      <View
-        style={{
-          alignItems: "center",
-        }}
-      >
+      <DrawerContentScrollView {...props} showsVerticalScrollIndicator={false}>
         <TouchableOpacity
-          onPress={() => onHome()}
-          style={home ? styles.activeIconHolder2 : styles.iconHolder2}
+            onPress={() => onHome()}
+            style={home ? styles.activeIconHolder2 : styles.iconHolder2}
         >
-          <Home />
+          {home ? <HomeBold /> : <Home />}
           <Text style={styles.txt}>Dashboard</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => onLive()}
-          style={live ? styles.activeIconHolder : styles.iconHolder}
+            onPress={() => onLive()}
+            style={live ? styles.activeIconHolder : styles.iconHolder}
         >
-          <Live />
+          {live ? <LiveBold /> : <Live />}
           <Text style={styles.txt}>Live Training</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => onCourse()}
-          style={course ? styles.activeIconHolder : styles.iconHolder}
+            onPress={() => onCourse()}
+            style={course ? styles.activeIconHolder : styles.iconHolder}
         >
-          <Second />
+          {course ? <CoursesBold /> : <Second />}
           <Text style={styles.txt}>Course</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => onSettings()}
-          style={accountibility ? styles.activeIconHolder : styles.iconHolder}
+            onPress={() => onSettings()}
+            style={accountibility ? styles.activeIconHolder : styles.iconHolder}
         >
-          <Trophy />
-          <Text style={styles.txt}>Accountibility</Text>
+          {accountibility ? <TrophyBold /> : <Trophy />}
+          <Text style={styles.txt}>Accountability</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => onResource()}
-          style={resources ? styles.activeIconHolder : styles.iconHolder}
+            onPress={() => onResource()}
+            style={resources ? styles.activeIconHolder : styles.iconHolder}
         >
-          <Settings />
+          {resources ? <RenchBold /> : <Settings />}
           <Text style={styles.txt}>Resources</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => onJourney()}
-          style={journey ? styles.activeIconHolder : styles.iconHolder}
+            onPress={() => onJourney()}
+            style={journey ? styles.activeIconHolder : styles.iconHolder}
         >
-          <Bag />
+          {journey ? <BagBold /> : <Bag />}
           <Text style={styles.txt}>Journey</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => onForum()}
-          style={forum ? styles.activeIconHolder : styles.iconHolder}
+            onPress={() => onForum()}
+            style={forum ? styles.activeIconHolder : styles.iconHolder}
         >
-          <Msg />
+          {forum ? <ChatBold height={25} width={25}/> : <Msg height={25} width={25}/>}
           <Text style={styles.txt}>Forum</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => onLinks()}
-          style={links ? styles.activeIconHolder : styles.iconHolder}
+            onPress={() => onChat()}
+            style={chat ? styles.activeIconHolder : styles.iconHolder}
         >
-          <Globe />
-          <Text style={styles.txt}>Links</Text>
+          {chat ? <MyChatBold /> : <Chat />}
+          <Text style={styles.txt}>Chat</Text>
         </TouchableOpacity>
-      </View>
-    </DrawerContentScrollView>
+        <TouchableOpacity
+            onPress={() => onGear()}
+            style={gear ? styles.activeIconHolder : styles.iconHolder}
+        >
+          {gear ? <SettingsBold /> : <Gear />}
+          <Text style={styles.txt}>Settings</Text>
+        </TouchableOpacity>
+      </DrawerContentScrollView>
   );
 };
 const styles = StyleSheet.create({

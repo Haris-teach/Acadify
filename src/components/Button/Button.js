@@ -43,9 +43,11 @@ class Button extends React.Component {
       isText,
       isImageStyle,
       fontFamily,
+      disabled
     } = this.props;
     return (
       <TouchableOpacity
+          disabled={disabled}
         onPress={onPress}
         activeOpacity={0.7}
         style={[

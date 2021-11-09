@@ -106,7 +106,9 @@ const PlanScreen = props => {
             );
           } else {
             console.log('Error ==>', response.response);
-            Toast.show(response.response.data.error.email, Toast.LONG);
+            setTimeout(() => {
+                Toast.show(response.response.data.error.email, Toast.LONG);
+            },200)
           }
         } else {
           setLoading(false);

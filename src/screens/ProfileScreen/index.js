@@ -3,15 +3,15 @@
 import React, {useEffect, useState} from 'react';
 import {
     View,
-    ImageBackground,
+    TextInput,
     ScrollView,
     KeyboardAvoidingView,
     Platform,
     StatusBar, Image,
 } from 'react-native';
-import {TextInput} from 'react-native-paper';
+import {TextInput as Input} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
-import {heightPercentageToDP as hp} from "react-native-responsive-screen";
+import {heightPercentageToDP as hp, widthPercentageToDP} from "react-native-responsive-screen";
 import Toast from 'react-native-simple-toast';
 
 //================================ Local Imported Files ======================================//
@@ -102,7 +102,7 @@ const ProfileScreen = props => {
                 </View>
                 <View style={styles.inputView}>
                     <View style={styles.inputSection}>
-                        <TextInput
+                        <Input
                             style={styles.inputText}
                             label="First Name"
                             mode={'outlined'}
@@ -128,7 +128,7 @@ const ProfileScreen = props => {
                         />
                     </View>
                     <View style={styles.inputSection}>
-                        <TextInput
+                        <Input
                             style={styles.inputText}
                             label="Last Name"
                             mode={'outlined'}
@@ -154,7 +154,7 @@ const ProfileScreen = props => {
                         />
                     </View>
                     <View style={styles.inputSection}>
-                        <TextInput
+                        <Input
                             style={styles.inputText}
                             label="Email"
                             mode={'outlined'}
@@ -182,7 +182,7 @@ const ProfileScreen = props => {
                         />
                     </View>
                     <View style={styles.inputSection}>
-                        <TextInput
+                        <Input
                             style={styles.inputText}
                             label="Phone Number"
                             mode={'outlined'}
@@ -211,27 +211,12 @@ const ProfileScreen = props => {
                     </View>
                     <View style={[styles.inputSection,{height:hp(17)}]}>
                         <TextInput
-                            style={[styles.inputText,{height:hp(15)}]}
-                            label="Description"
-                            mode={'outlined'}
-                            selectionColor={colors.white}
-                            theme={{
-                                roundness: 6,
-                                colors: {
-                                    primary: colors.inputFocus,
-                                    placeholder: colors.white,
-                                    text: colors.white,
-                                },
-                                fonts: {
-                                    regular: {
-                                        fontFamily: fonts.regular,
-                                    },
-                                },
-                            }}
+                            style={[styles.inputText,{height:hp(15),borderWidth:1,paddingTop:hp(2),paddingLeft:widthPercentageToDP(4),borderColor:colors.app_border}]}
+                            placeholder="Description"
+                            placeholderTextColor={colors.white}
                             multiline={true}
                             textAlignVertical={'top'}
                             outlineColor={colors.app_border}
-                            underlineColorAndroid="transparent"
                             editable={false}
                             onChangeText={description => setDescription(description)}
                             value={description}

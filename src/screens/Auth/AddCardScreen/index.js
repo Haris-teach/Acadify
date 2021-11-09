@@ -18,7 +18,6 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import Toast from 'react-native-simple-toast';
 import {CommonActions} from "@react-navigation/native";
-import moment from 'moment';
 
 //================================ Local Imported Files ======================================//
 
@@ -164,12 +163,15 @@ const AddCardScreen = props => {
                 </Text>
               </View>
               <View style={styles.dataView}>
-                <Text>09/22</Text>
+                {/*<Text>09/22</Text>*/}
               </View>
             </View>
           </ImageBackground>
         </View>
         <View style={styles.inputView}>
+          <View style={styles.cardTextView}>
+              <Text style={styles.cardText}>Card Detail</Text>
+          </View>
           <View style={styles.inputSection}>
             <TextInput
               style={[styles.inputText, {alignSelf: 'center'}]}
@@ -307,6 +309,7 @@ const AddCardScreen = props => {
             <Button
               width={wp(40)}
               buttonText={'No'}
+              bgColor={colors.card_background}
               onPress={() => props.navigation.goBack()}
             />
           </View>
@@ -317,7 +320,8 @@ const AddCardScreen = props => {
               bgColor={colors.white}
               borderColor={colors.white}
               textColor={colors.black}
-              onPress={() => onPay()}
+              // onPress={() => onPay()}
+              onPress={() => console.log('Data')}
             />
           </View>
         </View>

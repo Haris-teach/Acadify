@@ -20,15 +20,19 @@ const AddJourney = props => {
     const token = useSelector(state => state.ApiData.token);
     const [title,setTitle]             = useState('');
     const [description,setDescription] = useState('');
-    const [loading,setLoading] = useState('');
+    const [isDisable,setIsDisable] = useState(false);
+    const [loading,setLoading] = useState(false);
 
 
     const onPressSave = () => {
         if(title === '' || title === ' '){
+            setIsDisable(false);
             Toast.show('Please Enter Title',Toast.LONG)
         } else if (description === '' || description === ' '){
+            setIsDisable(false);
             Toast.show('Please Enter Description',Toast.LONG)
         } else {
+            setIsDisable(true);
             onSaveApi()
         }
     }
@@ -46,9 +50,11 @@ const AddJourney = props => {
                     setTimeout(() => {
                         Toast.show('Journey Successfully Created',Toast.LONG)
                     },200)
+                    props.navigation.goBack();
                 }
             }else {
                 setLoading(false);
+                setIsDisable(false);
                 console.log('Response',response.response)
             }
         })
@@ -106,6 +112,7 @@ const AddJourney = props => {
                         bgColor={colors.white}
                         borderColor={colors.white}
                         textColor={colors.black}
+                        disabled={isDisable}
                         onPress={() => onPressSave()}
                     />
                 </View>

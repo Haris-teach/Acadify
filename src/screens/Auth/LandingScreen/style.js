@@ -34,8 +34,9 @@ const styles = StyleSheet.create({
   },
   bottomView: {
     flex: 0.15,
-    marginBottom: Platform.OS === 'ios' ? hp(5) : null,
-    justifyContent: 'center',
+    marginBottom: Platform.OS === 'ios' ? hp(3) : null,
+    // justifyContent: 'center',
+    marginTop:hp(4),
     alignItems: 'center',
   },
 });

@@ -34,7 +34,7 @@ const CardScreen = props => {
       </View>
       <View style={styles.subHeadingView}>
         <Text style={styles.subHeadingText}>
-          Are you sure you want to purchase courses?
+          Are you sure you want to purchase this plan?
         </Text>
       </View>
       <View style={[styles.subHeadingView, {height: hp(5)}]}>

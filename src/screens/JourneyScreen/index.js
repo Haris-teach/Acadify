@@ -53,7 +53,7 @@ const JourneyScreen = (props) => {
 
     const renderItems = (item,index) => {
         let date = moment(item.createdAt).format('DD/MM/YYYY');
-        let time = moment(item.createdAt).format('HH:MM')
+        let time = moment(item.createdAt).format('HH:mm')
         return(
             <JourneyComponent
                 id={item.id}
@@ -74,7 +74,7 @@ const JourneyScreen = (props) => {
                 <AppHeaderNative
                     leftIconPath={true}
                     rightIconOnePath={true}
-                    onLeftIconPress={() => console.log('Drawer')}
+                    onLeftIconPress={() => props.navigation.openDrawer()}
                     onRightIconPress={() => console.log('Data on Ring')}
                 />
             </View>

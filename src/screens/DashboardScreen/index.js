@@ -11,6 +11,8 @@ import {
 import { useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 import { useSelector } from "react-redux";
+import {heightPercentageToDP, widthPercentageToDP} from "react-native-responsive-screen";
+import {useIsFocused} from "@react-navigation/native";
 
 //================================ Local Imported Files ======================================//
 
@@ -22,8 +24,12 @@ import CourseCard from "../../components/CourseCard/CourseCard";
 import colors from "../../assets/colors/colors";
 import ApiHelper from "../../api/ApiHelper";
 import AppHeaderNative from "../../components/AppHeaderNative";
+import AppLoading from "../../components/AppLoading";
+
 
 const DashboardScreen = (props) => {
+
+  const isFocused = useIsFocused();
   const [toggle, setToggle] = useState(true);
   const [selectedLanguage, setSelectedLanguage] = useState();
   const [visible, setVisible] = useState(false);
@@ -31,14 +37,13 @@ const DashboardScreen = (props) => {
   const [loading, setLoading] = useState(false);
   const [coursesData, setCoursesData] = useState();
 
+
   const getUserProfile = (props) => {
     setLoading(true);
-
     ApiHelper.getCoursesData(token, (response) => {
       if (response.isSuccess) {
         setLoading(false);
-        if (response.response.data.code == 200) {
-          console.log("here's my res - - - ", response.response.data.data.docs);
+        if (response.response.data.code === 200) {
           setCoursesData(response.response.data.data.docs);
         } else {
           console.log("Error inner ==>", response.response.data);
@@ -52,48 +57,20 @@ const DashboardScreen = (props) => {
 
   useEffect(() => {
     getUserProfile();
-  }, []);
+  }, [isFocused]);
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-<View style={{height:35}}>
-  <AppHeaderNative
-      leftIconPath={true}
-      rightIconOnePath={true}
-      onLeftIconPress={() => props.navigation.openDrawer()}
-      onRightIconPress={() => console.log('Data on Ring')}
-  />
-</View>
-      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <View style={{ flexDirection: "row" }}>
-          <Text style={styles.topHeading}>All Courses</Text>
-
-          <TouchableOpacity
-            onPress={() => setVisible(!visible)}
-            style={{ marginTop: 14, marginLeft: 5 }}
-          >
-            <Drop />
-          </TouchableOpacity>
-        </View>
-
-        <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity style={styles.iconHolder}>
-            <Search />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setToggle(!toggle)}
-            style={[
-              styles.iconHolder,
-              {
-                marginLeft: 7,
-                marginRight: 3,
-              },
-            ]}
-          >
-            <Filter />
-          </TouchableOpacity>
-        </View>
+      {AppLoading.renderLoading(loading)}
+      <View style={{height:35}}>
+        <AppHeaderNative
+          leftIconPath={true}
+          rightIconOnePath={true}
+          onLeftIconPress={() => props.navigation.openDrawer()}
+          onRightIconPress={() => console.log('Data on Ring')}
+        />
       </View>
+
       {visible ? (
         <Picker
           style={{
@@ -125,6 +102,42 @@ const DashboardScreen = (props) => {
           <FlatList
             data={coursesData}
             keyExtractor={(itm, ind) => ind.toString()}
+            ListHeaderComponent={() => {
+              return(
+                  <View style={{ flexDirection: "row", justifyContent: "space-between" ,alignItems:'center',paddingHorizontal:widthPercentageToDP(4),height:heightPercentageToDP(8)}}>
+                    <View style={{ flexDirection: "row" }}>
+                      <Text style={styles.topHeading}>All Courses</Text>
+
+                      <TouchableOpacity
+                          onPress={() => console.log('data')}
+                          // onPress={() => setVisible(!visible)}
+                          style={{  marginTop:10,marginLeft: 7 }}
+                      >
+                        <Drop />
+                      </TouchableOpacity>
+                    </View>
+
+                    <View style={{ flexDirection: "row" }}>
+                      <TouchableOpacity style={styles.iconHolder}>
+                        <Search />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                          // onPress={() => setToggle(!toggle)}
+                          onPress={() => console.log('Data')}
+                          style={[
+                            styles.iconHolder,
+                            {
+                              marginLeft: 7,
+                              marginRight: 3,
+                            },
+                          ]}
+                      >
+                        <Filter />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+              )
+            }}
             renderItem={(item, index) => {
               return (
                 <TouchableOpacity style={styles.innerContainer}>

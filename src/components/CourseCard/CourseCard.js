@@ -1,6 +1,8 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import colors from "../../assets/colors/colors";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
+import fonts from "../../assets/fonts/fonts";
 
 const CourseCard = (props) => {
   return (
@@ -11,7 +13,7 @@ const CourseCard = (props) => {
           uri: props.imgUri,
         }}
       />
-      <View style={{ flex: 1, justifyContent: "space-around", marginLeft: 10 }}>
+      <View style={{ justifyContent: "space-around", marginLeft: 15, width:wp(60),paddingVertical:wp(3)}}>
         <Text style={styles.text}>{props.title}</Text>
         <Text style={{ color: colors.greyTxt }}>{props.createdBy}</Text>
         <Text style={{ color: colors.greyTxt }}>(64646)</Text>
@@ -25,19 +27,25 @@ const CourseCard = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: "98%",
-    height: 130,
+    width: wp(90),
+    height: hp(15),
     backgroundColor: colors.image_background,
-    justifyContent: "center",
     borderRadius: 15,
     flexDirection: "row",
+    alignSelf:'center'
   },
   imageView: {
-    height: 129,
-    width: 140,
-    borderRadius: 10,
+    height: hp(15),
+    width: hp(15),
+    borderRadius: wp(4),
   },
-  text: { color: "#FFFFFF", flexWrap: "wrap", fontWeight: "500" },
+  text: {
+    color: colors.white,
+    flexWrap: "wrap",
+    fontWeight: "500",
+    fontSize:14,
+    fontFamily:fonts.semi
+  },
 });
 
 export default CourseCard;

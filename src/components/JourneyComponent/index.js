@@ -33,7 +33,7 @@ const JourneyComponent = (props) => {
                 </View>
             </View>
             <View style={styles.imageView}>
-                <Text style={[styles.titleText,{width:wp(83),fontSize:12,color:colors.date_text}]}>{props.description}</Text>
+                <Text style={[styles.titleText,{width:wp(83),fontSize:12,color:colors.date_text}]} >{props.description}</Text>
             </View>
         </View>
     );
