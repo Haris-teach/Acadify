@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         alignItems:'center',
         justifyContent:'space-between',
+        borderWidth:0
     },
     placeHolderText:{
         fontFamily:fonts.regular,
@@ -152,7 +153,7 @@ const styles = StyleSheet.create({
         color:colors.white,
     },
     flatListView:{
-        marginTop:hp(3),
+        marginTop:hp(4),
         justifyContent:'center',
         alignItems:'center',
     }

@@ -15,6 +15,7 @@ const colors = {
   date_background:'#181818',
   greyTxt: "#D1D1D1",
   card_background: "#171717",
+  checklist_item:'#565656'
 };
 
 export default colors;

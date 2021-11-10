@@ -34,20 +34,23 @@ import DateImage from "../../assets/images/date.svg";
 import AddSign from "../../assets/images/addIcon.svg";
 import DeleteSign from "../../assets/images/delete.svg";
 
-const AddGoal = props => {
+const EditAccountability = props => {
+
+    let data = props.route.params.item;
+    let propDate = moment(data.dateCompleted).format("MM/DD/YYYY");
 
     const isFocused = useIsFocused();
     const token = useSelector(state => state.ApiData.token);
-    const [progress,setProgress]       = useState(0);
-    const [title,setTitle]             = useState('');
-    const [description,setDescription] = useState('');
-    const [value, setValue]            = useState('Choose Category');
-    const [date,setDate]               = useState('MM/DD/YYYY');
+    const [progress,setProgress]       = useState(data.progress);
+    const [title,setTitle]             = useState(data.title);
+    const [description,setDescription] = useState(data.description);
+    const [value, setValue]            = useState(data.Category.name);
+    const [date,setDate]               = useState(propDate);
     const [isDisable,setIsDisable]     = useState(false);
     const [loading,setLoading]         = useState(false);
     const [dateModal,setDateModal]     = useState(false);
     const [open, setOpen]              = useState(false);
-    const [checkList, setCheckList]    = useState([]);
+    const [checkList, setCheckList]    = useState(data.ChecklistItems);
     const [textInputs, setTextInputs]  = useState([]);
     const [items, setItems]            = useState([]);
 
@@ -104,7 +107,7 @@ const AddGoal = props => {
             if(checkList.length > 0){
                 checkList.map((value) => {
                     if(value.name === ''){
-                       checkValue = true;
+                        checkValue = true;
                     }
                 })
                 if(checkValue){
@@ -195,15 +198,15 @@ const AddGoal = props => {
                 renderRightActions = {() => leftAction(item,index)}
                 onSwipeableRightOpen = {() => console.log('Open')}
             >
-            <View style={styles.listView}>
-                <TextInput
-                    style={styles.inputListView}
-                    placeholder={'Enter title'}
-                    placeholderTextColor={colors.inputColor}
-                    onChangeText={(text) => updateState(index,text)}
-                    value={checkList[index].name}
-                />
-            </View>
+                <View style={styles.listView}>
+                    <TextInput
+                        style={styles.inputListView}
+                        placeholder={'Enter title'}
+                        placeholderTextColor={colors.inputColor}
+                        onChangeText={(text) => updateState(index,text)}
+                        value={checkList[index].name}
+                    />
+                </View>
             </Swipeable>
         )
     }
@@ -225,13 +228,13 @@ const AddGoal = props => {
         <KeyboardAvoidingView
             style={styles.mainContainer}
             behavior={Platform.OS === 'ios' ? 'padding' : null}>
-                <StatusBar backgroundColor={colors.app_background} />
+            <StatusBar backgroundColor={colors.app_background} />
             {AppLoading.renderLoading(loading)}
             <ScrollView
                 style={[styles.mainContainer,{paddingTop:0}]}
                 showsVerticalScrollIndicator={false}>
                 <View style={styles.headingView}>
-                    <Text style={styles.headingText}>Create Your Goal</Text>
+                    <Text style={styles.headingText}>Edit Your Goal</Text>
                 </View>
                 <View style={styles.inputView}>
                     <View style={styles.inputBox}>
@@ -267,28 +270,28 @@ const AddGoal = props => {
                     </View>
                     <View style={styles.inputBox}>
                         <Text style={styles.titleText}>Category</Text>
-                            <DropDownPicker
-                                style={styles.dateViewStyle}
-                                open={open}
-                                items={items}
-                                setOpen={setOpen}
-                                placeholder={value}
-                                value={value}
-                                placeholderStyle={{color:colors.inputColor}}
-                                showArrowIcon={true}
-                                closeAfterSelecting={true}
-                                showTickIcon={false}
-                                zIndex={9999}
-                                dropDownContainerStyle={{backgroundColor:colors.image_background,marginTop:hp(2),borderColor:'transparent',borderTopStartRadius:hp(1),borderTopEndRadius:hp(1),zIndex:0}}
-                                arrowIconStyle={{tintColor:colors.white,height:25,width:25}}
-                                listItemLabelStyle={{color:colors.white}}
-                                containerStyle={styles.containerStyle}
-                                textStyle={{color:colors.black}}
-                                labelStyle={{color:colors.white}}
-                                setValue={setValue}
-                            />
+                        <DropDownPicker
+                            style={styles.dateViewStyle}
+                            open={open}
+                            items={items}
+                            setOpen={setOpen}
+                            placeholder={value}
+                            value={value}
+                            placeholderStyle={{color:colors.inputColor}}
+                            showArrowIcon={true}
+                            closeAfterSelecting={true}
+                            showTickIcon={false}
+                            zIndex={9999}
+                            dropDownContainerStyle={{backgroundColor:colors.image_background,marginTop:hp(2),borderColor:'transparent',borderTopStartRadius:hp(1),borderTopEndRadius:hp(1),zIndex:0}}
+                            arrowIconStyle={{tintColor:colors.white,height:25,width:25}}
+                            listItemLabelStyle={{color:colors.white}}
+                            containerStyle={styles.containerStyle}
+                            textStyle={{color:colors.black}}
+                            labelStyle={{color:colors.white}}
+                            setValue={setValue}
+                        />
                     </View>
-                    <View style={[styles.inputBox,{height:hp(14),zIndex:-1}]}>
+                    <View style={[styles.inputBox,{height:hp(15),zIndex:-1}]}>
                         <Text style={styles.titleText}>Progress</Text>
                         <View style={styles.sliderView}>
                             <SliderText
@@ -296,16 +299,16 @@ const AddGoal = props => {
                                 minimumTrackTintColor={colors.button_text}
                                 maximumTrackTintColor={colors.inputColor}
                                 stepValue={1}
-                                // multiplier={1.1}
                                 thumbTintColor={colors.button_text}
                                 customCountStyle={{color:colors.white,fontSize:10}}
                                 customLabelStyle={{color:colors.white,fontSize:wp(4)}}
                                 minimumValueLabel="0%"
                                 maximumValueLabel="100%"
                                 onValueChange={(id) => setProgress(id)}
-                                sliderValue={progress} />
+                                sliderValue={progress}
+                                value={progress}
+                            />
                         </View>
-
                         {/*<Slider*/}
                         {/*    style={styles.sliderView}*/}
                         {/*    minimumValue={0}*/}
@@ -321,7 +324,7 @@ const AddGoal = props => {
                         {/*    <Text style={[styles.placeHolderText,{color:colors.white}]}>100%</Text>*/}
                         {/*</View>*/}
                     </View>
-                    <View style={[styles.inputBox,{height:hp(4),zIndex:-1}]}>
+                    <View style={[styles.inputBox,{height:hp(5),zIndex:-1}]}>
                         <View style={styles.checkListView}>
                             <Text style={styles.titleText}>Checklist</Text>
                             <TouchableOpacity activeOpacity={0.7} onPress={() => onAddNewList()}>
@@ -350,7 +353,7 @@ const AddGoal = props => {
                     <View style={styles.btnView}>
                         <Button
                             width={wp(40)}
-                            buttonText={'Save'}
+                            buttonText={'Update'}
                             bgColor={colors.white}
                             borderColor={colors.white}
                             textColor={colors.black}
@@ -371,4 +374,4 @@ const AddGoal = props => {
     );
 };
 
-export default AddGoal;
+export default EditAccountability;

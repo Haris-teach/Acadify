@@ -18,13 +18,15 @@ import SignUpScreen from "./screens/Auth/SignUpScreen";
 import ForgotPasswordScreen from "./screens/Auth/ForgotPassword";
 import LandingScreen from "./screens/Auth/LandingScreen";
 import {
-    ADD_CARD, ADD_GOAL,
+    ADD_CARD,
+    ADD_GOAL,
     ADD_JOURNEY,
     COURSE_SCREEN,
     CREDIT_CARD,
-    DASHBOARD_SCREEN,
+    DASHBOARD_SCREEN, EDIT_ACCOUNTABILITY,
     EDIT_PROFILE_SCREEN,
-    FORGOT_PASSWORD, GET_ACCOUNTABILITY,
+    FORGOT_PASSWORD,
+    GET_ACCOUNTABILITY,
     JOURNEY,
     LANDING_SCREEN,
     LOGIN_SCREEN,
@@ -48,6 +50,8 @@ import PasswordUpdate from "./screens/PasswordUpdate";
 import VideoScreen from "./screens/VideoScreen";
 import CourseScreen from "./screens/CourseScreen";
 import AddGoal from "./screens/CreateGoal";
+import GetAccountability from "./screens/GetAccountability";
+import EditAccountability from "./screens/EditAccountability";
 import HomeActive from "./assets/images/DashboardActive.svg";
 import HomeInActive from "./assets/images/DashboardInActive.svg";
 import PlayActive from "./assets/images/play_active.svg";
@@ -56,7 +60,6 @@ import MessageActive from "./assets/images/message_active.svg";
 import MessageInActive from "./assets/images/message_inactive.svg";
 import SettingActive from "./assets/images/setting_active.svg";
 import SettingInActive from "./assets/images/setting_inactive.svg";
-import GetAccountability from "./screens/GetAccountability";
 
 const Tab = createBottomTabNavigator();
 const MyTabs = () => {
@@ -144,6 +147,7 @@ const MyNewStack = () => {
         <RootStack.Screen name={COURSE_SCREEN} component={CourseScreen}/>
         <RootStack.Screen name={ADD_GOAL} component={AddGoal}/>
         <RootStack.Screen name={GET_ACCOUNTABILITY} component={GetAccountability}/>
+        <RootStack.Screen name={EDIT_ACCOUNTABILITY} component={EditAccountability}/>
     </RootStack.Navigator>
   );
 };

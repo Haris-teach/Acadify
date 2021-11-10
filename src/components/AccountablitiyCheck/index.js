@@ -32,7 +32,7 @@ const AccountabilityComponent = (props) => {
                     <AnimatedCircularProgress
                         size={75}
                         width={6}
-                        fill={10}
+                        fill={props.progress}
                         rotation={0}
                         lineCap={'round'}
                         tintColor={colors.button_text}

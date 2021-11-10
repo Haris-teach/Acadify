@@ -254,6 +254,33 @@ class ApiServices {
   };
 
 
+  getCategories = (token,type,callback) => {
+
+    var config = {
+      method: "get",
+      url: BASE_URL + `/api/v1/category/categories?type=${type}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  };
+
+
   newJourney = (token,title,description,callback) => {
     var data = JSON.stringify({
       "title": title,
@@ -269,7 +296,7 @@ class ApiServices {
       },
       data : data
     };
-console.log('Config',config);
+      console.log('Config',config);
 
     axios(config)
         .then((response) => {
