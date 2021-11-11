@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         alignItems:'center',
         justifyContent:'space-between',
+        borderWidth:0
     },
     placeHolderText:{
         fontFamily:fonts.regular,

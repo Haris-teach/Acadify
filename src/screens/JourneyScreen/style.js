@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
         flex:0.1
     },
     listView:{
-        flex:0.8,
+        flex:0.9,
         justifyContent:'center',
         alignItems:'center'
     },
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
         paddingHorizontal:wp(7.5),
     },
     activityText:{
-        fontSize:14,
+        fontSize:wp(4.2),
         color:colors.white,
         fontFamily:fonts.semi
     },

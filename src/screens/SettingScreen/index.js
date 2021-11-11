@@ -5,7 +5,7 @@ import {
     View,
     Text,
     FlatList,
-    Alert,
+    Alert, StatusBar,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 import {CommonActions} from "@react-navigation/native";
@@ -17,6 +17,7 @@ import SettingTabComponent from "../../components/SettingTabComponent";
 import {LOGIN_SCREEN, PASSWORD_UPDATE, PROFILE_SCREEN} from "../../constants/navigators";
 import * as ApiDataActions from "../../../redux/store/actions/ApiData";
 import AppHeaderNative from "../../components/AppHeaderNative";
+import colors from "../../assets/colors/colors";
 
 
 const SettingScreen = (props) => {
@@ -121,6 +122,7 @@ const SettingScreen = (props) => {
 
     return (
         <View style={styles.mainContainer}>
+            <StatusBar backgroundColor={colors.app_background} />
             <View style={styles.headerView}>
                 <AppHeaderNative
                     leftIconPath={true}

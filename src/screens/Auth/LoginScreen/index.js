@@ -23,7 +23,7 @@ import fonts from "../../../assets/fonts/fonts";
 import Button from "../../../components/Button/Button";
 import LoginLogo from "../../../assets/images/login_screen.svg";
 import {
-  FORGOT_PASSWORD,
+  FORGOT_PASSWORD, MY_DRAWER,
   MY_TABS,
   SIGNUP_SCREEN,
 } from "../../../constants/navigators";
@@ -34,8 +34,8 @@ import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
 
 const LoginScreen = (props) => {
   const dispatch = useDispatch();
-  const [email, setEmail] = useState("user@mailinator.com");
-  const [password, setPassword] = useState("Dvorak1234!");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const onPressLogin = () => {
@@ -68,7 +68,7 @@ const LoginScreen = (props) => {
           props.navigation.dispatch(
             CommonActions.reset({
               index: 0,
-              routes: [{ name: MY_TABS }],
+              routes: [{ name: MY_DRAWER }],
             })
           );
           setPassword("");

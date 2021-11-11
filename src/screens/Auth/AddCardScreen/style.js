@@ -21,13 +21,13 @@ const styles = StyleSheet.create({
     width: Platform.OS === 'ios' ? hp(50) : hp(60),
   },
   imageView: {
-    height: hp(30),
+    height: hp(35),
     width: wp(100),
     justifyContent: 'center',
     alignItems: 'center',
   },
   inputView: {
-    height: hp(40),
+    height: hp(35),
     width: wp(100),
     justifyContent: 'center',
     borderTopRightRadius:wp(12),
@@ -37,13 +37,13 @@ const styles = StyleSheet.create({
   cardTextView:{
     height: hp(10),
     width: wp(100),
+    paddingTop:hp(2),
     justifyContent: 'center',
   },
   inputSection: {
-    marginTop: hp(5),
-    height: hp(10),
+    marginTop: hp(2),
+    height: hp(8),
     width: wp(100),
-    justifyContent: 'center',
   },
   inputText: {
     width: wp(85),

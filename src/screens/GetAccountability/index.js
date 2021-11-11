@@ -5,7 +5,7 @@ import {
     View,
     Text,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity, StatusBar
 } from 'react-native';
 import {useSelector} from "react-redux";
 import {useIsFocused} from "@react-navigation/native";
@@ -102,6 +102,7 @@ const GetAccountability = (props) => {
     return (
         <View style={styles.mainContainer}>
             {AppLoading.renderLoading(loading)}
+            <StatusBar backgroundColor={colors.app_background} />
             <View style={styles.headerView}>
                 <AppHeaderNative
                     leftIconPath={true}

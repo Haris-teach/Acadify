@@ -30,9 +30,10 @@ import Button from '../../../components/Button/Button';
 import AppHeader from '../../../components/AppHeader';
 import AppLoading from '../../../components/AppLoading';
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
-import {MY_TABS} from "../../../constants/navigators";
+import {LOGIN_SCREEN, MY_TABS} from "../../../constants/navigators";
 
 const AddCardScreen = props => {
+
   const data = useSelector(state => state.ApiData.signUpData);
   const dispatch = useDispatch();
   const [cardNumber, setCardNumber] = useState('');
@@ -41,7 +42,6 @@ const AddCardScreen = props => {
   const [cvcLength, setCvcLength] = useState(3);
   const [loading, setLoading] = useState(false);
 
-  console.log('Props',props.route.params.planName);
 
   const onPay = () => {
     if (cardNumber.length < 19) {
@@ -232,6 +232,7 @@ const AddCardScreen = props => {
                 flexDirection: 'row',
                 height: hp(9),
                 marginTop: hp(2),
+                justifyContent: 'center',
               },
             ]}>
             <TextInput
@@ -308,7 +309,7 @@ const AddCardScreen = props => {
           <View style={styles.btnView}>
             <Button
               width={wp(40)}
-              buttonText={'No'}
+              buttonText={'Cancel'}
               bgColor={colors.card_background}
               onPress={() => props.navigation.goBack()}
             />
@@ -321,7 +322,7 @@ const AddCardScreen = props => {
               borderColor={colors.white}
               textColor={colors.black}
               // onPress={() => onPay()}
-              onPress={() => console.log('Data')}
+              onPress={() => props.navigation.navigate(LOGIN_SCREEN)}
             />
           </View>
         </View>

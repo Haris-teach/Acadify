@@ -33,6 +33,7 @@ import AppLoading from "../../components/AppLoading";
 import DateImage from "../../assets/images/date.svg";
 import AddSign from "../../assets/images/addIcon.svg";
 import DeleteSign from "../../assets/images/delete.svg";
+import EditIcon from "../../assets/images/delete-Icon.svg";
 
 const EditAccountability = props => {
 
@@ -235,6 +236,9 @@ const EditAccountability = props => {
                 showsVerticalScrollIndicator={false}>
                 <View style={styles.headingView}>
                     <Text style={styles.headingText}>Edit Your Goal</Text>
+                    <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('On Press Delete')}>
+                        <EditIcon/>
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.inputView}>
                     <View style={styles.inputBox}>

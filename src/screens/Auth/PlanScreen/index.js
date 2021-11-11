@@ -27,7 +27,7 @@ import Free from '../../../assets/images/free.svg';
 import Tick from '../../../assets/images/tick.svg';
 import Monthly from '../../../assets/images/monthly.svg';
 import LIFETIME from '../../../assets/images/LIFETIME.svg';
-import {CREDIT_CARD, MY_TABS} from '../../../constants/navigators';
+import {CREDIT_CARD, MY_DRAWER, MY_TABS} from '../../../constants/navigators';
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
 
 const PlanScreen = props => {
@@ -35,12 +35,12 @@ const PlanScreen = props => {
     const dispatch = useDispatch();
     const data = useSelector(state => state.ApiData.signUpData);
     const [loading, setLoading] = useState(false);
-  const [packages, setPackages] = useState('');
-  const [indexFeature, setIndexFeature] = useState('');
-  const [stripeId, setStripeId] = useState('');
-  const [planName, setPlaneName] = useState('');
-  const [setIndex, setIndexValue] = useState(0);
-  const [isVisible, setVisible] = useState(false);
+    const [packages, setPackages] = useState('');
+    const [indexFeature, setIndexFeature] = useState('');
+    const [stripeId, setStripeId] = useState('');
+    const [planName, setPlaneName] = useState('');
+    const [setIndex, setIndexValue] = useState(0);
+    const [isVisible, setVisible] = useState(false);
 
   useEffect(() => {
     getPlans();
@@ -101,7 +101,7 @@ const PlanScreen = props => {
               props.navigation.dispatch(
               CommonActions.reset({
                 index: 0,
-                routes: [{name: MY_TABS}],
+                routes: [{name: MY_DRAWER}],
               }),
             );
           } else {

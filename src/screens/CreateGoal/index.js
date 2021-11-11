@@ -1,6 +1,6 @@
 //================================ React Native Imported Files ======================================//
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
     View,
     Text,
@@ -21,7 +21,7 @@ import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-nativ
 import {Swipeable} from 'react-native-gesture-handler';
 import {useIsFocused} from "@react-navigation/native";
 import SliderText from 'react-native-slider-text';
-import moment from "moment";
+import moment, {now} from "moment";
 
 //================================ Local Imported Files ======================================//
 
@@ -34,9 +34,11 @@ import DateImage from "../../assets/images/date.svg";
 import AddSign from "../../assets/images/addIcon.svg";
 import DeleteSign from "../../assets/images/delete.svg";
 
+
 const AddGoal = props => {
 
     const isFocused = useIsFocused();
+    const swipeRef = useRef();
     const token = useSelector(state => state.ApiData.token);
     const [progress,setProgress]       = useState(0);
     const [title,setTitle]             = useState('');
@@ -111,10 +113,10 @@ const AddGoal = props => {
                     setIsDisable(false);
                     Toast.show('Please Enter Checklist Name',Toast.LONG)
                 }else{
-                    alert()
+                    onSaveApi()
                 }
             }else{
-                alert()
+                onSaveApi()
             }
         }
     }
@@ -122,22 +124,23 @@ const AddGoal = props => {
 
     const onSaveApi = () => {
         setLoading(true);
-        ApiHelper.newJourney(token,title,description,(response) => {
+        ApiHelper.createGoal(token,title,description,0,progress,date,value,checkList,(response) => {
             if(response.isSuccess){
+                console.log('Data',response.response.data.data)
                 if(response.response.data.code === 200){
                     setLoading(false);
                     Keyboard.dismiss();
                     setTitle('');
                     setDescription('');
                     setTimeout(() => {
-                        Toast.show('Journey Successfully Created',Toast.LONG)
+                        Toast.show('Goal Successfully Created',Toast.LONG)
                     },200)
                     props.navigation.goBack();
                 }
             }else {
                 setLoading(false);
                 setIsDisable(false);
-                console.log('Response',response.response)
+                console.log('Response',response.response.response.data.error)
             }
         })
     };
@@ -147,7 +150,7 @@ const AddGoal = props => {
         const filteredData = checkList.filter((value,index) => index !== indexes);
         const filtered = textInputs.filter((value,index) => index !== indexes);
         setCheckList(filteredData);
-        setTextInputs(filtered)
+        setTextInputs(filtered);
     }
 
 
@@ -155,6 +158,7 @@ const AddGoal = props => {
         if(checkList.length < 1){
             let tempArray = [];
             tempArray.push({
+                id:now(),
                 name:'',
                 status:false
             })
@@ -162,6 +166,7 @@ const AddGoal = props => {
         }else if(checkList.length > 0){
             let tempArray = [];
             tempArray.push({
+                id:now(),
                 name:'',
                 status:false
             })
@@ -192,8 +197,10 @@ const AddGoal = props => {
     const renderItems = (item,index) => {
         return(
             <Swipeable
+                ref={swipeRef}
+                key={item.id}
                 renderRightActions = {() => leftAction(item,index)}
-                onSwipeableRightOpen = {() => console.log('Open')}
+                onSwipeableRightOpen = {() => console.log('Data')}
             >
             <View style={styles.listView}>
                 <TextInput
@@ -207,6 +214,7 @@ const AddGoal = props => {
             </Swipeable>
         )
     }
+
 
 
     const onConfirmDate = (value) => {

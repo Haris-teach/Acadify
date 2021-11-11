@@ -1,18 +1,23 @@
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
-import colors from "../../assets/colors/colors";
+import {ImageBackground, StyleSheet, Text, View} from "react-native";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import fonts from "../../assets/fonts/fonts";
+import LockIcon from "../../assets/images/lock_course.svg";
+import colors from "../../assets/colors/colors";
 
 const CourseCard = (props) => {
   return (
     <View style={styles.container}>
-      <Image
-        style={styles.imageView}
-        source={{
-          uri: props.imgUri,
-        }}
-      />
+      <ImageBackground
+          blurRadius={props.isLock ? 2 : 0}
+          imageStyle={styles.imageView}
+          style={styles.imageView}
+          source={{
+            uri: props.imgUri,
+          }}
+      >
+        {props.isLock ? <LockIcon height={45} width={45}/> : null}
+      </ImageBackground>
       <View style={{ justifyContent: "space-around", marginLeft: 15, width:wp(60),paddingVertical:wp(3)}}>
         <Text style={styles.text}>{props.title}</Text>
         <Text style={{ color: colors.greyTxt }}>{props.createdBy}</Text>
@@ -38,6 +43,8 @@ const styles = StyleSheet.create({
     height: hp(15),
     width: hp(15),
     borderRadius: wp(4),
+    justifyContent:'center',
+    alignItems:'center'
   },
   text: {
     color: colors.white,

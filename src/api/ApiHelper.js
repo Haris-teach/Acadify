@@ -311,7 +311,42 @@ class ApiServices {
             response: error,
           });
         });
+  }
 
+  createGoal = (token,title,description,catId,progress,dateComplete,catName,checkList,callback) => {
+    var data = JSON.stringify({
+      "title": title,
+      "description": description,
+      "categoryId": catId,
+      "progress": progress,
+      "dateCompleted": dateComplete,
+      "category": catName,
+      "checklist": checkList
+    });
+
+    var config = {
+      method: 'post',
+      url: BASE_URL + '/api/v1/goals/user',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
   }
 
 

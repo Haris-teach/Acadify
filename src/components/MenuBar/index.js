@@ -28,6 +28,8 @@ import MyChatBold from "../../assets/images/myChatBold.svg";
 
 import { useState } from "react";
 import {ADD_GOAL, COURSE_SCREEN, DASHBOARD_SCREEN, GET_ACCOUNTABILITY, JOURNEY} from "../../constants/navigators";
+import colors from "../../assets/colors/colors";
+import {widthPercentageToDP} from "react-native-responsive-screen";
 
 const MenuBar = (props) => {
   const [home, setHome] = useState(true);
@@ -228,8 +230,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderLeftWidth: 8,
-    borderLeftColor: "#B7A675",
+    borderLeftColor: colors.button_text,
     width: 100,
+    borderTopEndRadius:widthPercentageToDP(2),
+    borderBottomEndRadius:widthPercentageToDP(2)
   },
   iconHolder: {
     marginTop: 30,
@@ -240,11 +244,15 @@ const styles = StyleSheet.create({
     marginTop: 30,
     justifyContent: "center",
     alignItems: "center",
-    borderLeftColor: "#B7A675",
+    borderLeftColor: colors.button_text,
     borderLeftWidth: 8,
     width: 100,
   },
-  txt: { color: "white", fontSize: 10, marginTop: 3 },
+  txt: {
+    color:colors.white,
+    fontSize: 10,
+    marginTop: 3
+  },
 });
 
 export default MenuBar;

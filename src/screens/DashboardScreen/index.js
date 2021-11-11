@@ -60,9 +60,9 @@ const DashboardScreen = (props) => {
   }, [isFocused]);
 
   return (
-    <SafeAreaView style={styles.mainContainer}>
+    <View style={styles.mainContainer}>
       {AppLoading.renderLoading(loading)}
-      <View style={{height:35}}>
+      <View style={styles.headerView}>
         <AppHeaderNative
           leftIconPath={true}
           rightIconOnePath={true}
@@ -98,16 +98,16 @@ const DashboardScreen = (props) => {
         </Picker>
       ) : null}
       {toggle ? (
-        <>
+        <View style={styles.container}>
           <FlatList
             data={coursesData}
+            extraData={coursesData}
             keyExtractor={(itm, ind) => ind.toString()}
             ListHeaderComponent={() => {
               return(
-                  <View style={{ flexDirection: "row", justifyContent: "space-between" ,alignItems:'center',paddingHorizontal:widthPercentageToDP(4),height:heightPercentageToDP(8)}}>
+                  <View style={{ flexDirection: "row", justifyContent: "space-between" ,alignItems:'center',paddingHorizontal:widthPercentageToDP(4),height:heightPercentageToDP(10)}}>
                     <View style={{ flexDirection: "row" }}>
                       <Text style={styles.topHeading}>All Courses</Text>
-
                       <TouchableOpacity
                           onPress={() => console.log('data')}
                           // onPress={() => setVisible(!visible)}
@@ -142,15 +142,16 @@ const DashboardScreen = (props) => {
               return (
                 <TouchableOpacity style={styles.innerContainer}>
                   <CourseCard
-                    title={item.item.title}
-                    createdBy={item.item.createdby}
-                    imgUri={item.item.imageURL}
+                      isLock={true}
+                      title={item.item.title}
+                      createdBy={item.item.createdby}
+                      imgUri={item.item.imageURL}
                   />
                 </TouchableOpacity>
               );
             }}
           />
-        </>
+        </View>
       ) : (
         <View style={styles.mainContainer}>
           <View style={{ flex: 1, alignItems: "center" }}>
@@ -170,7 +171,7 @@ const DashboardScreen = (props) => {
           </View>
         </View>
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 

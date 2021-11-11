@@ -13,12 +13,15 @@ const styles = StyleSheet.create({
     backgroundColor: colors.app_background,
   },
   headerView:{
-    flex:0.1
+    flex:0.1,
+  },
+  container:{
+    flex:0.9,
   },
   innerContainer: {
-    marginTop: 13,
+    marginVertical: wp(2),
     width: wp(93),
-    marginLeft: 15,
+    alignSelf:'center'
   },
   heading: { fontSize: 20, fontWeight: "bold", color: "white" },
   iconHolder: {
@@ -35,7 +38,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily:fonts.semi
   },
-  viewall: { color: "white", fontSize: 15, marginRight: 3 },
   headingContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -46,7 +48,6 @@ const styles = StyleSheet.create({
     color: "white",
     marginTop: 5,
   },
-  headingView: { alignSelf: "baseline", marginLeft: 5, marginTop: 20 },
 });
 
 export default styles;

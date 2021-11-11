@@ -22,14 +22,16 @@ const styles = StyleSheet.create({
     headingView: {
         height: hp(15),
         width: wp(100),
-        justifyContent:'center',
+        alignItems:'center',
+        justifyContent:'space-between',
+        paddingHorizontal: wp(5),
+        flexDirection:'row'
     },
     headingText: {
         fontWeight: '700',
         fontSize: 24,
         color: colors.white,
         fontFamily: fonts.regular,
-        paddingHorizontal: wp(5),
     },
     inputView:{
         height: hp(72),
