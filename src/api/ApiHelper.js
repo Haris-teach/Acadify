@@ -1,5 +1,6 @@
 import axios from "axios";
 const BASE_URL = "https://api.stagingaia.com";
+// const BASE_URL = "http://192.168.1.179:5001";
 const BASE_URL_STRIPE = "https://api.stripe.com/v1";
 const STRIPE_PUBLISHABLE_KEY =
   "pk_test_51IbuHCL3SLhyon2BLACBp27GY1ecVJhQlbD2DIX7cGCmQWHNayYdJVlP9aXAdMjK6jMKR9VD4HRCAOlGAMQMB8XU005FRCU1zA";
@@ -100,11 +101,10 @@ class ApiServices {
 
 
   createImageUrl = (token, type,name, callback) => {
-    console.log('Data',type,name)
     var data = JSON.stringify({
       "ContentType": type,
       "Key": name,
-      "title": "dogs"
+      "title": ''
     });
 
     console.log('Data',data)

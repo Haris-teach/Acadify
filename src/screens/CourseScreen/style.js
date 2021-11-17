@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     announceUpperView:{
         height:hp(20),
         width:wp(100),
-        alignItems:'center'
+        alignItems:'center',
     },
     announceImage:{
         height: '100%',
@@ -62,15 +62,19 @@ const styles = StyleSheet.create({
         resizeMode:'stretch'
     },
     announceTextView:{
-        // marginTop:hp(1),
-        // maxHeight:hp(30),
+        maxHeight:hp(30),
         width:wp(100),
         justifyContent:'center',
         paddingBottom:hp(2),
-        backgroundColor:'red'
     },
     announceView:{
-        height:hp(10),
+        height:hp(9),
+        width:wp(100),
+        justifyContent:'center',
+        paddingHorizontal:wp(10),
+    },
+    descriptionText:{
+        maxHeight:hp(8),
         width:wp(100),
         paddingHorizontal:wp(10),
     },
@@ -167,6 +171,10 @@ const styles = StyleSheet.create({
         fontFamily: fonts.regular,
         fontWeight: '400',
         color: colors.white
+    },
+    backgroundVideo:{
+        height:'100%',
+        width:wp(90),
     }
 });
 

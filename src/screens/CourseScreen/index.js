@@ -6,6 +6,7 @@ import {widthPercentageToDP as wp,heightPercentageToDP as hp} from "react-native
 import {useSelector} from "react-redux";
 import Carousel from 'react-native-snap-carousel';
 import {useIsFocused} from "@react-navigation/native";
+import Video from 'react-native-video';
 import moment from "moment";
 
 //================================ Local Imported Files ======================================//
@@ -21,6 +22,7 @@ import CourseView from "../../components/CourseView";
 import AccountabilityComponent from "../../components/AccountablitiyCheck";
 import ResourceComponent from "../../components/ResourceComponent";
 import ForumComponent from "../../components/ForumCardDesign";
+import CourseSingleView from "../../components/CourseSingleView";
 
 LogBox.ignoreAllLogs(true);
 const CourseScreen = props => {
@@ -29,6 +31,7 @@ const CourseScreen = props => {
     let userData    = useSelector(state => state.ApiData.loginData);
     const token     = useSelector(state => state.ApiData.token);
     const [loading,setLoading] = useState(false);
+    const [hasImage,setHasImage] = useState(false);
     const [announcement,setAnnouncement] = useState('');
     const [items,setItems]     = useState([]);
     const [accountItems,setAccountItems] = useState([]);
@@ -42,8 +45,22 @@ const CourseScreen = props => {
     }, [isFocused]);
 
 
-    const getDashboardData = () => {
+    const getAnnouncements = () => {
         setLoading(true);
+        ApiHelper.getAnnouncements(token,(resp) => {
+            if(resp.isSuccess){
+                if(resp.response.data.code === 200){
+                    console.log('Announcements',resp.response.data.data)
+                    VideoCheck(resp.response.data.data)
+                }
+            }else{
+                // setLoading(false);
+            }
+        })
+    }
+
+
+    const getDashboardData = () => {
         ApiHelper.getDashboardData(token,(resp) => {
             if(resp.isSuccess){
                 setLoading(false);
@@ -59,32 +76,41 @@ const CourseScreen = props => {
     }
 
 
-    const getAnnouncements = () => {
-        setLoading(true);
-        ApiHelper.getAnnouncements(token,(resp) => {
-            if(resp.isSuccess){
-                setLoading(false);
-                if(resp.response.data.code === 200){
-                    console.log('Announcements',resp.response.data.data)
-                    setAnnouncement(resp.response.data.data)
-                }
-            }else{
-                setLoading(false);
-
-            }
-        })
-    }
+    const VideoCheck = (url) => {
+        if (!url.contentUrl) {
+            return;
+        }
+        const ext = url.contentUrl.slice(url.contentUrl.lastIndexOf(".") + 1);
+        if (ext === "mp4" || ext === "mkv") {
+            setHasImage(false);
+            setAnnouncement(url)
+        }else{
+            setHasImage(true);
+            setAnnouncement(url)
+        }
+    };
 
 
     const _renderItems = (item) => {
-        return (
-            <CourseView
-                name={item.title}
-                image={item.imageURL}
-                value={''}
-                ownName={item.createdby}
-            />
-        )
+        if(items.length > 0){
+            return (
+                <CourseView
+                    name={item.title}
+                    image={item.imageURL}
+                    value={''}
+                    ownName={item.createdby}
+                />
+            )
+        }else{
+            return(
+                <CourseSingleView
+                    name={item.title}
+                    image={item.imageURL}
+                    value={''}
+                    ownName={item.createdby}
+                />
+            )
+        }
     }
 
 
@@ -129,7 +155,6 @@ const CourseScreen = props => {
     return (
         <View style={styles.mainContainer}>
             <StatusBar backgroundColor={colors.app_background} />
-            {AppLoading.renderLoading(loading)}
             <View style={styles.headerView}>
                 <AppHeaderNative
                     leftIconPath={true}
@@ -139,7 +164,7 @@ const CourseScreen = props => {
                 />
             </View>
             <ScrollView style={styles.bodyView} showsVerticalScrollIndicator={false}>
-
+                {AppLoading.renderLoading(loading)}
                 <View style={styles.userDetailView}>
                     <View style={styles.nameView}>
                         <Text style={styles.userNameText} numberOfLines={1}>{userData.user.username} !</Text>
@@ -153,15 +178,22 @@ const CourseScreen = props => {
 
                 <View style={styles.announcementView}>
                     <View style={styles.announceUpperView}>
-                        <Image source={images.profile_placeHolder} style={styles.announceImage}/>
+                        {hasImage ? <Image source={images.profile_placeHolder} style={styles.announceImage}/>:
+                            <Video
+                                source={{uri: announcement.contentUrl}}
+                                controls={false}
+                                repeat={true}
+                                style={styles.backgroundVideo}
+                                resizeMode={'cover'}
+                            />}
                     </View>
                     <View style={styles.announceTextView}>
                         <View style={styles.announceView}>
                             <Text style={styles.userNameText}>Announcements</Text>
-                            <Text style={[styles.userNameText,{fontSize:wp(4),marginTop:wp(2),fontFamily:fonts.semi,fontWeight:'400',width:wp(80),color:colors.button_text}]}>{announcement.title}</Text>
+                            <Text style={[styles.userNameText,{fontSize:wp(4),marginTop:wp(2),fontFamily:fonts.semi,fontWeight:'400',width:wp(80),color:colors.button_text}]} numberOfLines={2}>{announcement.title}</Text>
                         </View>
-                        <View>
-                            <Text style={[styles.userNameText,{fontSize:wp(4),marginTop:wp(2),fontFamily:fonts.regular,fontWeight:'400',width:wp(80),color:colors.white}]}>{announcement.description}</Text>
+                        <View style={styles.descriptionText}>
+                            <Text style={[styles.userNameText,{fontSize:wp(4),marginTop:wp(2),fontFamily:fonts.regular,fontWeight:'400',width:wp(80),color:colors.white}]} numberOfLines={3}>{announcement.description}</Text>
                         </View>
                     </View>
                 </View>
@@ -180,7 +212,7 @@ const CourseScreen = props => {
                             activeSlideAlignment={'center'}
                             loop={true}
                             sliderWidth={wp(90)}
-                            itemWidth={wp(45)}
+                            itemWidth={items.length > 0 ? wp(45) : wp(90)}
                         />
                     </View>
                 </View>}
