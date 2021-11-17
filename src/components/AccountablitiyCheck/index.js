@@ -2,26 +2,19 @@
 
 import React, {useState} from "react";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
-import {View, StyleSheet, Text, TouchableOpacity} from "react-native";
+import {View, StyleSheet, Text} from "react-native";
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 //================================ Local Imported Files ======================================//
 
 import colors from "../../assets/colors/colors";
 import fonts from "../../assets/fonts/fonts";
-import DropDown from "../../assets/images/dropdown-gold.svg";
 
 
 const AccountabilityComponent = (props) => {
 
-    const [index,setIndex] = useState('');
-
-    const onPress = (value) => {
-        props.onPressCard()
-    }
-
     return (
-        <View style={index !== props.index ? styles.container : [styles.container,{backgroundColor:'#1F1F1F',borderRadius:wp(6)}]}>
+        <View style={styles.container}>
             <View style={styles.rightView}>
                 <Text style={styles.titleText} numberOfLines={1}>{props.title}</Text>
                 <Text style={[styles.titleText,{fontSize:wp(3.6)}]} numberOfLines={1}>{props.description}</Text>
@@ -46,9 +39,9 @@ const AccountabilityComponent = (props) => {
                         }
                     </AnimatedCircularProgress>
                 </View>
-                <TouchableOpacity style={styles.dropArrow} activeOpacity={0.7} onPress={() => console.log('Pressed')}>
-                    <DropDown height={20} width={20}/>
-                </TouchableOpacity>
+                {/*<TouchableOpacity style={styles.dropArrow} activeOpacity={0.7} onPress={() => console.log('Pressed')}>*/}
+                {/*    <DropDown height={20} width={20}/>*/}
+                {/*</TouchableOpacity>*/}
             </View>
         </View>
     );
@@ -58,7 +51,7 @@ const styles = StyleSheet.create({
     container: {
         height: hp(15),
         width: wp(90),
-        marginVertical: wp(2),
+        // marginVertical: wp(2),
         alignSelf:'center',
         flexDirection:'row',
         borderRadius:wp(7),

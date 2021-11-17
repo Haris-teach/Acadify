@@ -1,37 +1,39 @@
-import React from "react";
-import {
-  DrawerContentScrollView,
-} from "@react-navigation/drawer";
-import {
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import React, { useEffect } from "react";
+import { DrawerContentScrollView } from "@react-navigation/drawer";
+import { Text, StyleSheet, TouchableOpacity } from "react-native";
 import Live from "../../assets/images/live.svg";
+import RenchBold from "../../assets/images/renchbold.svg";
 import Settings from "../../assets/images/settings.svg";
+import BagBold from "../../assets/images/bagBold.svg";
 import Bag from "../../assets/images/bag.svg";
 import Trophy from "../../assets/images/trophy.svg";
-import Second from "../../assets/images/second.svg";
 import Home from "../../assets/images/home.svg";
-import Msg from "../../assets/images/msg.svg";
+import Msg from "../../assets/images/forumBold1.svg";
 import LiveBold from "../../assets/images/509.svg";
+import Second from "../../assets/images/second.svg";
 import CoursesBold from "../../assets/images/566.svg";
-import Chat from "../../assets/images/935.svg";
-import SettingsBold from "../../assets/images/setting_inactive.svg";
-import Gear from "../../assets/images/setting_inactive-false.svg";
-import RenchBold from "../../assets/images/renchbold.svg";
 import TrophyBold from "../../assets/images/tophyBold.svg";
 import HomeBold from "../../assets/images/home-bold.svg";
-import BagBold from "../../assets/images/bagBold.svg";
 import ChatBold from "../../assets/images/msg-1.svg";
-import MyChatBold from "../../assets/images/myChatBold.svg";
+import SettingsBold from "../../assets/images/settingsBold.svg";
+import Gear from "../../assets/images/settingsInactive.svg";
+import Chat from "../../assets/images/935.svg";
+import MyChatBold from "../../assets/images/Subtract.svg";
 
 import { useState } from "react";
-import {ADD_GOAL, COURSE_SCREEN, DASHBOARD_SCREEN, GET_ACCOUNTABILITY, JOURNEY} from "../../constants/navigators";
-import colors from "../../assets/colors/colors";
-import {widthPercentageToDP} from "react-native-responsive-screen";
+import {
+  ADD_GOAL,
+  COURSE_SCREEN,
+  DASHBOARD_SCREEN,
+  GET_ACCOUNTABILITY,
+  JOURNEY,
+  SETTINGS,
+} from "../../constants/navigators";
+import { height_screen } from "../../utils/Dimentions";
+import { useSelector } from "react-redux";
 
 const MenuBar = (props) => {
+
   const [home, setHome] = useState(true);
   const [live, setLive] = useState(false);
   const [course, setCourse] = useState(false);
@@ -54,7 +56,7 @@ const MenuBar = (props) => {
     setLinks(false);
     setChat(false);
     setGear(false);
-    props.navigation.navigate(COURSE_SCREEN)
+    props.navigation.navigate(COURSE_SCREEN);
   };
   const onLive = () => {
     setHome(false);
@@ -78,7 +80,7 @@ const MenuBar = (props) => {
     setForum(false);
     setLinks(false);
     setGear(false);
-    props.navigation.navigate(GET_ACCOUNTABILITY)
+    props.navigation.navigate(GET_ACCOUNTABILITY);
   };
   const onCourse = () => {
     setHome(false);
@@ -91,7 +93,7 @@ const MenuBar = (props) => {
     setLinks(false);
     setChat(false);
     setGear(false);
-    props.navigation.navigate(DASHBOARD_SCREEN)
+    props.navigation.navigate(DASHBOARD_SCREEN);
   };
   const onResource = () => {
     setHome(false);
@@ -128,7 +130,6 @@ const MenuBar = (props) => {
     setChat(false);
     setGear(false);
   };
-
   const onChat = () => {
     setHome(false);
     setLive(false);
@@ -151,15 +152,20 @@ const MenuBar = (props) => {
     setForum(false);
     setLinks(false);
     setChat(false);
-    setGear(true);
+    setGear("settings");
+    props.navigation.navigate(SETTINGS);
   };
+
+
   return (
       <DrawerContentScrollView {...props} showsVerticalScrollIndicator={false}>
         <TouchableOpacity
             onPress={() => onHome()}
-            style={home ? styles.activeIconHolder2 : styles.iconHolder2}
+            style={
+              home === true ? styles.activeIconHolder2 : styles.iconHolder2
+            }
         >
-          {home ? <HomeBold /> : <Home />}
+          { home === true ? <HomeBold /> : <Home />}
           <Text style={styles.txt}>Dashboard</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -201,7 +207,11 @@ const MenuBar = (props) => {
             onPress={() => onForum()}
             style={forum ? styles.activeIconHolder : styles.iconHolder}
         >
-          {forum ? <ChatBold height={25} width={25}/> : <Msg height={25} width={25}/>}
+          {forum ? (
+              <Msg height={25} width={25} />
+          ) : (
+              <ChatBold height={25} width={25} />
+          )}
           <Text style={styles.txt}>Forum</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -215,7 +225,7 @@ const MenuBar = (props) => {
             onPress={() => onGear()}
             style={gear ? styles.activeIconHolder : styles.iconHolder}
         >
-          {gear ? <SettingsBold /> : <Gear />}
+          {gear ? <SettingsBold /> : <Gear height={28} width={28} />}
           <Text style={styles.txt}>Settings</Text>
         </TouchableOpacity>
       </DrawerContentScrollView>
@@ -230,29 +240,23 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderLeftWidth: 8,
-    borderLeftColor: colors.button_text,
+    borderLeftColor: "#B7A675",
     width: 100,
-    borderTopEndRadius:widthPercentageToDP(2),
-    borderBottomEndRadius:widthPercentageToDP(2)
   },
   iconHolder: {
-    marginTop: 30,
+    marginTop: height_screen < 675 ? 25 : 30,
     justifyContent: "center",
     alignItems: "center",
   },
   activeIconHolder: {
-    marginTop: 30,
+    marginTop: height_screen < 675 ? 25 : 30,
     justifyContent: "center",
     alignItems: "center",
-    borderLeftColor: colors.button_text,
+    borderLeftColor: "#B7A675",
     borderLeftWidth: 8,
     width: 100,
   },
-  txt: {
-    color:colors.white,
-    fontSize: 10,
-    marginTop: 3
-  },
+  txt: { color: "white", fontSize: 10, marginTop: 3 },
 });
 
 export default MenuBar;

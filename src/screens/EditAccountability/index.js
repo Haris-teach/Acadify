@@ -35,6 +35,7 @@ import AddSign from "../../assets/images/addIcon.svg";
 import DeleteSign from "../../assets/images/delete.svg";
 import EditIcon from "../../assets/images/delete-Icon.svg";
 
+
 const EditAccountability = props => {
 
     let data = props.route.params.item;

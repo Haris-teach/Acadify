@@ -206,7 +206,6 @@ class ApiServices {
   };
 
 
-
   getToken = async (cardName, cardNumber, cvc, month, year) => {
     const card = {
       "card[number]": cardNumber.replace(/ /g, ""),
@@ -214,7 +213,6 @@ class ApiServices {
       "card[exp_year]": year,
       "card[cvc]": cvc,
     };
-    console.log("Card", card);
     return await fetch(`${BASE_URL_STRIPE}/tokens`, {
       headers: {
         Accept: "application/json",
@@ -227,6 +225,7 @@ class ApiServices {
         .join("&"),
     }).then((response) => response.json());
   };
+
 
   getUserProfile = (token, callback) => {
     var config = {
@@ -313,6 +312,7 @@ class ApiServices {
         });
   }
 
+
   createGoal = (token,title,description,catId,progress,dateComplete,catName,checkList,callback) => {
     var data = JSON.stringify({
       "title": title,
@@ -375,6 +375,7 @@ class ApiServices {
         });
   }
 
+
   getGoals = (token,callback) => {
     var config = {
       method: 'get',
@@ -424,6 +425,56 @@ class ApiServices {
           response: error,
         });
       });
+  };
+
+  getDashboardData = (token, callback) => {
+    var config = {
+      method: "get",
+      url: BASE_URL + "/api/v1/dashboard/latest",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    axios(config)
+      .then((response) => {
+        callback({
+          isSuccess: true,
+          response: response,
+        });
+      })
+      .catch((error) => {
+        callback({
+          isSuccess: false,
+          response: error,
+        });
+      });
+  };
+
+  getAnnouncements = (token, callback) => {
+    var config = {
+      method: "get",
+      url: BASE_URL + "/api/v1/annoucements/latest",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
   };
 }
 

@@ -14,7 +14,6 @@ import { useDispatch } from "react-redux";
 import { CommonActions } from "@react-navigation/native";
 import Toast from "react-native-simple-toast";
 
-
 //================================ Local Imported Files ======================================//
 
 import styles from "./style";
@@ -24,7 +23,6 @@ import Button from "../../../components/Button/Button";
 import LoginLogo from "../../../assets/images/login_screen.svg";
 import {
   FORGOT_PASSWORD, MY_DRAWER,
-  MY_TABS,
   SIGNUP_SCREEN,
 } from "../../../constants/navigators";
 import AppLoading from "../../../components/AppLoading";
@@ -34,13 +32,12 @@ import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
 
 const LoginScreen = (props) => {
   const dispatch = useDispatch();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("user@mailinator.com");
+  const [password, setPassword] = useState("Dvorak1234!");
   const [loading, setLoading] = useState(false);
 
   const onPressLogin = () => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
     if (email === "" || email === " ") {
       Toast.show("Please Enter Email", Toast.LONG);
     } else if (reg.test(email) !== true) {

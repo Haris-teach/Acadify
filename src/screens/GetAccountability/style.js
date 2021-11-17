@@ -131,7 +131,11 @@ const styles = StyleSheet.create({
         width:wp(75),
         borderTopColor:colors.button_text,
         borderTopWidth:0.3,
-    }
+    },
+
+
+
+
 });
 
 export default styles;

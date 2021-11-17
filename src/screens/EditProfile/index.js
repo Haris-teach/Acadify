@@ -88,6 +88,7 @@ const EditProfileScreen = props => {
             } else if (res.errorMessage) {
                 console.log("ImagePicker Error: ", res.errorMessage);
             } else {
+                console.log("ImagePicker",res);
                 setImage(res.assets[0])
                 setHasImage(true);
             }
