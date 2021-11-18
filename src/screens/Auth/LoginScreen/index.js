@@ -22,7 +22,8 @@ import fonts from "../../../assets/fonts/fonts";
 import Button from "../../../components/Button/Button";
 import LoginLogo from "../../../assets/images/login_screen.svg";
 import {
-  FORGOT_PASSWORD, MY_DRAWER,
+  FORGOT_PASSWORD,
+  MY_DRAWER,
   SIGNUP_SCREEN,
 } from "../../../constants/navigators";
 import AppLoading from "../../../components/AppLoading";
@@ -32,6 +33,8 @@ import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
 
 const LoginScreen = (props) => {
   const dispatch = useDispatch();
+  // const [email, setEmail] = useState("user@mailinator.com");
+  // const [password, setPassword] = useState("Dvorak1234!");
   const [email, setEmail] = useState("user@mailinator.com");
   const [password, setPassword] = useState("Dvorak1234!");
   const [loading, setLoading] = useState(false);

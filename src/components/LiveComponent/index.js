@@ -2,24 +2,32 @@
 
 import React from "react";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
-import {View, StyleSheet, Text, Image} from "react-native";
+import {View, StyleSheet, Text, ImageBackground} from "react-native";
 
 //================================ Local Imported Files ======================================//
 
 import colors from "../../assets/colors/colors";
 import fonts from "../../assets/fonts/fonts";
+import LiveIcon from "../../assets/images/Live_btn.svg";
 
-const CourseView = (props) => {
+const LiveComponent = (props) => {
 
     return (
         <View style={[styles.container,{width:props.width}]}>
             <View style={[styles.imageSection,{width:props.width}]}>
-                <Image source={{uri:props.image}} style={styles.imageStyle}/>
+                <ImageBackground
+                    borderRadius={wp(6)}
+                    source={{uri:props.image}}
+                    style={styles.imageStyle}
+                >
+                    <View style={[styles.liveView,{width:props.width}]}>
+                        <LiveIcon height={15} width={15}/>
+                        <Text style={styles.liveText}>Live</Text>
+                    </View>
+                </ImageBackground>
             </View>
             <View style={[styles.textView,{width:props.width}]}>
-                <Text style={styles.nameText} numberOfLines={2}>{props.name}</Text>
-                <Text style={[styles.nameText,{color:colors.greyTxt,fontWeight:'300',marginTop:2}]} numberOfLines={1}>{props.ownName}</Text>
-                {/*<Text style={[styles.nameText,{color:colors.course_screen,fontWeight:'400'}]} numberOfLines={1}>({props.value})</Text>*/}
+                <Text style={styles.nameText} numberOfLines={1}>{props.title}</Text>
             </View>
         </View>
     );
@@ -27,9 +35,8 @@ const CourseView = (props) => {
 
 const styles = StyleSheet.create({
     container: {
-        height: hp(20),
+        height: hp(18),
         width: wp(42),
-        alignSelf:'center',
         borderRadius:wp(6),
     },
     imageSection:{
@@ -37,9 +44,10 @@ const styles = StyleSheet.create({
         width: wp(42),
         borderTopLeftRadius:wp(6),
         borderTopRightRadius:wp(6),
+        backgroundColor:colors.image_background
     },
     textView:{
-        height: hp(7),
+        height: hp(5),
         width: wp(42),
         justifyContent:'center',
         paddingHorizontal:wp(4),
@@ -58,7 +66,21 @@ const styles = StyleSheet.create({
         width:'100%',
         borderTopLeftRadius:wp(6),
         borderTopRightRadius:wp(6),
+    },
+    liveView:{
+        height:hp(6),
+        width:wp(42),
+        flexDirection:'row',
+        alignItems:'center',
+        paddingLeft:wp(3),
+    },
+    liveText:{
+        paddingLeft:wp(1),
+        fontFamily:fonts.regular,
+        fontWeight:'500',
+        color:colors.white,
+        fontSize:wp(4)
     }
 });
 
-export default CourseView;
+export default LiveComponent;

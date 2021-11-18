@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* AcadifyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* AcadifyTests.m */; };
-		04398A032726848100C5580B /* Montserrat-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 043989F12726848000C5580B /* Montserrat-BlackItalic.ttf */; };
 		04398A042726848100C5580B /* Montserrat-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 043989F22726848000C5580B /* Montserrat-Italic.ttf */; };
 		04398A052726848100C5580B /* Montserrat-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 043989F32726848100C5580B /* Montserrat-ExtraLightItalic.ttf */; };
 		04398A062726848100C5580B /* Montserrat-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 043989F42726848100C5580B /* Montserrat-ThinItalic.ttf */; };
@@ -306,7 +305,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				04398A032726848100C5580B /* Montserrat-BlackItalic.ttf in Resources */,
 				04398A042726848100C5580B /* Montserrat-Italic.ttf in Resources */,
 				04398A052726848100C5580B /* Montserrat-ExtraLightItalic.ttf in Resources */,
 				04398A062726848100C5580B /* Montserrat-ThinItalic.ttf in Resources */,

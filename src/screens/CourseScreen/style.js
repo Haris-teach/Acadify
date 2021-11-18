@@ -24,8 +24,9 @@ const styles = StyleSheet.create({
     },
     nameView:{
         height:hp(15),
-        width:wp(55),
+        width:wp(60),
         justifyContent:'center',
+        paddingLeft:wp(2),
     },
     userNameText:{
         fontSize:wp(6),
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
     },
     imageView:{
         height:hp(15),
-        width:wp(35),
+        width:wp(30),
         justifyContent:'center',
         alignItems:'center',
     },
@@ -45,11 +46,9 @@ const styles = StyleSheet.create({
         resizeMode:'cover'
     },
     announcementView:{
-        maxHeight:hp(50),
+        maxHeight:hp(220),
         width:wp(100),
         alignSelf:'center',
-        // borderBottomWidth:0.2,
-        // borderBottomColor:colors.button_text,
     },
     announceUpperView:{
         height:hp(20),
@@ -62,19 +61,19 @@ const styles = StyleSheet.create({
         resizeMode:'stretch'
     },
     announceTextView:{
-        maxHeight:hp(30),
+        maxHeight:hp(220),
         width:wp(100),
         justifyContent:'center',
         paddingBottom:hp(2),
     },
     announceView:{
-        height:hp(9),
+        height:hp(8),
         width:wp(100),
         justifyContent:'center',
         paddingHorizontal:wp(10),
     },
     descriptionText:{
-        maxHeight:hp(8),
+        maxHeight:hp(200),
         width:wp(100),
         paddingHorizontal:wp(10),
     },
@@ -175,6 +174,12 @@ const styles = StyleSheet.create({
     backgroundVideo:{
         height:'100%',
         width:wp(90),
+    },
+    bottomWidth:{
+        height:0.5,
+        width:wp(80),
+        alignSelf:'center',
+        backgroundColor:colors.button_text
     }
 });
 
