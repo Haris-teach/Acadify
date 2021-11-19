@@ -32,7 +32,7 @@ const ForumComponent = (props) => {
                 </View>
             </View>
             <View style={styles.descriptionView}>
-                <Text style={[styles.textStyle,{color:colors.greyTxt}]}>{props.title}</Text>
+                <Text style={[styles.textStyle,{color:colors.greyTxt}]} numberOfLines={3}>{props.title}</Text>
             </View>
         </View>
     );
@@ -40,7 +40,7 @@ const ForumComponent = (props) => {
 
 const styles = StyleSheet.create({
     container: {
-        height: hp(16),
+        height: hp(17),
         width: wp(90),
         borderRadius:wp(7),
         backgroundColor:colors.image_background

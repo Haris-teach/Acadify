@@ -2,18 +2,26 @@
 
 import React from "react";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
-import {View, StyleSheet, Text, Image} from "react-native";
+import {View, StyleSheet, Text, ImageBackground} from "react-native";
 
 //================================ Local Imported Files ======================================//
 
 import colors from "../../assets/colors/colors";
 import fonts from "../../assets/fonts/fonts";
+import Play from "../../assets/images/play_card.svg";
 
-const ResourceComponent = (props) => {
+const FeatureComponent = (props) => {
     return (
         <View style={styles.container}>
             <View style={styles.upperImageView}>
-                <Image source={{uri: props.image}} style={styles.imageViewStyle}/>
+                <ImageBackground
+                    resizeMode={'contain'}
+                    borderRadius={wp(7)}
+                    source={{uri: props.image}}
+                    style={styles.imageViewStyle}
+                >
+                    <Play height={40} width={40}/>
+                </ImageBackground>
             </View>
             <View style={styles.descriptionView}>
                 <Text style={styles.textStyle} numberOfLines={1}>{props.description}</Text>
@@ -37,7 +45,8 @@ const styles = StyleSheet.create({
         height:'100%',
         width: '100%',
         borderRadius:wp(7),
-        resizeMode:'contain'
+        justifyContent:'center',
+        alignItems:'center'
     },
     descriptionView:{
         height: hp(4),
@@ -53,4 +62,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ResourceComponent;
+export default FeatureComponent;

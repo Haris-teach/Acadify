@@ -15,6 +15,8 @@ import fonts from '../../../assets/fonts/fonts';
 import Button from '../../../components/Button/Button';
 import CreditCard from '../../../assets/images/credit_card.svg';
 import {ADD_CARD} from '../../../constants/navigators';
+import AppHeader from "../../../components/AppHeader";
+import images from "../../../assets/images/images";
 
 const CardScreen = props => {
   const onPressYes = () => {
@@ -26,8 +28,14 @@ const CardScreen = props => {
   return (
     <View style={styles.mainContainer}>
       <StatusBar backgroundColor={colors.app_background} />
+        <View style={styles.headerView}>
+            <AppHeader
+                leftIconPath={images.back_icon}
+                onLeftIconPress={() => props.navigation.goBack()}
+            />
+        </View>
       <View style={styles.imageView}>
-        <CreditCard />
+        <CreditCard height={350} width={350}/>
       </View>
       <View style={styles.headingView}>
         <Text style={styles.headingText}>Credit/Debit Card</Text>

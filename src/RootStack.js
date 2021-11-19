@@ -101,8 +101,8 @@ const MyDrawer = () => {
                 drawerStyle: {
                     backgroundColor: "rgba(36, 37, 41, 0.62)",
                     width: 90,
-                    height: height_screen < 675 ? 635 : 690,
-                    marginTop: height_screen < 675 ? 15 : 80,
+                    height: height_screen < 675 ? 635 : 620,
+                    marginTop: height_screen < 675 ? 15 : 90,
                     borderTopRightRadius: 60,
                     borderBottomRightRadius: 60,
                 },

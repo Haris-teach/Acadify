@@ -11,7 +11,10 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         backgroundColor: colors.app_background,
-        paddingTop: Platform.OS === 'ios' ? hp(5) : null,
+    },
+    headerView:{
+        height: hp(10),
+        width: wp(100),
     },
     imageView: {
         height: hp(60),
@@ -20,7 +23,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     headingView: {
-        height: hp(15),
+        height: hp(10),
         width: wp(100),
         justifyContent:'center',
     },

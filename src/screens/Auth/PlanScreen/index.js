@@ -29,6 +29,7 @@ import Monthly from '../../../assets/images/monthly.svg';
 import LIFETIME from '../../../assets/images/LIFETIME.svg';
 import {CREDIT_CARD, MY_DRAWER, MY_TABS} from '../../../constants/navigators';
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
+import images from "../../../assets/images/images";
 
 const PlanScreen = props => {
 
@@ -91,12 +92,11 @@ const PlanScreen = props => {
       });
     } else {
       setLoading(true);
-      console.log('Enter', data)
       ApiHelper.onSignUpApi(stripeId, data, response => {
         if (response.isSuccess) {
           setLoading(false);
           if (response.response.data.code === 200) {
-            console.log('Success ===>', response.response.data);
+            // console.log('Success ===>', response.response.data);
               dispatch(ApiDataActions.SetUserToken(response.response.data.token));
               props.navigation.dispatch(
               CommonActions.reset({
@@ -157,7 +157,11 @@ const PlanScreen = props => {
       {AppLoading.renderLoading(loading)}
       <StatusBar backgroundColor={colors.app_background} />
       <View style={styles.headerView}>
-        <AppHeader title={'Payment Plan'} />
+        <AppHeader
+            title={'Payment Plan'}
+            leftIconPath={images.back_icon}
+            onLeftIconPress={() => props.navigation.goBack()}
+        />
       </View>
       <View style={styles.headingView}>
         <Text style={styles.headingText}>

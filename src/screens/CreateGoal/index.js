@@ -28,11 +28,13 @@ import moment, {now} from "moment";
 import styles from './style';
 import colors from '../../assets/colors/colors';
 import ApiHelper from "../../api/ApiHelper";
+import images from "../../assets/images/images";
 import Button from '../../components/Button/Button';
 import AppLoading from "../../components/AppLoading";
 import DateImage from "../../assets/images/date.svg";
 import AddSign from "../../assets/images/addIcon.svg";
 import DeleteSign from "../../assets/images/delete.svg";
+import AppHeader from "../../components/AppHeader";
 
 
 const AddGoal = props => {
@@ -216,7 +218,6 @@ const AddGoal = props => {
     }
 
 
-
     const onConfirmDate = (value) => {
         let finalDate = moment(value).format("MM/DD/YYYY");
         setDate(finalDate);
@@ -238,6 +239,12 @@ const AddGoal = props => {
             <ScrollView
                 style={[styles.mainContainer,{paddingTop:0}]}
                 showsVerticalScrollIndicator={false}>
+                <View style={styles.headerView}>
+                    <AppHeader
+                        leftIconPath={images.back_icon}
+                        onLeftIconPress={() => props.navigation.goBack()}
+                    />
+                </View>
                 <View style={styles.headingView}>
                     <Text style={styles.headingText}>Create Your Goal</Text>
                 </View>
@@ -304,7 +311,6 @@ const AddGoal = props => {
                                 minimumTrackTintColor={colors.button_text}
                                 maximumTrackTintColor={colors.inputColor}
                                 stepValue={1}
-                                // multiplier={1.1}
                                 thumbTintColor={colors.button_text}
                                 customCountStyle={{color:colors.white,fontSize:10}}
                                 customLabelStyle={{color:colors.white,fontSize:wp(4)}}
@@ -328,6 +334,7 @@ const AddGoal = props => {
                         {/*    <Text style={[styles.placeHolderText,{color:colors.white}]}>{progress}%</Text>*/}
                         {/*    <Text style={[styles.placeHolderText,{color:colors.white}]}>100%</Text>*/}
                         {/*</View>*/}
+
                     </View>
                     <View style={[styles.inputBox,{height:hp(4),zIndex:-1}]}>
                         <View style={styles.checkListView}>

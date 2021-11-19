@@ -1,8 +1,13 @@
-import React, { useEffect } from "react";
+//================================ React Native Imported Files ======================================//
+
+import React,{ useState } from "react";
 import { DrawerContentScrollView } from "@react-navigation/drawer";
-import { Text, StyleSheet, TouchableOpacity } from "react-native";
-import Live from "../../assets/images/live.svg";
-import RenchBold from "../../assets/images/renchbold.svg";
+import {Text, StyleSheet, TouchableOpacity, View} from "react-native";
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from "react-native-responsive-screen";
+
+//================================ Local Imported Files ======================================//
+
+import WrenchBold from "../../assets/images/renchbold.svg";
 import Settings from "../../assets/images/settings.svg";
 import BagBold from "../../assets/images/bagBold.svg";
 import Bag from "../../assets/images/bag.svg";
@@ -19,10 +24,8 @@ import SettingsBold from "../../assets/images/settingsBold.svg";
 import Gear from "../../assets/images/settingsInactive.svg";
 import Chat from "../../assets/images/935.svg";
 import MyChatBold from "../../assets/images/Subtract.svg";
-
-import { useState } from "react";
+import Live from "../../assets/images/live.svg";
 import {
-  ADD_GOAL,
   COURSE_SCREEN,
   DASHBOARD_SCREEN,
   GET_ACCOUNTABILITY,
@@ -30,7 +33,9 @@ import {
   SETTINGS,
 } from "../../constants/navigators";
 import { height_screen } from "../../utils/Dimentions";
-import { useSelector } from "react-redux";
+import colors from "../../assets/colors/colors";
+import fonts from "../../assets/fonts/fonts";
+
 
 const MenuBar = (props) => {
 
@@ -104,6 +109,8 @@ const MenuBar = (props) => {
     setJourney(false);
     setForum(false);
     setLinks(false);
+    setChat(false);
+    setGear(false);
   };
   const onJourney = () => {
     setHome(false);
@@ -161,102 +168,134 @@ const MenuBar = (props) => {
       <DrawerContentScrollView {...props} showsVerticalScrollIndicator={false}>
         <TouchableOpacity
             onPress={() => onHome()}
-            style={
-              home === true ? styles.activeIconHolder2 : styles.iconHolder2
-            }
+            style={styles.activeIconHolder2}
         >
-          { home === true ? <HomeBold /> : <Home />}
-          <Text style={styles.txt}>Dashboard</Text>
+          <View style={home ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
+          <View style={styles.iconView}>
+            { home ? <HomeBold /> : <Home />}
+            <Text style={styles.txt}>Dashboard</Text>
+          </View>
+
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => onLive()}
-            style={live ? styles.activeIconHolder : styles.iconHolder}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : 12}]}
         >
-          {live ? <LiveBold /> : <Live />}
-          <Text style={styles.txt}>Live Training</Text>
+          <View style={live ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
+          <View style={styles.iconView}>
+            {live ? <LiveBold /> : <Live />}
+            <Text style={styles.txt}>Live Training</Text>
+          </View>
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => onCourse()}
-            style={course ? styles.activeIconHolder : styles.iconHolder}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : 12}]}
         >
-          {course ? <CoursesBold /> : <Second />}
-          <Text style={styles.txt}>Course</Text>
+          <View style={course ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
+          <View style={styles.iconView}>
+            {course ? <CoursesBold /> : <Second />}
+            <Text style={styles.txt}>Course</Text>
+          </View>
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => onSettings()}
-            style={accountibility ? styles.activeIconHolder : styles.iconHolder}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : 12}]}
         >
-          {accountibility ? <TrophyBold /> : <Trophy />}
-          <Text style={styles.txt}>Accountability</Text>
+          <View style={accountibility ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
+          <View style={styles.iconView}>
+            {accountibility ? <TrophyBold /> : <Trophy />}
+            <Text style={styles.txt}>Accountability</Text>
+          </View>
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => onResource()}
-            style={resources ? styles.activeIconHolder : styles.iconHolder}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : 12}]}
         >
-          {resources ? <RenchBold /> : <Settings />}
-          <Text style={styles.txt}>Resources</Text>
+          <View style={resources ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
+          <View style={styles.iconView}>
+            {resources ? <WrenchBold /> : <Settings />}
+            <Text style={styles.txt}>Resources</Text>
+          </View>
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => onJourney()}
-            style={journey ? styles.activeIconHolder : styles.iconHolder}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : 12}]}
         >
-          {journey ? <BagBold /> : <Bag />}
-          <Text style={styles.txt}>Journey</Text>
+          <View style={journey ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
+          <View style={styles.iconView}>
+            {journey ? <BagBold /> : <Bag />}
+            <Text style={styles.txt}>Journey</Text>
+          </View>
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => onForum()}
-            style={forum ? styles.activeIconHolder : styles.iconHolder}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : 12}]}
         >
-          {forum ? (
-              <Msg height={25} width={25} />
-          ) : (
-              <ChatBold height={25} width={25} />
-          )}
-          <Text style={styles.txt}>Forum</Text>
+          <View style={forum ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
+          <View style={styles.iconView}>
+            {forum ? <Msg height={27} width={27} /> : <ChatBold height={27} width={27} />}
+            <Text style={styles.txt}>Forum</Text>
+          </View>
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => onChat()}
-            style={chat ? styles.activeIconHolder : styles.iconHolder}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : 12}]}
         >
-          {chat ? <MyChatBold /> : <Chat />}
-          <Text style={styles.txt}>Chat</Text>
+          <View style={chat ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
+          <View style={styles.iconView}>
+            {chat ? <MyChatBold height={25} width={25}/> : <Chat height={25} width={25}/>}
+            <Text style={styles.txt}>Chat</Text>
+          </View>
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => onGear()}
-            style={gear ? styles.activeIconHolder : styles.iconHolder}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : 12}]}
         >
-          {gear ? <SettingsBold /> : <Gear height={28} width={28} />}
-          <Text style={styles.txt}>Settings</Text>
+          <View style={gear ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
+          <View style={styles.iconView}>
+            {gear ? <SettingsBold height={25} width={25}/> : <Gear height={25} width={25} />}
+            <Text style={styles.txt}>Settings</Text>
+          </View>
         </TouchableOpacity>
       </DrawerContentScrollView>
   );
 };
 const styles = StyleSheet.create({
-  iconHolder2: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
   activeIconHolder2: {
-    justifyContent: "center",
     alignItems: "center",
-    borderLeftWidth: 8,
-    borderLeftColor: "#B7A675",
-    width: 100,
+    flexDirection:'row',
+    height:hp(6),
   },
-  iconHolder: {
-    marginTop: height_screen < 675 ? 25 : 30,
+  iconView:{
+    width:wp(22),
     justifyContent: "center",
     alignItems: "center",
   },
-  activeIconHolder: {
-    marginTop: height_screen < 675 ? 25 : 30,
-    justifyContent: "center",
-    alignItems: "center",
-    borderLeftColor: "#B7A675",
-    borderLeftWidth: 8,
-    width: 100,
+  focusLine:{
+    borderRadius:wp(2),
+    height:hp(5.3),
+    width:wp(2),
+    backgroundColor:colors.button_text
   },
-  txt: { color: "white", fontSize: 10, marginTop: 3 },
+  // iconHolder: {
+  //   marginTop: height_screen < 675 ? 25 : 30,
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  // },
+  // activeIconHolder: {
+  //   marginTop: height_screen < 675 ? 25 : 30,
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   borderLeftColor: "#B7A675",
+  //   borderLeftWidth: 8,
+  //   width: 100,
+  // },
+  txt: {
+    color: colors.white,
+    fontFamily:fonts.regular,
+    fontSize: wp(2.5),
+    marginTop: 4
+  },
 });
 
 export default MenuBar;

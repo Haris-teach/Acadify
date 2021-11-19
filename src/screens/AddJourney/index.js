@@ -13,6 +13,8 @@ import colors from '../../assets/colors/colors';
 import Button from '../../components/Button/Button';
 import AppLoading from "../../components/AppLoading";
 import ApiHelper from "../../api/ApiHelper";
+import AppHeader from "../../components/AppHeader";
+import images from "../../assets/images/images";
 
 
 const AddJourney = props => {
@@ -69,7 +71,12 @@ const AddJourney = props => {
             <ScrollView
                 style={[styles.mainContainer,{paddingTop:0}]}
                 showsVerticalScrollIndicator={false}>
-
+                <View style={styles.headerView}>
+                    <AppHeader
+                        leftIconPath={images.back_icon}
+                        onLeftIconPress={() => props.navigation.goBack()}
+                    />
+                </View>
             <View style={styles.headingView}>
                 <Text style={styles.headingText}>Create Activity</Text>
             </View>

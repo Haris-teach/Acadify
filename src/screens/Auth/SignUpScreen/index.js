@@ -39,6 +39,7 @@ const SignUpScreen = props => {
   const [valid, setValid] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
 
+
   const onPressSignUp = () => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     let testAddress = /^[^-\s][a-zA-Z_\s-]+$/;

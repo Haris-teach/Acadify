@@ -11,10 +11,13 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: colors.app_background,
-    paddingTop: Platform.OS === 'ios' ? hp(5) : null,
+  },
+  headerView:{
+    height:hp(10),
+    width:wp(100)
   },
   imageView: {
-    height: hp(60),
+    height: hp(50),
     width: wp(100),
     justifyContent: 'center',
     alignItems: 'center',
@@ -42,17 +45,14 @@ const styles = StyleSheet.create({
     paddingLeft: wp(5),
   },
   buttonView: {
-    height: hp(21),
+    height: hp(20),
     width: wp(100),
     justifyContent: 'center',
-    // alignItems: 'center',
     flexDirection: 'row',
   },
   btnView: {
-    height: hp(20),
     width: wp(45),
-    paddingTop:hp(3),
-    // justifyContent: 'center',
+    justifyContent:'center',
     alignItems: 'center',
   },
 });

@@ -79,7 +79,6 @@ const AddCardScreen = props => {
 
   const startSignUp = (id) => {
     setLoading(true);
-    console.log('Enter', data)
     ApiHelper.onSignUpPaidApi(id,props.route.params.planName.Rights[0].StripeId, data, response => {
       if (response.isSuccess) {
         setLoading(false);
@@ -113,7 +112,11 @@ const AddCardScreen = props => {
         style={styles.mainContainer}
         showsVerticalScrollIndicator={false}>
         <View style={styles.headerView}>
-          <AppHeader title={'Add Credit Card'} />
+          <AppHeader
+              title={'Add Credit Card'}
+              leftIconPath={images.back_icon}
+              onLeftIconPress={() => props.navigation.goBack()}
+          />
         </View>
         <View style={styles.imageView}>
           <ImageBackground source={images.card_icon} style={styles.cardStyle}>
