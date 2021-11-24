@@ -67,9 +67,9 @@ const styles = StyleSheet.create({
         paddingBottom:hp(2),
     },
     announceView:{
-        height:hp(8),
+        height:hp(5),
         width:wp(100),
-        justifyContent:'center',
+        justifyContent:'flex-end',
         paddingHorizontal:wp(10),
     },
     descriptionText:{

@@ -1,11 +1,13 @@
 //================================ React Native Imported Files ======================================//
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     View,
     Text,
     FlatList,
-    Alert, StatusBar,
+    Alert,
+    StatusBar,
+    BackHandler,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 import {CommonActions} from "@react-navigation/native";
@@ -21,8 +23,6 @@ import colors from "../../assets/colors/colors";
 
 
 const SettingScreen = (props) => {
-
-    console.log('Props',props)
 
     const dispatch = useDispatch();
     const [data,setData] = useState([

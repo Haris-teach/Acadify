@@ -2,7 +2,7 @@
 
 import React,{ useState } from "react";
 import { DrawerContentScrollView } from "@react-navigation/drawer";
-import {Text, StyleSheet, TouchableOpacity, View} from "react-native";
+import {Text, StyleSheet, TouchableOpacity, View, Platform} from "react-native";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from "react-native-responsive-screen";
 
 //================================ Local Imported Files ======================================//
@@ -42,11 +42,10 @@ const MenuBar = (props) => {
   const [home, setHome] = useState(true);
   const [live, setLive] = useState(false);
   const [course, setCourse] = useState(false);
-  const [accountibility, setAccountibility] = useState(false);
+  const [accountability, setAccountability] = useState(false);
   const [resources, setResources] = useState(false);
   const [journey, setJourney] = useState(false);
   const [forum, setForum] = useState(false);
-  const [links, setLinks] = useState(false);
   const [chat, setChat] = useState(false);
   const [gear, setGear] = useState(false);
 
@@ -54,11 +53,10 @@ const MenuBar = (props) => {
     setHome(true);
     setLive(false);
     setCourse(false);
-    setAccountibility(false);
+    setAccountability(false);
     setResources(false);
     setJourney(false);
     setForum(false);
-    setLinks(false);
     setChat(false);
     setGear(false);
     props.navigation.navigate(COURSE_SCREEN);
@@ -67,11 +65,10 @@ const MenuBar = (props) => {
     setHome(false);
     setLive(true);
     setCourse(false);
-    setAccountibility(false);
+    setAccountability(false);
     setResources(false);
     setJourney(false);
     setForum(false);
-    setLinks(false);
     setChat(false);
     setGear(false);
   };
@@ -79,11 +76,11 @@ const MenuBar = (props) => {
     setHome(false);
     setLive(false);
     setCourse(false);
-    setAccountibility(true);
+    setAccountability(true);
     setResources(false);
     setJourney(false);
     setForum(false);
-    setLinks(false);
+    setChat(false);
     setGear(false);
     props.navigation.navigate(GET_ACCOUNTABILITY);
   };
@@ -91,11 +88,10 @@ const MenuBar = (props) => {
     setHome(false);
     setLive(false);
     setCourse(true);
-    setAccountibility(false);
+    setAccountability(false);
     setResources(false);
     setJourney(false);
     setForum(false);
-    setLinks(false);
     setChat(false);
     setGear(false);
     props.navigation.navigate(DASHBOARD_SCREEN);
@@ -104,11 +100,10 @@ const MenuBar = (props) => {
     setHome(false);
     setLive(false);
     setCourse(false);
-    setAccountibility(false);
+    setAccountability(false);
     setResources(true);
     setJourney(false);
     setForum(false);
-    setLinks(false);
     setChat(false);
     setGear(false);
   };
@@ -116,11 +111,10 @@ const MenuBar = (props) => {
     setHome(false);
     setLive(false);
     setCourse(false);
-    setAccountibility(false);
+    setAccountability(false);
     setResources(false);
     setJourney(true);
     setForum(false);
-    setLinks(false);
     setChat(false);
     setGear(false);
     props.navigation.navigate(JOURNEY);
@@ -129,11 +123,10 @@ const MenuBar = (props) => {
     setHome(false);
     setLive(false);
     setCourse(false);
-    setAccountibility(false);
+    setAccountability(false);
     setResources(false);
     setJourney(false);
     setForum(true);
-    setLinks(false);
     setChat(false);
     setGear(false);
   };
@@ -141,11 +134,10 @@ const MenuBar = (props) => {
     setHome(false);
     setLive(false);
     setCourse(false);
-    setAccountibility(false);
+    setAccountability(false);
     setResources(false);
     setJourney(false);
     setForum(false);
-    setLinks(false);
     setGear(false);
     setChat(true);
   };
@@ -153,11 +145,10 @@ const MenuBar = (props) => {
     setHome(false);
     setLive(false);
     setCourse(false);
-    setAccountibility(false);
+    setAccountability(false);
     setResources(false);
     setJourney(false);
     setForum(false);
-    setLinks(false);
     setChat(false);
     setGear("settings");
     props.navigation.navigate(SETTINGS);
@@ -168,7 +159,7 @@ const MenuBar = (props) => {
       <DrawerContentScrollView {...props} showsVerticalScrollIndicator={false}>
         <TouchableOpacity
             onPress={() => onHome()}
-            style={styles.activeIconHolder2}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : Platform.OS === 'android' ?  hp(5) : null}]}
         >
           <View style={home ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
           <View style={styles.iconView}>
@@ -179,7 +170,7 @@ const MenuBar = (props) => {
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => onLive()}
-            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : 12}]}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 :Platform.OS === 'android' ?  hp(2) : 12}]}
         >
           <View style={live ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
           <View style={styles.iconView}>
@@ -189,7 +180,7 @@ const MenuBar = (props) => {
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => onCourse()}
-            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : 12}]}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : Platform.OS === 'android' ?  hp(2) : 12}]}
         >
           <View style={course ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
           <View style={styles.iconView}>
@@ -199,17 +190,17 @@ const MenuBar = (props) => {
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => onSettings()}
-            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : 12}]}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : Platform.OS === 'android' ?  hp(2) : 12}]}
         >
-          <View style={accountibility ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
+          <View style={accountability ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
           <View style={styles.iconView}>
-            {accountibility ? <TrophyBold /> : <Trophy />}
+            {accountability ? <TrophyBold /> : <Trophy />}
             <Text style={styles.txt}>Accountability</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => onResource()}
-            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : 12}]}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : Platform.OS === 'android' ?  hp(2) : 12}]}
         >
           <View style={resources ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
           <View style={styles.iconView}>
@@ -219,7 +210,7 @@ const MenuBar = (props) => {
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => onJourney()}
-            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : 12}]}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 :Platform.OS === 'android' ?  hp(2) : 12}]}
         >
           <View style={journey ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
           <View style={styles.iconView}>
@@ -229,7 +220,7 @@ const MenuBar = (props) => {
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => onForum()}
-            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : 12}]}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 :Platform.OS === 'android' ?  hp(2) : 12}]}
         >
           <View style={forum ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
           <View style={styles.iconView}>
@@ -239,7 +230,7 @@ const MenuBar = (props) => {
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => onChat()}
-            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : 12}]}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : Platform.OS === 'android' ?  hp(2) : 12}]}
         >
           <View style={chat ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
           <View style={styles.iconView}>
@@ -249,7 +240,7 @@ const MenuBar = (props) => {
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => onGear()}
-            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : 12}]}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : Platform.OS === 'android' ?  hp(2) : 12}]}
         >
           <View style={gear ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
           <View style={styles.iconView}>

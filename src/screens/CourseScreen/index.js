@@ -1,7 +1,7 @@
 //================================ React Native Imported Files ======================================//
 
 import React, {useEffect, useState} from 'react';
-import {ScrollView, StatusBar, View, Text, Image, LogBox, RefreshControl} from 'react-native';
+import {ScrollView, StatusBar, View, Text, Image, LogBox, RefreshControl, Platform, Alert,BackHandler} from 'react-native';
 import {widthPercentageToDP as wp,heightPercentageToDP as hp} from "react-native-responsive-screen";
 import {useSelector} from "react-redux";
 import Carousel from 'react-native-snap-carousel';
@@ -42,15 +42,30 @@ const CourseScreen = props => {
     const [liveItems,setLiveItems] = useState([]);
     const [sortData,setSortData] = useState([]);
     const [video,setVideos] = useState([]);
-    const [refreshing, setRefreshing] = useState(false);
     const [noUrl, setNoUrl] = useState(false);
     const [announceTest,setAnnounceTest] = useState([]);
 
-    console.log('UserData',userData)
 
     useEffect(() => {
         getAnnouncements();
         getDashboardData();
+        // const backAction = () => {
+        //     Alert.alert("Hold on!", "Are you sure you want to go back?", [
+        //         {
+        //             text: "Cancel",
+        //             onPress: () => null,
+        //             style: "cancel"
+        //         },
+        //         { text: "YES", onPress: () => BackHandler.exitApp() }
+        //     ]);
+        //     return true;
+        // };
+        // const backHandler = BackHandler.addEventListener(
+        //     "hardwareBackPress",
+        //     backAction
+        // );
+        //
+        // return () => backHandler.remove();
     }, [isFocused]);
 
 
@@ -246,25 +261,26 @@ const CourseScreen = props => {
                             {hasImage ? <Image source={{uri: announcement.contentUrl}} style={styles.announceImage}/> :
                                 <Video
                                     source={{uri: announcement.contentUrl}}
-                                    controls={true}
+                                    controls={Platform.OS === 'ios'}
                                     repeat={true}
                                     muted={true}
                                     style={styles.backgroundVideo}
                                     playInBackground={false}
                                     resizeMode={'cover'}
-                                />}
+                                />
+                            }
                         </View> : null}
                         <View style={styles.announceTextView}>
                             <View style={styles.announceView}>
                                 <Text style={styles.userNameText}>Announcements</Text>
-                                <Text style={[styles.userNameText, {
-                                    fontSize: wp(4),
-                                    marginTop: wp(2),
-                                    fontFamily: fonts.semi,
-                                    fontWeight: '400',
-                                    width: wp(80),
-                                    color: colors.button_text
-                                }]} numberOfLines={2}>{announcement.title}</Text>
+                                {/*<Text style={[styles.userNameText, {*/}
+                                {/*    fontSize: wp(4),*/}
+                                {/*    marginTop: wp(2),*/}
+                                {/*    fontFamily: fonts.semi,*/}
+                                {/*    fontWeight: '400',*/}
+                                {/*    width: wp(80),*/}
+                                {/*    color: colors.button_text*/}
+                                {/*}]} numberOfLines={2}>{announcement.title}</Text>*/}
                             </View>
 
                             {announcement.description !== "" && <View style={styles.descriptionText}>

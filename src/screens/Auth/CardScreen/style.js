@@ -1,5 +1,5 @@
-import * as React from 'react';
-import {Platform, StyleSheet} from 'react-native';
+import React from 'react';
+import {StyleSheet} from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -39,10 +39,10 @@ const styles = StyleSheet.create({
   },
   subHeadingText: {
     fontWeight: '400',
-    fontSize: 18,
+    fontSize: wp(4.4),
     color: colors.white,
     fontFamily: fonts.regular,
-    paddingLeft: wp(5),
+    paddingHorizontal: wp(5),
   },
   buttonView: {
     height: hp(20),

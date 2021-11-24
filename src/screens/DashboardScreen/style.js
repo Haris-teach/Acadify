@@ -18,35 +18,51 @@ const styles = StyleSheet.create({
   container:{
     flex:0.9,
   },
+  dropArrow:{
+    height:hp(5),
+    marginLeft:wp(2),
+    justifyContent:'center',
+  },
   innerContainer: {
     marginVertical: wp(2),
     width: wp(93),
     alignSelf:'center'
   },
-  heading: { fontSize: 20, fontWeight: "bold", color: "white" },
-  iconHolder: {
-    backgroundColor: colors.image_background,
-    width: 38,
-    height: 38,
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
+  upperView:{
+    height:hp(10),
+    width:wp(100),
+    paddingHorizontal:wp(7.5),
+    flexDirection:'row',
+    justifyContent:'space-between',
+    alignItems:'center',
   },
-  topHeading: {
-    color: colors.white,
-    fontWeight: "700",
-    fontSize: 24,
-    fontFamily:fonts.semi
+  headerStyle:{
+    height:hp(10),
+    width:wp(65),
+    flexDirection:'row',
+    alignItems:'center',
+  },
+  filterIcons:{
+    height:hp(10),
+    width:wp(20),
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-between',
+  },
+  headerTextStyle:{
+    fontFamily:fonts.semi,
+    fontWeight:'700',
+    color:colors.white,
+    fontSize:24
   },
   headingContainer: {
+    height: hp(8),
     flexDirection: "row",
     justifyContent: "space-between",
-    height: hp(8),
     alignItems: "center",
   },
   listText: {
-    color: "white",
-    marginTop: 5,
+    color: colors.white,
   },
 });
 

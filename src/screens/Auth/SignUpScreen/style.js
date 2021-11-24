@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.bold,
     fontSize: wp(9),
     position: 'absolute',
-    top: Platform.OS === 'android' ? hp(10) : Platform.Version >= '14.5' ? hp(5) : null,
+    top: Platform.OS === 'android' ? hp(5) : Platform.Version >= '14.5' ? hp(5) : null,
     left: wp(7),
     width: wp(60),
   },
@@ -98,7 +98,6 @@ const styles = StyleSheet.create({
     borderRadius: wp(2),
     height: hp(7.5),
   }
-
 });
 
 export default styles;

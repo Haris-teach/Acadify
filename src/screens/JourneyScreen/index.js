@@ -5,7 +5,7 @@ import {
     View,
     Text,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
 } from 'react-native';
 import {useSelector} from "react-redux";
 import {useIsFocused} from "@react-navigation/native";
@@ -16,21 +16,39 @@ import moment from "moment";
 import styles from './style';
 import {ADD_JOURNEY} from "../../constants/navigators";
 import ApiHelper from "../../api/ApiHelper";
-import JourneyComponent from "../../components/JourneyComponent";
 import Add from "../../assets/images/addIcon.svg";
 import AppHeaderNative from "../../components/AppHeaderNative";
 import AppLoading from "../../components/AppLoading";
+import JourneyComponent from "../../components/JourneyComponent";
+
 
 const JourneyScreen = (props) => {
 
     const isFocused = useIsFocused();
     const token = useSelector(state => state.ApiData.token);
     const [loading,setLoading] = useState(false);
-    const [data,setData] = useState([])
+    const [data,setData] = useState([]);
 
 
     useEffect(() => {
-       getJourney()
+       getJourney();
+        // const backAction = () => {
+        //     Alert.alert("Hold on!", "Are you sure you want to go back?", [
+        //         {
+        //             text: "Cancel",
+        //             onPress: () => null,
+        //             style: "cancel"
+        //         },
+        //         { text: "YES", onPress: () => BackHandler.exitApp() }
+        //     ]);
+        //     return true;
+        // };
+        // const backHandler = BackHandler.addEventListener(
+        //     "hardwareBackPress",
+        //     backAction
+        // );
+        //
+        // return () => backHandler.remove();
     }, [isFocused]);
 
 
@@ -39,7 +57,7 @@ const JourneyScreen = (props) => {
         ApiHelper.getJourney(token,(response) => {
             if(response.isSuccess){
                 if(response.response.data.code === 200){
-                    console.log('Response',response.response.data.data.docs)
+                    // console.log('Response of Journey',response.response.data.data.docs)
                     setData(response.response.data.data.docs)
                     setLoading(false);
                 }

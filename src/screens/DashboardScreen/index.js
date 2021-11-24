@@ -4,47 +4,87 @@ import React, { useEffect } from "react";
 import {
   View,
   Text,
-  SafeAreaView,
   TouchableOpacity,
   FlatList,
 } from "react-native";
 import { useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 import { useSelector } from "react-redux";
-import {heightPercentageToDP, widthPercentageToDP} from "react-native-responsive-screen";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import {useIsFocused} from "@react-navigation/native";
+import Modal from "react-native-modal";
 
 //================================ Local Imported Files ======================================//
 
 import styles from "./style";
-import Search from "../../assets/images/search.svg";
-import Filter from "../../assets/images/filter.svg";
-import Drop from "../../assets/images/dropdown.svg";
-import CourseCard from "../../components/CourseCard/CourseCard";
 import colors from "../../assets/colors/colors";
 import ApiHelper from "../../api/ApiHelper";
 import AppHeaderNative from "../../components/AppHeaderNative";
 import AppLoading from "../../components/AppLoading";
+import Search from "../../assets/images/searchBackground.svg";
+import Filter from "../../assets/images/filterBackground.svg";
+import DropArrow from "../../assets/images/dropdown.svg";
+import CourseCard from "../../components/CourseCard/CourseCard";
+import CategoryFilterModal from "../../components/CategoryFilterModal";
+import {COURSE_DETAILS} from "../../constants/navigators";
 
 
 const DashboardScreen = (props) => {
 
   const isFocused = useIsFocused();
-  const [toggle, setToggle] = useState(true);
+  const token = useSelector((state) => state.ApiData.token);
   const [selectedLanguage, setSelectedLanguage] = useState();
   const [visible, setVisible] = useState(false);
-  const token = useSelector((state) => state.ApiData.token);
   const [loading, setLoading] = useState(false);
-  const [coursesData, setCoursesData] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
+  let [coursesData, setCoursesData] = useState([]);
+  let [page, setPage] = useState(1);
+  let [categoryData, setCategoryData] = useState([]);
+
+  let [catText, setCatText] = useState('All Courses');
 
 
-  const getUserProfile = (props) => {
+  const getUserProfile = () => {
     setLoading(true);
-    ApiHelper.getCoursesData(token, (response) => {
+    let tempArray = [];
+    ApiHelper.getCoursesData(token,page, (response) => {
       if (response.isSuccess) {
-        setLoading(false);
         if (response.response.data.code === 200) {
-          setCoursesData(response.response.data.data.docs);
+          console.log('Data',response.response.data)
+          response.response.data.data.docs.map((value) => {
+            if(value.CoursePayeds.length > 0){
+              if(value.CoursePayeds[0].paid === true){
+                tempArray.push({
+                  isLock:false,
+                  id:value.id,
+                  catName:value.Category.name,
+                  title:value.title,
+                  image:value.imageURL,
+                  price:value.Courseprices[0].price
+                })
+              }else{
+                tempArray.push({
+                  isLock:true,
+                  id:value.id,
+                  catName:value.Category.name,
+                  title:value.title,
+                  image:value.imageURL,
+                  price:value.CoursePayeds[0].price
+                })
+              }
+            } else {
+              tempArray.push({
+                isLock:true,
+                id:value.id,
+                catName:value.Category.name,
+                title:value.title,
+                image:value.imageURL,
+                price:value.Courseprices[0].price
+              })
+            }
+          })
+          setCoursesData(tempArray);
+          setLoading(false);
         } else {
           console.log("Error inner ==>", response.response.data);
         }
@@ -55,9 +95,98 @@ const DashboardScreen = (props) => {
     });
   };
 
+
+  const getCategories = () => {
+    setLoading(true);
+    ApiHelper.getCategories(token,'COURSES', (response) => {
+      if (response.isSuccess) {
+        setLoading(false);
+        if (response.response.data.code === 200) {
+          setCategoryData(response.response.data.data)
+        } else {
+        }
+      } else {
+        setLoading(false);
+        console.log("Error ==>", response.response);
+      }
+    });
+  };
+
+
   useEffect(() => {
+    setPage(1);
     getUserProfile();
+    getCategories();
   }, [isFocused]);
+
+
+  const renderCourseItems = (item,index) => {
+    return (
+        <CourseCard
+            isLock={item.isLock}
+            title={item.title}
+            createdBy={item.catName}
+            imgUri={item.image}
+            price={item.price}
+            onPressCourse={() => props.navigation.navigate(COURSE_DETAILS,{courseId:item.id})}
+        />
+    );
+  }
+
+
+  const LoadMoreRandomData = () => {
+    setPage(page = page + 1);
+    setMoreData();
+  }
+
+
+  const setMoreData = () => {
+    // setLoading(true);
+    // let tempArray = [];
+    // ApiHelper.getCoursesData(token,page,(response) => {
+    //   if (response.isSuccess) {
+    //     // setCategoryExtraData(coursesData = page === 2 ? response.response.data.data.docs : [...coursesData, ...response.response.data.data.docs]);
+    //     response.response.data.data.docs?.map((value) => {
+    //       if (value.CoursePayeds.length > 0) {
+    //       if (value.CoursePayeds[0].paid === true) {
+    //         tempArray.push({
+    //           isLock: false,
+    //           id: value.id,
+    //           catName: value.Category.name,
+    //           title: value.title,
+    //           image: value.imageURL,
+    //           price: value.Courseprices[0].price
+    //         })
+    //       } else {
+    //         tempArray.push({
+    //           isLock: true,
+    //           id: value.id,
+    //           catName: value.Category.name,
+    //           title: value.title,
+    //           image: value.imageURL,
+    //           price: value.CoursePayeds[0].price
+    //         })
+    //       }
+    //     } else {
+    //       tempArray.push({
+    //         isLock: true,
+    //         id: value.id,
+    //         catName: value.Category.name,
+    //         title: value.title,
+    //         image: value.imageURL,
+    //         price: value.Courseprices[0].price
+    //       })
+    //     }
+    //   })
+    //     console.log('te')
+    //     setCoursesData(coursesData = page === 2 ? response.response.data.data.docs : [...coursesData, ...tempArray]);
+    //     setLoading(false);
+    //   }else{
+    //     setLoading(false);
+    //   }
+    // })
+  }
+
 
   return (
     <View style={styles.mainContainer}>
@@ -75,7 +204,8 @@ const DashboardScreen = (props) => {
         <Picker
           style={{
             zIndex: 1000,
-            width: 180,
+            width: wp(40),
+            height:hp(30),
             justifyContent: "center",
             position: "absolute",
             top: 110,
@@ -84,7 +214,7 @@ const DashboardScreen = (props) => {
           itemStyle={{
             backgroundColor: colors.image_background,
             color: "#ddd",
-            fontSize: 18,
+            fontSize: wp(4),
           }}
           selectedValue={selectedLanguage}
           onValueChange={(itemValue, itemIndex) =>
@@ -97,80 +227,54 @@ const DashboardScreen = (props) => {
           <Picker.Item label="Enrolled Courses" value="Enrolled Courses" />
         </Picker>
       ) : null}
-      {toggle ? (
         <View style={styles.container}>
           <FlatList
             data={coursesData}
             extraData={coursesData}
-            keyExtractor={(itm, ind) => ind.toString()}
+            onEndReachedThreshold={0}
+            onEndReached={() => LoadMoreRandomData()}
+            keyExtractor={(item) => item.id}
             ListHeaderComponent={() => {
               return(
-                  <View style={{ flexDirection: "row", justifyContent: "space-between" ,alignItems:'center',paddingHorizontal:widthPercentageToDP(4),height:heightPercentageToDP(10)}}>
-                    <View style={{ flexDirection: "row" }}>
-                      <Text style={styles.topHeading}>All Courses</Text>
+                  <View style={styles.upperView}>
+                    <View style={styles.headerStyle}>
+                      <Text style={styles.headerTextStyle}>{catText}</Text>
                       <TouchableOpacity
-                          onPress={() => console.log('data')}
-                          // onPress={() => setVisible(!visible)}
-                          style={{  marginTop:10,marginLeft: 7 }}
+                        activeOpacity={0.7}
+                        style={styles.dropArrow}
+                        onPress={() => console.log('Data')}
                       >
-                        <Drop />
+                        <DropArrow/>
                       </TouchableOpacity>
                     </View>
-
-                    <View style={{ flexDirection: "row" }}>
-                      <TouchableOpacity style={styles.iconHolder}>
-                        <Search />
+                    <View style={styles.filterIcons}>
+                      <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Searched')}>
+                        <Search/>
                       </TouchableOpacity>
-                      <TouchableOpacity
-                          // onPress={() => setToggle(!toggle)}
-                          onPress={() => console.log('Data')}
-                          style={[
-                            styles.iconHolder,
-                            {
-                              marginLeft: 7,
-                              marginRight: 3,
-                            },
-                          ]}
-                      >
-                        <Filter />
+                      <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Pressed')}>
+                        <Filter/>
                       </TouchableOpacity>
                     </View>
                   </View>
               )
             }}
-            renderItem={(item, index) => {
-              return (
-                <TouchableOpacity style={styles.innerContainer}>
-                  <CourseCard
-                      isLock={true}
-                      title={item.item.title}
-                      createdBy={item.item.createdby}
-                      imgUri={item.item.imageURL}
-                  />
-                </TouchableOpacity>
-              );
-            }}
+            renderItem={({item, index}) => renderCourseItems(item,index)}
           />
         </View>
-      ) : (
-        <View style={styles.mainContainer}>
-          <View style={{ flex: 1, alignItems: "center" }}>
-            <View style={styles.headingView}>
-              <Text style={{ color: "white", fontSize: 18 }}>
-                All Categories
-              </Text>
-            </View>
-            <View style={styles.headingView}>
-              <Text style={styles.listText}>Finance and Accounting</Text>
-              <Text style={styles.listText}>Business</Text>
-              <Text style={styles.listText}>Finance and Accounting</Text>
-              <Text style={styles.listText}>It and Software</Text>
-              <Text style={styles.listText}>Finance and Accounting</Text>
-              <Text style={styles.listText}>Personal Software</Text>
-            </View>
-          </View>
-        </View>
-      )}
+
+      <Modal
+          animationIn="zoomIn"
+          animationOut="zoomOut"
+          transparent={true}
+          isVisible={modalVisible}
+          onBackdropPress={() => setModalVisible(!modalVisible)}
+      >
+        <CategoryFilterModal
+            onPressClose={() => setModalVisible(!modalVisible)}
+            catData={categoryData}
+        />
+      </Modal>
+
     </View>
   );
 };

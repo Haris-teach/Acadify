@@ -254,7 +254,6 @@ class ApiServices {
 
 
   getCategories = (token,type,callback) => {
-
     var config = {
       method: "get",
       url: BASE_URL + `/api/v1/category/categories?type=${type}`,
@@ -402,10 +401,11 @@ class ApiServices {
   }
 
 
-  getCoursesData = (token, callback) => {
+  getCoursesData = (token,page, callback) => {
     var config = {
       method: "get",
-      url: BASE_URL + "/api/v1/courses/?page=1",
+      // url: BASE_URL + `/api/v1/courses/?size=10&page=${page}`,
+      url: BASE_URL + '/api/v1/courses',
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -426,6 +426,7 @@ class ApiServices {
         });
       });
   };
+
 
   getDashboardData = (token, callback) => {
     var config = {
@@ -476,6 +477,60 @@ class ApiServices {
           });
         });
   };
+
+  getSingleCourse = (token,courseId, callback) => {
+    var config = {
+      method: "get",
+      url: BASE_URL + "/api/v1/courses/" + courseId,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  };
+
+
+  enrollCourse = (token,data,callback) => {
+    var config = {
+      method: 'post',
+      url: BASE_URL + '/api/v1/courses/enroll',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+
+    console.log('Config',config)
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  }
 }
 
 const apiService = new ApiServices();

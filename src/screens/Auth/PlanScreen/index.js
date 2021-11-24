@@ -53,7 +53,7 @@ const PlanScreen = props => {
       if (response.isSuccess) {
         setLoading(false);
         if (response.response.data.code === 200) {
-          console.log('Response', response.response.data);
+          // console.log('Response', response.response.data);
           setIndexValue(0);
           setPackages(response.response.data.result[0].Stripes);
           setIndexFeature(response.response.data.result[0].Stripes[0].Rights);
@@ -88,7 +88,8 @@ const PlanScreen = props => {
   const onChoose = () => {
     if (planName.interval !== 'free') {
       props.navigation.navigate(CREDIT_CARD, {
-        planName,
+          planName,
+          fromSignUp:true
       });
     } else {
       setLoading(true);
@@ -96,7 +97,6 @@ const PlanScreen = props => {
         if (response.isSuccess) {
           setLoading(false);
           if (response.response.data.code === 200) {
-            // console.log('Success ===>', response.response.data);
               dispatch(ApiDataActions.SetUserToken(response.response.data.token));
               props.navigation.dispatch(
               CommonActions.reset({

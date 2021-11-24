@@ -33,6 +33,8 @@ import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
 
 const LoginScreen = (props) => {
   const dispatch = useDispatch();
+  // const [email, setEmail] = useState("hussain14.cs@gmail.com");
+  // const [password, setPassword] = useState("Password@1");
   const [email, setEmail] = useState("user@mailinator.com");
   const [password, setPassword] = useState("Dvorak1234!");
   const [loading, setLoading] = useState(false);
@@ -59,18 +61,25 @@ const LoginScreen = (props) => {
         console.log("DATA", response);
         if (response.response.data.status === 200) {
           console.log("Success ===>", response.response.data.data);
-          dispatch(ApiDataActions.SetLoginData(response.response.data.data));
-          dispatch(
-            ApiDataActions.SetUserToken(response.response.data.data.token)
-          );
-          props.navigation.dispatch(
-            CommonActions.reset({
-              index: 0,
-              routes: [{ name: MY_DRAWER }],
-            })
-          );
-          setPassword("");
-          setEmail("");
+          if(response.response.data.data.user.userType === 2){
+            dispatch(ApiDataActions.SetLoginData(response.response.data.data));
+            dispatch(
+                ApiDataActions.SetUserToken(response.response.data.data.token)
+            );
+            props.navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{ name: MY_DRAWER }],
+                })
+            );
+            setPassword("");
+            setEmail("");
+          }else {
+            setTimeout(() => {
+              Toast.show('Invalid Credentials', Toast.LONG);
+            }, 200);
+          }
+
         } else {
           setTimeout(() => {
             Toast.show(response.response.data.message, Toast.LONG);

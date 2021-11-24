@@ -5,7 +5,7 @@ import {
     View,
     Text,
     FlatList,
-    TouchableOpacity, StatusBar
+    TouchableOpacity, StatusBar, Alert,BackHandler
 } from 'react-native';
 import {useSelector} from "react-redux";
 import {useIsFocused} from "@react-navigation/native";
@@ -40,7 +40,24 @@ const GetAccountability = (props) => {
 
 
     useEffect(() => {
-        getGoals()
+        getGoals();
+        const backAction = () => {
+            Alert.alert("Hold on!", "Are you sure you want to go back?", [
+                {
+                    text: "Cancel",
+                    onPress: () => null,
+                    style: "cancel"
+                },
+                { text: "YES", onPress: () => BackHandler.exitApp() }
+            ]);
+            return true;
+        };
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+        );
+
+        return () => backHandler.remove();
     }, [isFocused]);
 
 

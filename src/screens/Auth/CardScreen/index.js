@@ -1,6 +1,6 @@
 //================================ React Native Imported Files ======================================//
 
-import * as React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StatusBar} from 'react-native';
 import {
   heightPercentageToDP as hp,
@@ -12,18 +12,39 @@ import {
 import styles from './style';
 import colors from '../../../assets/colors/colors';
 import fonts from '../../../assets/fonts/fonts';
+import {ADD_CARD} from '../../../constants/navigators';
+import images from "../../../assets/images/images";
 import Button from '../../../components/Button/Button';
 import CreditCard from '../../../assets/images/credit_card.svg';
-import {ADD_CARD} from '../../../constants/navigators';
 import AppHeader from "../../../components/AppHeader";
-import images from "../../../assets/images/images";
+
 
 const CardScreen = props => {
-  const onPressYes = () => {
-    props.navigation.navigate(ADD_CARD, {
-        planName: props.route.params.planName,
-    });
-  };
+
+    const [planName,setPlanName] = useState('');
+    const [title,setTitle] = useState('');
+
+    useEffect(() => {
+       if(props.route.params.fromSignUp === true){
+           setPlanName(props.route.params.planName.amount);
+           setTitle('plan');
+       } else if (props.route.params.fromCourse === true){
+           setPlanName(props.route.params.price)
+           setTitle('course');
+       }
+    }, []);
+
+
+    const onPressYes = () => {
+        if(props.route.params.fromSignUp === true) {
+            props.navigation.navigate(ADD_CARD, {
+                planName: props.route.params.planName,
+            });
+        } else if(props.route.params.fromCourse === true){
+            console.log('Navigate');
+        }
+    };
+
 
   return (
     <View style={styles.mainContainer}>
@@ -42,12 +63,12 @@ const CardScreen = props => {
       </View>
       <View style={styles.subHeadingView}>
         <Text style={styles.subHeadingText}>
-          Are you sure you want to purchase this plan?
+          Are you sure you want to purchase this {title}?
         </Text>
       </View>
       <View style={[styles.subHeadingView, {height: hp(5)}]}>
         <Text style={[styles.headingText, {fontFamily: fonts.regular}]}>
-          $ {props.route.params.planName.amount / 100}.00
+          $ {planName / 100}.00
         </Text>
       </View>
       <View style={styles.buttonView}>

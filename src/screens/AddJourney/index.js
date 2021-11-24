@@ -27,12 +27,17 @@ const AddJourney = props => {
 
 
     const onPressSave = () => {
+        let testAddress = /^[^-\s][a-zA-Z_\s-]+$/;
         if(title === '' || title === ' '){
             setIsDisable(false);
             Toast.show('Please Enter Title',Toast.LONG)
+        } else if (testAddress.test(title) !== true) {
+            Toast.show('Please Enter Valid Title', Toast.LONG);
         } else if (description === '' || description === ' '){
             setIsDisable(false);
             Toast.show('Please Enter Description',Toast.LONG)
+        }else if (testAddress.test(description) !== true) {
+            Toast.show('Please Enter Valid Description',Toast.LONG)
         } else {
             setIsDisable(true);
             onSaveApi()
