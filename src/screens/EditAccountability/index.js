@@ -20,7 +20,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {Swipeable} from 'react-native-gesture-handler';
 import {useIsFocused} from "@react-navigation/native";
-import SliderText from 'react-native-slider-text';
+import SliderText from '../../../vendor/react-native-slider-text';
 import moment from "moment";
 
 //================================ Local Imported Files ======================================//
