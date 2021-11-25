@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   upperView:{
     height:hp(10),
     width:wp(100),
-    paddingHorizontal:wp(7.5),
+    paddingHorizontal:wp(5),
     flexDirection:'row',
     justifyContent:'space-between',
     alignItems:'center',
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     fontFamily:fonts.semi,
     fontWeight:'700',
     color:colors.white,
-    fontSize:24
+    fontSize:wp(6)
   },
   headingContainer: {
     height: hp(8),
@@ -63,6 +63,25 @@ const styles = StyleSheet.create({
   },
   listText: {
     color: colors.white,
+  },
+
+  dropStyle:{
+    position:'absolute',
+    top:hp(18),
+    left:wp(10),
+  },
+  dateViewStyle:{
+    height:hp(10),
+    width:wp(40),
+    borderRadius:wp(5),
+    backgroundColor:colors.image_background,
+    // paddingHorizontal:wp(5),
+    // flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-between',
+    borderWidth:0
+  },
+  containerStyle: {
   },
 });
 

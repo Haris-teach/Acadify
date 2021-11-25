@@ -25,7 +25,7 @@ const CourseCard = (props) => {
       <View style={{ justifyContent: "space-around", marginLeft: wp(3), width:wp(60),paddingVertical:wp(2)}}>
         <Text style={styles.text} numberOfLines={2}>{props.title} </Text>
         <Text style={{width:wp(50) ,color: colors.greyTxt }} numberOfLines={1}>{props.createdBy}</Text>
-        <Text style={[styles.text, { fontWeight: "700", fontSize: wp(5) }]} numberOfLines={1}>${props.price/100}</Text>
+        <Text style={[styles.text, { fontWeight: "700", fontSize: wp(5) }]} numberOfLines={1}>{props.price > 0 ? `$ ${props.price/100}` : 'Free' }</Text>
       </View>
 
     </TouchableOpacity>

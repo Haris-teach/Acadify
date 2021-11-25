@@ -10,7 +10,7 @@ import {
     SectionList,
     StatusBar,
 } from "react-native";
-import { widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import {useSelector} from "react-redux";
 import Toast from "react-native-simple-toast";
 import Clipboard from '@react-native-clipboard/clipboard';
@@ -67,7 +67,7 @@ const CourseDetailScreen = (props) => {
         ApiHelper.getSingleCourse(token,props.route.params.courseId,(response) => {
             if (response.isSuccess) {
                 if(response.response.data.code === 200){
-                    // console.log('SingleCourse ===>',response.response.data.data)
+                    console.log('SingleCourse ===>',response.response.data.data)
                     response.response.data.data.CourseSections?.map((value) => {
                         tempArray.push({
                             id:value.id,
@@ -84,8 +84,7 @@ const CourseDetailScreen = (props) => {
                             setShowBtn(false)
                             setCourseDetails(response.response.data.data);
                             setLoading(false)
-                            console.log('Price',coursePrice,courseDetails,coursePrice)
-
+                            // console.log('Price',coursePrice,courseDetails,coursePrice)
                         }else{
                             setIsDisabled(true);
                             setCoursePrice(response.response.data.data.CoursePayeds[0].price);
@@ -112,7 +111,7 @@ const CourseDetailScreen = (props) => {
                 }
             }else{
                 setLoading(false)
-                console.log('Course Error',response.response);
+                console.log('Course Error',response.response.response);
             }
         })
     }
@@ -178,12 +177,12 @@ const CourseDetailScreen = (props) => {
                         <View style={styles.cardDetail}>
                             <View style={styles.headingView}>
                                 <Text style={styles.titleText} numberOfLines={1}>{courseDetails.title}</Text>
-                                <TouchableOpacity
-                                    activeOpacity={0.7}
-                                    onPress={() => copyToClipboard()}
-                                >
-                                    <Share/>
-                                </TouchableOpacity>
+                                {/*<TouchableOpacity*/}
+                                {/*    activeOpacity={0.7}*/}
+                                {/*    onPress={() => copyToClipboard()}*/}
+                                {/*>*/}
+                                {/*    <Share/>*/}
+                                {/*</TouchableOpacity>*/}
                             </View>
                             <View style={styles.imageSection}>
                                 <View style={styles.imageView}>
@@ -196,14 +195,11 @@ const CourseDetailScreen = (props) => {
                                 </View>
                                 <View style={styles.lowerTitleView}>
                                     <Text style={[styles.titleText,{fontSize:wp(3.4),color:colors.greyTxt,fontFamily:fonts.regular,fontWeight:'300',width:wp(62)}]} numberOfLines={2}>{courseDetails.createdby}</Text>
-                                    <Text style={[styles.titleText,{fontSize:wp(3.8)}]} numberOfLines={2}>{coursePrice > 0 ? `US $ ${coursePrice/100}.00` : 'Free'}</Text>
+                                    <Text style={[styles.titleText,{fontSize:wp(4),color:colors.button_text}]} numberOfLines={2}>{coursePrice > 0 ? `$ ${coursePrice/100}.00` : 'Free'}</Text>
                                 </View>
                             </View>
                         </View>
 
-                        <View style={styles.contentHeading}>
-                            <Text style={styles.titleText} numberOfLines={1}>Content List</Text>
-                        </View>
 
                         <View style={styles.sectionView}>
                             <SectionList
@@ -211,10 +207,24 @@ const CourseDetailScreen = (props) => {
                                 keyExtractor={(item) => item.id}
                                 scrollEnabled={false}
                                 showsVerticalScrollIndicator={false}
+                                ListEmptyComponent={() => {
+                                    return(
+                                        <View style={styles.emptySection}>
+                                            <Text style={[styles.titleText,{fontSize:wp(4),width:wp(100),textAlign:'center'}]}>This Course has no Content</Text>
+                                        </View>
+                                    )
+                                }}
+                                ListHeaderComponent={() => {
+                                    return(
+                                        <View style={styles.contentHeading}>
+                                            <Text style={styles.titleText} numberOfLines={1}>Content List</Text>
+                                        </View>
+                                    )
+                                }}
                                 renderItem={({ item,section }) => _renderContent(item,section)}
                                 renderSectionHeader={({ section: { title } }) =>
-                                    <View style={styles.headerTitle}>
-                                        <Text style={[styles.titleText,{fontSize:wp(4.2),fontWeight:'400'}]}>{title}</Text>
+                                    <View style={[styles.contentHeading,{height:hp(4)}]}>
+                                        <Text style={[styles.titleText,{fontSize:wp(5),fontWeight:'400'}]}>{title}</Text>
                                     </View>
                                 }
                             />

@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: colors.app_background,
-    paddingTop: Platform.OS === 'ios' ? hp(5) : null,
+    // paddingTop: Platform.OS === 'ios' ? hp(5) : null,
   },
   headerView: {
     height: hp(10),
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.bold,
     fontSize: wp(9),
     position: 'absolute',
-    top: Platform.OS === 'android' ? hp(5) : Platform.Version >= '14.5' ? hp(5) : null,
+    top: Platform.OS === 'android' ? hp(5) : Platform.Version >= '14.5' ? hp(8) : hp(5),
     left: wp(7),
     width: wp(60),
   },

@@ -2,22 +2,20 @@
 
 import React, { useEffect } from "react";
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  FlatList,
+    View,
+    Text,
+    TouchableOpacity,
+    FlatList,
+    Modal
 } from "react-native";
 import { useState } from "react";
-import { Picker } from "@react-native-picker/picker";
 import { useSelector } from "react-redux";
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import {useIsFocused} from "@react-navigation/native";
-import Modal from "react-native-modal";
+// import Modal from "react-native-modal";
 
 //================================ Local Imported Files ======================================//
 
 import styles from "./style";
-import colors from "../../assets/colors/colors";
 import ApiHelper from "../../api/ApiHelper";
 import AppHeaderNative from "../../components/AppHeaderNative";
 import AppLoading from "../../components/AppLoading";
@@ -27,21 +25,28 @@ import DropArrow from "../../assets/images/dropdown.svg";
 import CourseCard from "../../components/CourseCard/CourseCard";
 import CategoryFilterModal from "../../components/CategoryFilterModal";
 import {COURSE_DETAILS} from "../../constants/navigators";
+import CourseDropdown from "../../components/CourseDropDwon";
 
 
 const DashboardScreen = (props) => {
 
   const isFocused = useIsFocused();
   const token = useSelector((state) => state.ApiData.token);
-  const [selectedLanguage, setSelectedLanguage] = useState();
-  const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [dropModal, setDropModal] = useState(false);
   let [coursesData, setCoursesData] = useState([]);
   let [page, setPage] = useState(1);
   let [categoryData, setCategoryData] = useState([]);
-
   let [catText, setCatText] = useState('All Courses');
+
+
+  useEffect(() => {
+    setCatText('All Courses');
+    setPage(1);
+    getUserProfile();
+    getCategories();
+  }, [isFocused]);
 
 
   const getUserProfile = () => {
@@ -50,7 +55,7 @@ const DashboardScreen = (props) => {
     ApiHelper.getCoursesData(token,page, (response) => {
       if (response.isSuccess) {
         if (response.response.data.code === 200) {
-          console.log('Data',response.response.data)
+          // console.log('Data',response.response.data)
           response.response.data.data.docs.map((value) => {
             if(value.CoursePayeds.length > 0){
               if(value.CoursePayeds[0].paid === true){
@@ -113,11 +118,67 @@ const DashboardScreen = (props) => {
   };
 
 
-  useEffect(() => {
-    setPage(1);
-    getUserProfile();
-    getCategories();
-  }, [isFocused]);
+  const onSelectType = (text) => {
+    let url;
+    let tempArray = [];
+    if(text === 'All Courses'){
+      getUserProfile();
+    } else if(text === 'Paid Courses'){
+      url = '/api/v1/courses/?isFree=0';
+    } else if(text === 'Free Courses'){
+      url = '/api/v1/courses/?isFree=1';
+    } else if(text === 'Enrolled Courses'){
+      url = '/api/v1/courses/?notenrolled=yes';
+    }
+    setLoading(true);
+    ApiHelper.getCourseTypes(token,url, (response) => {
+      if (response.isSuccess) {
+        if (response.response.data.code === 200) {
+
+          response.response.data.data.docs.map((value) => {
+            if(value.CoursePayeds.length > 0){
+              if(value.CoursePayeds[0].paid === true){
+                tempArray.push({
+                  isLock:false,
+                  id:value.id,
+                  catName:value.Category.name,
+                  title:value.title,
+                  image:value.imageURL,
+                  price:value.Courseprices[0].price
+                })
+              }else{
+                tempArray.push({
+                  isLock:true,
+                  id:value.id,
+                  catName:value.Category.name,
+                  title:value.title,
+                  image:value.imageURL,
+                  price:value.CoursePayeds[0].price
+                })
+              }
+            } else {
+              tempArray.push({
+                isLock:true,
+                id:value.id,
+                catName:value.Category.name,
+                title:value.title,
+                image:value.imageURL,
+                price:value.Courseprices[0].price
+              })
+            }
+          })
+
+          setCoursesData(tempArray);
+          setLoading(false);
+          console.log('Data ===>',response.response.data)
+        } else {
+        }
+      } else {
+        setLoading(false);
+        console.log("Error ==>", response.response);
+      }
+    });
+  };
 
 
   const renderCourseItems = (item,index) => {
@@ -200,33 +261,6 @@ const DashboardScreen = (props) => {
         />
       </View>
 
-      {visible ? (
-        <Picker
-          style={{
-            zIndex: 1000,
-            width: wp(40),
-            height:hp(30),
-            justifyContent: "center",
-            position: "absolute",
-            top: 110,
-            left: 20,
-          }}
-          itemStyle={{
-            backgroundColor: colors.image_background,
-            color: "#ddd",
-            fontSize: wp(4),
-          }}
-          selectedValue={selectedLanguage}
-          onValueChange={(itemValue, itemIndex) =>
-            setSelectedLanguage(itemValue)
-          }
-        >
-          <Picker.Item label="All Courses" value="All Courses" />
-          <Picker.Item label="Free Courses" value="Free Courses" />
-          <Picker.Item label="Paid Courses" value="Paid Courses" />
-          <Picker.Item label="Enrolled Courses" value="Enrolled Courses" />
-        </Picker>
-      ) : null}
         <View style={styles.container}>
           <FlatList
             data={coursesData}
@@ -237,16 +271,12 @@ const DashboardScreen = (props) => {
             ListHeaderComponent={() => {
               return(
                   <View style={styles.upperView}>
-                    <View style={styles.headerStyle}>
+                    <TouchableOpacity style={styles.headerStyle}  onPress={() => setDropModal(!dropModal)}>
                       <Text style={styles.headerTextStyle}>{catText}</Text>
-                      <TouchableOpacity
-                        activeOpacity={0.7}
-                        style={styles.dropArrow}
-                        onPress={() => console.log('Data')}
-                      >
+                      <View style={styles.dropArrow}>
                         <DropArrow/>
-                      </TouchableOpacity>
-                    </View>
+                      </View>
+                    </TouchableOpacity>
                     <View style={styles.filterIcons}>
                       <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Searched')}>
                         <Search/>
@@ -262,16 +292,32 @@ const DashboardScreen = (props) => {
           />
         </View>
 
+      {/*<Modal*/}
+      {/*    animationIn="zoomIn"*/}
+      {/*    animationOut="zoomOut"*/}
+      {/*    transparent={true}*/}
+      {/*    isVisible={modalVisible}*/}
+      {/*    onBackdropPress={() => setModalVisible(!modalVisible)}*/}
+      {/*>*/}
+      {/*  <CategoryFilterModal*/}
+      {/*      onPressClose={() => setModalVisible(!modalVisible)}*/}
+      {/*      catData={categoryData}*/}
+      {/*  />*/}
+      {/*</Modal>*/}
+
       <Modal
-          animationIn="zoomIn"
-          animationOut="zoomOut"
+          animationType={'none'}
           transparent={true}
-          isVisible={modalVisible}
-          onBackdropPress={() => setModalVisible(!modalVisible)}
+          visible={dropModal}
+          onRequestClose={() => setDropModal(!dropModal)}
       >
-        <CategoryFilterModal
-            onPressClose={() => setModalVisible(!modalVisible)}
-            catData={categoryData}
+        <CourseDropdown
+            onPressClose={() => setDropModal(!dropModal)}
+            onSelect={(text) => {
+              setCatText(text)
+              setDropModal(!dropModal)
+              onSelectType(text)
+            }}
         />
       </Modal>
 

@@ -70,7 +70,6 @@ const EditAccountability = props => {
         ApiHelper.getCategories(token,'ACCOUNTABILITY',(response) => {
             if(response.isSuccess){
                 if(response.response.data.code === 200){
-                    console.log(response.response.data.data)
                     response.response.data.data.forEach((value) => {
                         tempArray.push({
                             id: value.id,

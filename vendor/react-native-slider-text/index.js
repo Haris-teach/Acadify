@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {View, Text, Dimensions, StyleSheet, Platform} from 'react-native';
 import Slider from '@react-native-community/slider';
 import {widthPercentageToDP} from "react-native-responsive-screen";

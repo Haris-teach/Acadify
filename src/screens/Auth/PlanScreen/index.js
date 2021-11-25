@@ -18,6 +18,7 @@ import {useDispatch, useSelector} from "react-redux";
 
 import styles from './style';
 import colors from '../../../assets/colors/colors';
+import images from "../../../assets/images/images";
 import Button from '../../../components/Button/Button';
 import AppHeader from '../../../components/AppHeader';
 import AppLoading from '../../../components/AppLoading';
@@ -27,9 +28,9 @@ import Free from '../../../assets/images/free.svg';
 import Tick from '../../../assets/images/tick.svg';
 import Monthly from '../../../assets/images/monthly.svg';
 import LIFETIME from '../../../assets/images/LIFETIME.svg';
-import {CREDIT_CARD, MY_DRAWER, MY_TABS} from '../../../constants/navigators';
+import {CREDIT_CARD, MY_DRAWER} from '../../../constants/navigators';
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
-import images from "../../../assets/images/images";
+
 
 const PlanScreen = props => {
 
@@ -43,11 +44,11 @@ const PlanScreen = props => {
     const [setIndex, setIndexValue] = useState(0);
     const [isVisible, setVisible] = useState(false);
 
-  useEffect(() => {
-    getPlans();
-  }, []);
+    useEffect(() => {
+        getPlans();
+    }, []);
 
-  const getPlans = () => {
+    const getPlans = () => {
     setLoading(true);
     ApiHelper.onGetPlan(response => {
       if (response.isSuccess) {
@@ -69,14 +70,14 @@ const PlanScreen = props => {
     });
   };
 
-  const onPressPlan = (item, index) => {
+    const onPressPlan = (item, index) => {
     setIndexValue(index);
     setIndexFeature(item.Rights);
     setStripeId(item.Rights[0].StripeId);
     setPlaneName(item);
   };
 
-  const renderItemsFeature = (item, index) => {
+    const renderItemsFeature = (item, index) => {
     return (
       <View style={styles.miniContainer}>
         <Tick height={25} width={25} />
@@ -85,7 +86,7 @@ const PlanScreen = props => {
     );
   };
 
-  const onChoose = () => {
+    const onChoose = () => {
     if (planName.interval !== 'free') {
       props.navigation.navigate(CREDIT_CARD, {
           planName,
@@ -95,9 +96,10 @@ const PlanScreen = props => {
       setLoading(true);
       ApiHelper.onSignUpApi(stripeId, data, response => {
         if (response.isSuccess) {
-          setLoading(false);
           if (response.response.data.code === 200) {
               dispatch(ApiDataActions.SetUserToken(response.response.data.token));
+              dispatch(ApiDataActions.SetLoginData(response.response.data.data));
+              setLoading(false);
               props.navigation.dispatch(
               CommonActions.reset({
                 index: 0,
@@ -105,10 +107,11 @@ const PlanScreen = props => {
               }),
             );
           } else {
-            console.log('Error ==>', response.response);
-            setTimeout(() => {
-                Toast.show(response.response.data.error.email, Toast.LONG);
-            },200)
+              setLoading(false);
+              console.log('Error ==>', response.response);
+              setTimeout(() => {
+                  Toast.show(response.response.data.error.email, Toast.LONG);
+              },200)
           }
         } else {
           setLoading(false);
@@ -118,7 +121,7 @@ const PlanScreen = props => {
     }
   };
 
-  const renderItems = (item, index) => {
+    const renderItems = (item, index) => {
     return (
       <TouchableOpacity
         style={

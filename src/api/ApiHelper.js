@@ -279,6 +279,33 @@ class ApiServices {
   };
 
 
+  getCourseTypes = (token,url,callback) => {
+
+    var config = {
+      method: "get",
+      url: BASE_URL + url,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  };
+
+
   newJourney = (token,title,description,callback) => {
     var data = JSON.stringify({
       "title": title,

@@ -170,7 +170,7 @@ const MenuBar = (props) => {
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => onLive()}
-            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 :Platform.OS === 'android' ?  hp(2) : 12}]}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 30 :Platform.OS === 'android' ?  hp(2) : 7}]}
         >
           <View style={live ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
           <View style={styles.iconView}>
@@ -180,7 +180,7 @@ const MenuBar = (props) => {
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => onCourse()}
-            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : Platform.OS === 'android' ?  hp(2) : 12}]}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : Platform.OS === 'android' ?  hp(2) : 7}]}
         >
           <View style={course ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
           <View style={styles.iconView}>
@@ -190,7 +190,7 @@ const MenuBar = (props) => {
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => onSettings()}
-            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : Platform.OS === 'android' ?  hp(2) : 12}]}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : Platform.OS === 'android' ?  hp(2) : 8}]}
         >
           <View style={accountability ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
           <View style={styles.iconView}>
@@ -200,7 +200,7 @@ const MenuBar = (props) => {
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => onResource()}
-            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : Platform.OS === 'android' ?  hp(2) : 12}]}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : Platform.OS === 'android' ?  hp(2) : 7}]}
         >
           <View style={resources ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
           <View style={styles.iconView}>
@@ -210,7 +210,7 @@ const MenuBar = (props) => {
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => onJourney()}
-            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 :Platform.OS === 'android' ?  hp(2) : 12}]}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 :Platform.OS === 'android' ?  hp(2) : 7}]}
         >
           <View style={journey ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
           <View style={styles.iconView}>
@@ -220,7 +220,7 @@ const MenuBar = (props) => {
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => onForum()}
-            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 :Platform.OS === 'android' ?  hp(2) : 12}]}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 :Platform.OS === 'android' ?  hp(2) : 7}]}
         >
           <View style={forum ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
           <View style={styles.iconView}>
@@ -230,7 +230,7 @@ const MenuBar = (props) => {
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => onChat()}
-            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : Platform.OS === 'android' ?  hp(2) : 12}]}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : Platform.OS === 'android' ?  hp(2) : 7}]}
         >
           <View style={chat ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
           <View style={styles.iconView}>
@@ -240,7 +240,7 @@ const MenuBar = (props) => {
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => onGear()}
-            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : Platform.OS === 'android' ?  hp(2) : 12}]}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : Platform.OS === 'android' ?  hp(2) : 7}]}
         >
           <View style={gear ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
           <View style={styles.iconView}>

@@ -30,11 +30,10 @@ import AppLoading from "../../../components/AppLoading";
 import ApiHelper from "../../../api/ApiHelper";
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
 
-
 const LoginScreen = (props) => {
   const dispatch = useDispatch();
-  // const [email, setEmail] = useState("hussain14.cs@gmail.com");
-  // const [password, setPassword] = useState("Password@1");
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
   const [email, setEmail] = useState("user@mailinator.com");
   const [password, setPassword] = useState("Dvorak1234!");
   const [loading, setLoading] = useState(false);
@@ -58,9 +57,9 @@ const LoginScreen = (props) => {
       if (response.isSuccess) {
         dispatch(ApiDataActions.SetLoginData(response.response.data.data));
         setLoading(false);
-        console.log("DATA", response);
+        // console.log("DATA", response);
         if (response.response.data.status === 200) {
-          console.log("Success ===>", response.response.data.data);
+          // console.log("Success ===>", response.response.data.data);
           if(response.response.data.data.user.userType === 2){
             dispatch(ApiDataActions.SetLoginData(response.response.data.data));
             dispatch(

@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     imageStyles: {
         width:'100%',
         height:'100%',
-        resizeMode:'stretch',
+        resizeMode:'cover',
         borderRadius:wp(5),
     },
     textSection:{
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
     contentHeading:{
-        height:hp(10),
+        height:hp(8),
         width:wp(100),
         paddingHorizontal:wp(5),
         justifyContent:'center',
@@ -92,7 +92,12 @@ const styles = StyleSheet.create({
       justifyContent:'center',
       alignItems:'center',
     },
-
+    emptySection:{
+      height:hp(20),
+      width:wp(100),
+      justifyContent:'center',
+      alignItems:'center',
+    },
 
     cardImg: {
         marginTop: hp("3%"),
