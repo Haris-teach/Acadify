@@ -20,7 +20,7 @@ import LandingScreen from "./screens/Auth/LandingScreen";
 import {
     ADD_CARD,
     ADD_GOAL,
-    ADD_JOURNEY,
+    ADD_JOURNEY, ALL_RESOURCES,
     COURSE_CONTENT_PLAY,
     COURSE_DETAILS,
     COURSE_SCREEN,
@@ -58,6 +58,7 @@ import MenuBar from "./components/MenuBar";
 import EditAccountability from "./screens/Accountability/EditAccountability";
 import CourseDetailScreen from "./screens/Courses/CourseDetailScreen";
 import CourseContentPlay from "./screens/Courses/CourseContentPlay";
+import AllResourcesScreen from "./screens/Resources/AllResources";
 
 
 const RootStack = createNativeStackNavigator();
@@ -91,6 +92,7 @@ const MyNewStack = () => {
             <RootStack.Screen name={EDIT_ACCOUNTABILITY} component={EditAccountability}/>
             <RootStack.Screen name={COURSE_DETAILS} component={CourseDetailScreen}/>
             <RootStack.Screen name={COURSE_CONTENT_PLAY} component={CourseContentPlay}/>
+            <RootStack.Screen name={ALL_RESOURCES} component={AllResourcesScreen}/>
         </RootStack.Navigator>
     );
 };
@@ -124,6 +126,7 @@ const MyDrawer = () => {
             <Drawer.Screen name={GET_ACCOUNTABILITY} component={GetAccountability} />
             <Drawer.Screen name={JOURNEY} component={JourneyScreen} />
             <Drawer.Screen name={SETTINGS} component={SettingScreen} />
+            <Drawer.Screen name={ALL_RESOURCES} component={AllResourcesScreen} />
         </Drawer.Navigator>
     );
 };

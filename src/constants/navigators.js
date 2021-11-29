@@ -21,4 +21,5 @@ export const MY_DRAWER = 'MY_DRAWER';
 export const SETTINGS = 'SETTINGS';
 export const COURSE_CONTENT_PLAY = 'COURSE_CONTENT_PLAY';
 export const COURSE_DETAILS = 'COURSE_DETAILS';
+export const ALL_RESOURCES = 'ALL_RESOURCES';
 

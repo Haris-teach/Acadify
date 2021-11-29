@@ -40,6 +40,25 @@ const DashboardScreen = (props) => {
   let [categoryData, setCategoryData] = useState([]);
   let [catText, setCatText] = useState('All Courses');
 
+  let dropText = [
+    {
+      id:0,
+      name:'All Courses'
+    },
+    {
+      id:1,
+      name:'Paid Courses'
+    },
+    {
+      id:2,
+      name:'Free Courses'
+    },
+    {
+      id:3,
+      name:'Enrolled Courses'
+    }
+  ];
+
 
   useEffect(() => {
     setCatText('All Courses');
@@ -55,7 +74,6 @@ const DashboardScreen = (props) => {
     ApiHelper.getCoursesData(token,page, (response) => {
       if (response.isSuccess) {
         if (response.response.data.code === 200) {
-          // console.log('Data',response.response.data)
           response.response.data.data.docs.map((value) => {
             if(value.CoursePayeds.length > 0){
               if(value.CoursePayeds[0].paid === true){
@@ -313,6 +331,8 @@ const DashboardScreen = (props) => {
       >
         <CourseDropdown
             onPressClose={() => setDropModal(!dropModal)}
+            text={dropText}
+            fromCourse={true}
             onSelect={(text) => {
               setCatText(text)
               setDropModal(!dropModal)

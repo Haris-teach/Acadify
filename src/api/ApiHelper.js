@@ -271,7 +271,32 @@ class ApiServices {
 
 
   getCourseTypes = (token,url,callback) => {
+    var config = {
+      method: "get",
+      url: BASE_URL + url,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
 
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  };
+
+
+  getResourceTypes = (token,url,callback) => {
     var config = {
       method: "get",
       url: BASE_URL + url,
@@ -422,6 +447,33 @@ class ApiServices {
       method: "get",
       // url: BASE_URL + `/api/v1/courses/?size=10&page=${page}`,
       url: BASE_URL + '/api/v1/courses',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    axios(config)
+      .then((response) => {
+        callback({
+          isSuccess: true,
+          response: response,
+        });
+      })
+      .catch((error) => {
+        callback({
+          isSuccess: false,
+          response: error,
+        });
+      });
+  };
+
+
+  getResourceData = (token,page, callback) => {
+    var config = {
+      method: "get",
+      // url: BASE_URL + `/api/v1/courses/?size=10&page=${page}`,
+      url: BASE_URL + '/api/v1/resources',
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",

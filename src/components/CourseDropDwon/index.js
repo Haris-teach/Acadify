@@ -24,34 +24,34 @@ const CourseDropdown = (props) => {
                 <TouchableOpacity
                     activeOpacity={0.7}
                     style={styles.sectionView}
-                    onPress={() => props.onSelect('All Courses')}
+                    onPress={() => props.onSelect(props.text[0].name)}
                 >
-                    <Text style={styles.headingText}>All Courses</Text>
+                    <Text style={styles.headingText}>{props.text[0].name}</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                     activeOpacity={0.7}
                     style={styles.sectionView}
-                    onPress={() => props.onSelect('Paid Courses')}
+                    onPress={() => props.onSelect(props.text[1].name)}
                 >
-                    <Text style={styles.headingText}>Paid Courses</Text>
+                    <Text style={styles.headingText}>{props.text[1].name}</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                     activeOpacity={0.7}
                     style={styles.sectionView}
-                    onPress={() => props.onSelect('Free Courses')}
+                    onPress={() => props.onSelect(props.text[2].name)}
                 >
-                    <Text style={styles.headingText}>Free Courses</Text>
+                    <Text style={styles.headingText}>{props.text[2].name}</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity
+                {props.fromCourse ? <TouchableOpacity
                     activeOpacity={0.7}
                     style={styles.sectionView}
-                    onPress={() => props.onSelect('Enrolled Courses')}
+                    onPress={() => props.onSelect(props.text[3].name)}
                 >
-                    <Text style={styles.headingText}>Enrolled Courses</Text>
-                </TouchableOpacity>
+                    <Text style={styles.headingText}>{props.text[3].name}</Text>
+                </TouchableOpacity> : null}
             </View>
         </TouchableOpacity>
     );
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
         paddingLeft:wp(10),
     },
     container: {
-        height: hp(18),
+        maxHeight: hp(18),
         width: wp(40),
         borderRadius: wp(2),
         backgroundColor:colors.image_background,
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
         height: hp(4.5),
         width: wp(40),
         justifyContent:"center",
-        alignItems:'center',
+        paddingLeft:wp(3),
         backgroundColor:colors.image_background
     },
     headingText:{

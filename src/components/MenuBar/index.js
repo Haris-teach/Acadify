@@ -26,6 +26,7 @@ import Chat from "../../assets/images/935.svg";
 import MyChatBold from "../../assets/images/Subtract.svg";
 import Live from "../../assets/images/live.svg";
 import {
+  ALL_RESOURCES,
   COURSE_SCREEN,
   DASHBOARD_SCREEN,
   GET_ACCOUNTABILITY,
@@ -106,6 +107,7 @@ const MenuBar = (props) => {
     setForum(false);
     setChat(false);
     setGear(false);
+    props.navigation.navigate(ALL_RESOURCES);
   };
   const onJourney = () => {
     setHome(false);
