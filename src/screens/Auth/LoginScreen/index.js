@@ -36,7 +36,7 @@ const LoginScreen = (props) => {
   // const [password, setPassword] = useState("");
   const [email, setEmail] = useState("user@mailinator.com");
   const [password, setPassword] = useState("Dvorak1234!");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading]   = useState(false);
 
   const onPressLogin = () => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -78,7 +78,6 @@ const LoginScreen = (props) => {
               Toast.show('Invalid Credentials', Toast.LONG);
             }, 200);
           }
-
         } else {
           setTimeout(() => {
             Toast.show(response.response.data.message, Toast.LONG);

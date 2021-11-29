@@ -150,7 +150,7 @@ const MenuBar = (props) => {
     setJourney(false);
     setForum(false);
     setChat(false);
-    setGear("settings");
+    setGear(true);
     props.navigation.navigate(SETTINGS);
   };
 

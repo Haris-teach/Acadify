@@ -82,7 +82,6 @@ class ApiServices {
       },
       data: value,
     };
-    console.log("Cnonfig", config);
 
     axios(config)
       .then((response) => {
@@ -107,8 +106,6 @@ class ApiServices {
       "title": ''
     });
 
-    console.log('Data',data)
-
     var config = {
       method: 'post',
       url: BASE_URL + '/api/v1/media/signed/url',
@@ -118,8 +115,6 @@ class ApiServices {
       },
       data : data
     };
-
-    console.log('Data',config)
 
     axios(config)
         .then(response => {
@@ -147,8 +142,6 @@ class ApiServices {
       },
       data: value,
     };
-
-    console.log('Config', config);
 
     axios(config)
         .then(response => {
@@ -187,8 +180,6 @@ class ApiServices {
       },
       data: value,
     };
-
-    console.log("Cnonfig", config);
 
     axios(config)
       .then((response) => {
@@ -321,7 +312,6 @@ class ApiServices {
       },
       data : data
     };
-      console.log('Config',config);
 
     axios(config)
         .then((response) => {
@@ -339,14 +329,13 @@ class ApiServices {
   }
 
 
-  createGoal = (token,title,description,catId,progress,dateComplete,catName,checkList,callback) => {
+  createGoal = (token,title,description,catId,progress,dateComplete,checkList,callback) => {
     var data = JSON.stringify({
       "title": title,
       "description": description,
       "categoryId": catId,
       "progress": progress,
       "dateCompleted": dateComplete,
-      "category": catName,
       "checklist": checkList
     });
 
@@ -542,7 +531,56 @@ class ApiServices {
       data : data
     };
 
-    console.log('Config',config)
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  }
+
+
+  deleteGoal = (token,id,callback) => {
+    var config = {
+      method: 'delete',
+      url: BASE_URL + `/api/v1/goals/user/${id}`,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  }
+
+  changeSingleGoalStatus = (token,id,callback) => {
+    var config = {
+      method: 'put',
+      url: BASE_URL + `/api/v1/goals/changestatus/${id}`,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    };
 
     axios(config)
         .then((response) => {

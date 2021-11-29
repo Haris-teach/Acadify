@@ -12,7 +12,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 //================================ Local Imported Files ======================================//
 
 import { height_screen } from "./utils/Dimentions";
-import JourneyScreen from "./screens/JourneyScreen";
+import JourneyScreen from "./screens/Journey/JourneyScreen";
 import LoginScreen from "./screens/Auth/LoginScreen";
 import SignUpScreen from "./screens/Auth/SignUpScreen";
 import ForgotPasswordScreen from "./screens/Auth/ForgotPassword";
@@ -44,20 +44,20 @@ import {
 import PlanScreen from "./screens/Auth/PlanScreen";
 import CardScreen from "./screens/Auth/CardScreen";
 import AddCardScreen from "./screens/Auth/AddCardScreen";
-import DashboardScreen from "./screens/DashboardScreen";
-import SettingScreen from "./screens/SettingScreen";
-import ProfileScreen from "./screens/ProfileScreen";
-import AddJourney from "./screens/AddJourney";
-import PasswordUpdate from "./screens/PasswordUpdate";
+import DashboardScreen from "./screens/Courses/CoursesScreen";
+import SettingScreen from "./screens/ProfileSetting/SettingScreen";
+import ProfileScreen from "./screens/ProfileSetting/ProfileScreen";
+import AddJourney from "./screens/Journey/AddJourney";
+import PasswordUpdate from "./screens/ProfileSetting/PasswordUpdate";
 import VideoScreen from "./screens/VideoScreen";
-import CourseScreen from "./screens/CourseScreen";
-import AddGoal from "./screens/CreateGoal";
-import EditProfileScreen from "./screens/EditProfile";
-import GetAccountability from "./screens/GetAccountability";
+import CourseScreen from "./screens/DashboardScreen";
+import AddGoal from "./screens/Accountability/CreateGoal";
+import EditProfileScreen from "./screens/ProfileSetting/EditProfile";
+import GetAccountability from "./screens/Accountability/GetAccountability";
 import MenuBar from "./components/MenuBar";
-import EditAccountability from "./screens/EditAccountability";
-import CourseDetailScreen from "./screens/CourseDetailScreen";
-import CourseContentPlay from "./screens/CourseContentPlay";
+import EditAccountability from "./screens/Accountability/EditAccountability";
+import CourseDetailScreen from "./screens/Courses/CourseDetailScreen";
+import CourseContentPlay from "./screens/Courses/CourseContentPlay";
 
 
 const RootStack = createNativeStackNavigator();
@@ -124,7 +124,6 @@ const MyDrawer = () => {
             <Drawer.Screen name={GET_ACCOUNTABILITY} component={GetAccountability} />
             <Drawer.Screen name={JOURNEY} component={JourneyScreen} />
             <Drawer.Screen name={SETTINGS} component={SettingScreen} />
-
         </Drawer.Navigator>
     );
 };
@@ -135,7 +134,7 @@ const Stack = () => {
         <NavigationContainer
             ref={navigationRef}
             onReady={() => {
-                console.log("curren - - ", navigationRef.getCurrentRoute().name);
+                console.log("Current ====>", navigationRef.getCurrentRoute().name);
             }}
         >
             <MyNewStack />
