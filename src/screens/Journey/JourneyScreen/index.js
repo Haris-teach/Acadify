@@ -21,7 +21,6 @@ import AppHeaderNative from "../../../components/AppHeaderNative";
 import AppLoading from "../../../components/AppLoading";
 import JourneyComponent from "../../../components/JourneyComponent";
 
-
 const JourneyScreen = (props) => {
 
     const isFocused = useIsFocused();
@@ -32,23 +31,6 @@ const JourneyScreen = (props) => {
 
     useEffect(() => {
        getJourney();
-        // const backAction = () => {
-        //     Alert.alert("Hold on!", "Are you sure you want to go back?", [
-        //         {
-        //             text: "Cancel",
-        //             onPress: () => null,
-        //             style: "cancel"
-        //         },
-        //         { text: "YES", onPress: () => BackHandler.exitApp() }
-        //     ]);
-        //     return true;
-        // };
-        // const backHandler = BackHandler.addEventListener(
-        //     "hardwareBackPress",
-        //     backAction
-        // );
-        //
-        // return () => backHandler.remove();
     }, [isFocused]);
 
 

@@ -20,7 +20,9 @@ import LandingScreen from "./screens/Auth/LandingScreen";
 import {
     ADD_CARD,
     ADD_GOAL,
-    ADD_JOURNEY, ALL_RESOURCES,
+    ADD_JOURNEY,
+    ALL_RESOURCES,
+    BUY_RESOURCES,
     COURSE_CONTENT_PLAY,
     COURSE_DETAILS,
     COURSE_SCREEN,
@@ -59,6 +61,7 @@ import EditAccountability from "./screens/Accountability/EditAccountability";
 import CourseDetailScreen from "./screens/Courses/CourseDetailScreen";
 import CourseContentPlay from "./screens/Courses/CourseContentPlay";
 import AllResourcesScreen from "./screens/Resources/AllResources";
+import ResourceBuyScreen from "./screens/Resources/ResourceBuyScreen";
 
 
 const RootStack = createNativeStackNavigator();
@@ -93,6 +96,7 @@ const MyNewStack = () => {
             <RootStack.Screen name={COURSE_DETAILS} component={CourseDetailScreen}/>
             <RootStack.Screen name={COURSE_CONTENT_PLAY} component={CourseContentPlay}/>
             <RootStack.Screen name={ALL_RESOURCES} component={AllResourcesScreen}/>
+            <RootStack.Screen name={BUY_RESOURCES} component={ResourceBuyScreen}/>
         </RootStack.Navigator>
     );
 };

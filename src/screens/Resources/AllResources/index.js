@@ -6,7 +6,9 @@ import {
     Text,
     TouchableOpacity,
     FlatList,
-    Modal, Platform, Linking
+    Modal,
+    Platform,
+    Linking
 } from "react-native";
 import { useState } from "react";
 import { useSelector } from "react-redux";
@@ -25,7 +27,7 @@ import Filter from "../../../assets/images/filterBackground.svg";
 import DropArrow from "../../../assets/images/dropdown.svg";
 import CourseDropdown from "../../../components/CourseDropDwon";
 import ResourceComponent from "../../../components/ResourceComponent";
-
+import {BUY_RESOURCES, CREDIT_CARD} from "../../../constants/navigators";
 
 const AllResourcesScreen = (props) => {
 
@@ -34,9 +36,10 @@ const AllResourcesScreen = (props) => {
     const [loading, setLoading] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [dropModal, setDropModal] = useState(false);
-    let [coursesData, setCoursesData] = useState([]);
     let [page, setPage] = useState(1);
+    let [pageLength, pagePageLength] = useState(1);
     let [categoryData, setCategoryData] = useState([]);
+    let [coursesData, setCoursesData]   = useState([]);
     let [catText, setCatText] = useState('All Resources');
     let dropText = [
         {
@@ -64,11 +67,11 @@ const AllResourcesScreen = (props) => {
 
     const getAllResources = () => {
         setLoading(true);
-        ApiHelper.getResourceData(token,page, (response) => {
+        ApiHelper.getResourceData(token, (response) => {
             if (response.isSuccess) {
                 if (response.response.data.code === 200) {
-                    // console.log('Resources ===>',response.response.data.data.docs)
                     setCoursesData(response.response.data.data.docs);
+                    pagePageLength(response.response.data.data.pages);
                     setLoading(false);
                 } else {
                     console.log("Error inner ==>", response.response.data);
@@ -85,10 +88,9 @@ const AllResourcesScreen = (props) => {
         setLoading(true);
         ApiHelper.getCategories(token,'RESOURCES', (response) => {
             if (response.isSuccess) {
-                setLoading(false);
                 if (response.response.data.code === 200) {
-                    setLoading(false)
                     setCategoryData(response.response.data.data)
+                    setLoading(false)
                 } else {
                 }
             } else {
@@ -99,32 +101,87 @@ const AllResourcesScreen = (props) => {
     };
 
 
-    const downloadDocument = (items) => {
-        if(items.type === 'DOCUMENTS'){
-            const { fs } = RNFetchBlob;
+    const downloadDocument = (items,value) => {
+        if(value === 'download'){
+            Toast.show('Downloading ...',Toast.LONG);
+            var date = new Date();
             let linking = items.url.split(' ');
-            RNFetchBlob
-                .config({
-                    fileCache : true,
-                    autorename: false,
+            const { dirs: {DownloadDir, DocumentDir} } = RNFetchBlob.fs;
+            const {config} = RNFetchBlob;
+            const isIOS = Platform.OS === "ios";
+            const aPath = Platform.select({ios: DocumentDir, android: DownloadDir});
+            const fPath = aPath + '/' + Math.floor(date.getTime() + date.getSeconds() / 2)+'.docs';
+
+            const configOptions = Platform.select({
+                ios: {
+                    fileCache: true,
+                    path: fPath,
+                    notification: true,
+                },
+
+                android: {
+                    fileCache: false,
                     addAndroidDownloads: {
                         useDownloadManager: true,
                         notification: true,
-                        title: 'title',
-                        path: Platform.OS === "ios" ? fs.dirs.DocumentDir : fs.dirs.DCIMDir + "/me_" + "." + 'DOCS',
-                        description: "Downloading file.",
-                    },
-                })
-                .fetch('GET', linking[0], {
-                })
-                .then((res) => {
-                    console.log('Downloaded ====>', res.path())
-                })
-                .catch((error) => {
-                    console.log('error', error)
-                })
-        } else if (items.type === 'SERVICES'){
+                        path: fPath,
+                        title: linking[0],
+                        description: 'Downloading docs...',
+                    }
+                },
+            });
+
+            if (isIOS) {
+                config(configOptions)
+                    .fetch('GET', linking[0])
+                    .then((res) => {
+                        setTimeout(() => {
+                            RNFetchBlob.ios.openDocument(res.data);
+                        }, 300);
+
+                    })
+                    .catch((errorMessage) => {
+                        Toast.show(errorMessage,Toast.LONG);
+                    });
+            } else {
+                config(configOptions)
+                    .fetch('GET', linking[0])
+                    .then((res) => {
+                        // RNFetchBlob.android.actionViewIntent(res.path());
+                        Toast.show('File download successfully',Toast.LONG);
+                    })
+                    .catch((errorMessage, statusCode) => {
+                        Toast.show(errorMessage,Toast.LONG);
+                    });
+            }
+            // const { fs } = RNFetchBlob;
+            // let linking = items.url.split(' ');
+            // RNFetchBlob
+            //     .config({
+            //         fileCache : true,
+            //         addAndroidDownloads: {
+            //             useDownloadManager: true,
+            //             notification: true,
+            //             title: items.title,
+            //             path: Platform.OS === "ios" ? fs.dirs.DocumentDir : fs.dirs.DCIMDir + "/me_" + "." + 'DOCS',
+            //             description: "Downloading file.",
+            //         },
+            //     })
+            //     .fetch('GET', linking[0], {
+            //     })
+            //     .then((res) => {
+            //         console.log('Downloaded ====>', res.path())
+            //     })
+            //     .catch((error) => {
+            //         console.log('error', error)
+            //     })
+        } else if (value === 'link'){
             Linking.openURL(items.url)
+        } else if (value > 0){
+            props.navigation.navigate(BUY_RESOURCES,{
+                fromResource: true,
+                price: value * 100
+            })
         }
     };
 
@@ -134,15 +191,14 @@ const AllResourcesScreen = (props) => {
         if(text === 'All Resources'){
             getAllResources();
         } else if(text === 'Services'){
-            url = '/api/v1/resources/?resourceType=SERVICES';
+            url = '/api/v1/resources/?size=30&resourceType=SERVICES';
         } else if(text === 'Documents'){
-            url = '/api/v1/resources/?resourceType=DOCUMENTS';
+            url = '/api/v1/resources/?size=30&resourceType=DOCUMENTS';
         }
         setLoading(true);
         ApiHelper.getResourceTypes(token,url, (response) => {
             if (response.isSuccess) {
                 if (response.response.data.code === 200) {
-                    console.log('Resources types ===>',response.response.data.data.docs)
                     setCoursesData(response.response.data.data.docs);
                     setLoading(false);
                 } else {
@@ -156,7 +212,7 @@ const AllResourcesScreen = (props) => {
     };
 
 
-    const renderCourseItems = (item) => {
+    const renderResourceItems = (item) => {
         return (
             <ResourceComponent
                 title={item.title}
@@ -165,61 +221,29 @@ const AllResourcesScreen = (props) => {
                 type={item.resourceType}
                 price={item.Documentprices}
                 pay={item.DocumentPayeds}
-                onPressContent={(title) => downloadDocument(title)}
+                onPressContent={(title,value) => downloadDocument(title,value)}
             />
         );
     }
 
 
     const LoadMoreRandomData = () => {
-        setPage(page = page + 1);
-        setMoreData();
+        if(page < pageLength) {
+            setPage(page = page + 1);
+            setMoreData();
+        }
     }
 
 
     const setMoreData = () => {
         // setLoading(true);
-        // let tempArray = [];
-        // ApiHelper.getCoursesData(token,page,(response) => {
-        //   if (response.isSuccess) {
-        //     // setCategoryExtraData(coursesData = page === 2 ? response.response.data.data.docs : [...coursesData, ...response.response.data.data.docs]);
-        //     response.response.data.data.docs?.map((value) => {
-        //       if (value.CoursePayeds.length > 0) {
-        //       if (value.CoursePayeds[0].paid === true) {
-        //         tempArray.push({
-        //           isLock: false,
-        //           id: value.id,
-        //           catName: value.Category.name,
-        //           title: value.title,
-        //           image: value.imageURL,
-        //           price: value.Courseprices[0].price
-        //         })
-        //       } else {
-        //         tempArray.push({
-        //           isLock: true,
-        //           id: value.id,
-        //           catName: value.Category.name,
-        //           title: value.title,
-        //           image: value.imageURL,
-        //           price: value.CoursePayeds[0].price
-        //         })
-        //       }
-        //     } else {
-        //       tempArray.push({
-        //         isLock: true,
-        //         id: value.id,
-        //         catName: value.Category.name,
-        //         title: value.title,
-        //         image: value.imageURL,
-        //         price: value.Courseprices[0].price
-        //       })
-        //     }
-        //   })
-        //     console.log('te')
-        //     setCoursesData(coursesData = page === 2 ? response.response.data.data.docs : [...coursesData, ...tempArray]);
-        //     setLoading(false);
+        // ApiHelper.getResourceData(token,page,(response) => {
+        //     if (response.isSuccess) {
+        //       setCoursesData(coursesData = page === 2 ? response.response.data.data.docs : [...coursesData, ...response.response.data.data.docs]);
+        //       setLoading(false);
         //   }else{
         //     setLoading(false);
+        //         console.log('Response error',response.response)
         //   }
         // })
     }
@@ -264,7 +288,7 @@ const AllResourcesScreen = (props) => {
                             </View>
                         )
                     }}
-                    renderItem={({item, index}) => renderCourseItems(item,index)}
+                    renderItem={({item}) => renderResourceItems(item)}
                 />
             </View>
 

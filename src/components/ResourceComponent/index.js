@@ -12,13 +12,30 @@ import Download from "../../assets/images/download-Light.svg";
 import Link from "../../assets/images/link.svg";
 import Lock from "../../assets/images/lock-Filled.svg";
 
+
 const ResourceComponent = (props) => {
+
+    const checkTerms = () => {
+        if(props.type === 'DOCUMENTS' && props.pay.length > 0 && props.pay[0].paid === true ){
+            props.onPressContent(props,'download')
+        } else if (props.type === 'DOCUMENTS' && props.pay.length > 0 && props.pay[0].paid === false){
+            props.onPressContent(props,props.pay[0].price / 100)
+        } else if (props.type === 'DOCUMENTS' && props.pay.length < 1 && props.price[0].isFree === true){
+            props.onPressContent(props,'download')
+        } else if (props.type === 'DOCUMENTS' && props.pay.length < 1 && props.price[0].isFree === false){
+            props.onPressContent(props,props.price[0].price / 100)
+        } else if (props.type === 'SERVICES'){
+            props.onPressContent(props,'link')
+        }
+    }
+
+
     return (
         <TouchableOpacity
             activeOpacity={0.7}
             style={styles.container}
             disabled={props.isDisable}
-            onPress={() => props.onPressContent(props)}
+            onPress={() => checkTerms()}
         >
             <View style={styles.imageSection}>
                 <ImageBackground
@@ -31,22 +48,27 @@ const ResourceComponent = (props) => {
                 <Text style={styles.text} numberOfLines={2}>{props.title}</Text>
                 {props.type === 'DOCUMENTS' && (props.pay.length > 0 && props.pay[0].paid === true ?<View style={styles.iconView}>
                     <Download height={20} width={20}/>
-                    <Text style={{paddingLeft: wp(2), color: colors.greyTxt, marginTop: wp(1.2)}}
+                    <Text style={{paddingLeft: wp(2), color: colors.greyTxt,fontFamily:fonts.semi, marginTop: wp(1.2)}}
                           numberOfLines={2}>Download</Text>
                 </View> : null)}
                 {props.type === 'DOCUMENTS' && (props.pay.length > 0 && props.pay[0].paid === false ?<View style={styles.iconView}>
                     <Lock height={18} width={18}/>
-                    <Text style={{paddingLeft: wp(2), color: colors.greyTxt, marginTop: wp(1.2)}}
-                          numberOfLines={2}>$ {props.pay[0].price / 100}</Text>
+                    <Text style={{paddingLeft: wp(2), color: colors.white,fontFamily:fonts.semi, marginTop: wp(1.2)}}
+                          numberOfLines={2}>US ${props.pay[0].price / 100}.00</Text>
                 </View> : null)}
-                {props.type === 'DOCUMENTS' && props.pay.length < 1 ? <View style={styles.iconView}>
+                {props.type === 'DOCUMENTS' && (props.pay.length < 1 && props.price[0].isFree === false ? <View style={styles.iconView}>
                     <Lock height={18} width={18}/>
-                    <Text style={{paddingLeft: wp(2), color: colors.greyTxt,fontFamily:fonts.semi,fontWeight:'700', marginTop: wp(1.2)}}
-                          numberOfLines={2}>US {props.price[0].price / 100}</Text>
-                </View> : null}
+                    <Text style={{paddingLeft: wp(2), color: colors.white,fontFamily:fonts.semi, marginTop: wp(1.2)}}
+                          numberOfLines={2}>US ${props.price[0].price / 100}.00</Text>
+                </View> : null)}
+                {props.type === 'DOCUMENTS' && (props.pay.length < 1 && props.price[0].isFree === true ? <View style={styles.iconView}>
+                    <Download height={18} width={18}/>
+                    <Text style={{paddingLeft: wp(2), color: colors.greyTxt,fontFamily:fonts.semi, marginTop: wp(1.2)}}
+                          numberOfLines={2}>Download</Text>
+                </View> : null)}
                 {props.type === 'SERVICES' ? <View style={styles.iconView}>
                     <Link height={18} width={18}/>
-                    <Text style={{paddingLeft: wp(2), color: colors.greyTxt, marginTop: wp(1.2)}}
+                    <Text style={{paddingLeft: wp(2), color: colors.greyTxt,fontFamily:fonts.semi, marginTop: wp(1.2)}}
                           numberOfLines={2}>Link</Text>
                 </View> : null}
             </View>

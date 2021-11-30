@@ -393,7 +393,7 @@ class ApiServices {
   getJourney = (token,callback) => {
     var config = {
       method: 'get',
-      url: BASE_URL + '/api/v1/journey/alljourney',
+      url: BASE_URL + '/api/v1/journey/alljourney/?size=30',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -469,16 +469,18 @@ class ApiServices {
   };
 
 
-  getResourceData = (token,page, callback) => {
+  getResourceData = (token, callback) => {
     var config = {
       method: "get",
-      // url: BASE_URL + `/api/v1/courses/?size=10&page=${page}`,
-      url: BASE_URL + '/api/v1/resources',
+      // url: BASE_URL + `/api/v1/resources/?size=15&page=${page}`,
+      url: BASE_URL + '/api/v1/resources/?size=30',
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     };
+
+    console.log('Config',config)
 
     axios(config)
       .then((response) => {
@@ -520,6 +522,7 @@ class ApiServices {
         });
       });
   };
+
 
   getAnnouncements = (token, callback) => {
     var config = {
