@@ -10,6 +10,7 @@ import colors from "../../assets/colors/colors";
 import fonts from "../../assets/fonts/fonts";
 import Clock from "../../assets/images/clock_gold.svg";
 import Calendar from "../../assets/images/calendar_gold.svg";
+import images from "../../assets/images/images";
 
 
 const ForumComponent = (props) => {
@@ -17,7 +18,7 @@ const ForumComponent = (props) => {
         <View style={styles.container}>
             <View style={styles.upperImageView}>
                 <View style={styles.userDetails}>
-                    <Image source={{uri:props.image}} style={styles.userImage}/>
+                    <Image source={props.image !== 'null' ? {uri:props.image} : images.placeHolder } style={styles.userImage}/>
                     <Text style={[styles.textStyle,{width:wp(20),paddingLeft:5}]} numberOfLines={1}>{props.name}</Text>
                 </View>
                 <View style={styles.dateMainView}>

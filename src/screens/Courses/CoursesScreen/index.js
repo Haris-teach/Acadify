@@ -11,7 +11,7 @@ import {
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import {useIsFocused} from "@react-navigation/native";
-// import Modal from "react-native-modal";
+import Model from "react-native-modal";
 
 //================================ Local Imported Files ======================================//
 
@@ -71,7 +71,7 @@ const DashboardScreen = (props) => {
   const getUserProfile = () => {
     setLoading(true);
     let tempArray = [];
-    ApiHelper.getCoursesData(token,page, (response) => {
+    ApiHelper.getCoursesData(token,page,(response) => {
       if (response.isSuccess) {
         if (response.response.data.code === 200) {
           response.response.data.data.docs.map((value) => {
@@ -267,6 +267,11 @@ const DashboardScreen = (props) => {
   }
 
 
+  const onCatSelect = (value) => {
+    console.log('Value',value)
+  }
+
+
   return (
     <View style={styles.mainContainer}>
       {AppLoading.renderLoading(loading)}
@@ -299,7 +304,7 @@ const DashboardScreen = (props) => {
                       <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Searched')}>
                         <Search/>
                       </TouchableOpacity>
-                      <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Pressed')}>
+                      <TouchableOpacity activeOpacity={0.7} onPress={() => setModalVisible(!modalVisible)}>
                         <Filter/>
                       </TouchableOpacity>
                     </View>
@@ -310,18 +315,22 @@ const DashboardScreen = (props) => {
           />
         </View>
 
-      {/*<Modal*/}
-      {/*    animationIn="zoomIn"*/}
-      {/*    animationOut="zoomOut"*/}
-      {/*    transparent={true}*/}
-      {/*    isVisible={modalVisible}*/}
-      {/*    onBackdropPress={() => setModalVisible(!modalVisible)}*/}
-      {/*>*/}
-      {/*  <CategoryFilterModal*/}
-      {/*      onPressClose={() => setModalVisible(!modalVisible)}*/}
-      {/*      catData={categoryData}*/}
-      {/*  />*/}
-      {/*</Modal>*/}
+      <Model
+          animationIn="zoomIn"
+          animationOut="zoomOut"
+          transparent={true}
+          isVisible={modalVisible}
+          onBackdropPress={() => setModalVisible(!modalVisible)}
+      >
+        <CategoryFilterModal
+            onPressClose={() => setModalVisible(!modalVisible)}
+            catData={categoryData}
+            onSelect={(value) => {
+              setModalVisible(!modalVisible)
+              onCatSelect(value);
+            }}
+        />
+      </Model>
 
       <Modal
           animationType={'none'}

@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
     container: {
         maxHeight: hp(18),
         width: wp(40),
-        borderRadius: wp(2),
         backgroundColor:colors.image_background,
         shadowColor: colors.button_text,
         shadowOpacity: 0.8,

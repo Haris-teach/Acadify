@@ -17,14 +17,24 @@ const CategoryFilterModal = (props) => {
 
 
     const _renderCategoryItems = (item,index) => {
-        // return(
-        //
-        // )
+        return(
+            <TouchableOpacity
+                activeOpacity={0.7}
+                style={styles.sectionView}
+                onPress={() => props.onSelect(item)}
+            >
+                <Text style={[styles.headingText,{fontSize:wp(3.6),fontWeight:'400'}]}>{item.name}</Text>
+            </TouchableOpacity>
+        )
     }
 
 
     return (
-        <View style={styles.mainContainer}>
+        <TouchableOpacity
+            style={styles.mainContainer}
+            activeOpacity={1}
+            onPress={() => props.onPressClose()}
+        >
             <View style={styles.container}>
                 <View style={styles.headingView}>
                     <Text style={styles.headingText}>All Categories</Text>
@@ -39,26 +49,31 @@ const CategoryFilterModal = (props) => {
                     />
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 };
 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: "rgba(0,0,0,0.5)",
-        justifyContent:'center',
-        alignItems:'center',
+        paddingTop:hp(16),
+        alignItems:'flex-end',
+        paddingRight:-wp(10),
     },
     container: {
-        height: hp(50),
-        width: wp(90),
+        maxHeight: hp(30),
+        width: wp(50),
         backgroundColor: colors.image_background,
-        borderRadius: wp(9),
+        shadowColor: colors.button_text,
+        shadowOpacity: 0.8,
+        shadowOffset: {
+            height: 0.5,
+            width: 0.5
+        },
     },
     headingView:{
         height: hp(8),
-        width: wp(90),
+        width: wp(50),
         justifyContent:"center",
         paddingHorizontal:wp(7),
     },
@@ -70,7 +85,14 @@ const styles = StyleSheet.create({
     },
     listView:{
 
-    }
+    },
+    sectionView:{
+        height: hp(4),
+        width: wp(50),
+        justifyContent:"center",
+        paddingLeft:wp(3),
+        backgroundColor:colors.image_background
+    },
 });
 
 export default CategoryFilterModal;

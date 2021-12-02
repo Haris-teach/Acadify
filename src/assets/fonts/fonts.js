@@ -4,6 +4,7 @@ const fonts = {
   black: 'Montserrat-Black',
   medium: 'Montserrat-Medium',
   semi: 'Montserrat-SemiBold',
+  microsoft:'MicrosoftYaHei'
 };
 
 export default fonts;

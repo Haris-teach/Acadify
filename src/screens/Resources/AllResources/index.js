@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import {useIsFocused} from "@react-navigation/native";
 import Toast from "react-native-simple-toast";
 import RNFetchBlob from 'rn-fetch-blob'
+import moment from "moment";
 
 //================================ Local Imported Files ======================================//
 
@@ -26,8 +27,9 @@ import Search from "../../../assets/images/searchBackground.svg";
 import Filter from "../../../assets/images/filterBackground.svg";
 import DropArrow from "../../../assets/images/dropdown.svg";
 import CourseDropdown from "../../../components/CourseDropDwon";
-import ResourceComponent from "../../../components/ResourceComponent";
 import {BUY_RESOURCES, CREDIT_CARD} from "../../../constants/navigators";
+import CategoryFilterModal from "../../../components/CategoryFilterModal";
+import ResourceCard from "../../../components/ResourcesCard";
 
 const AllResourcesScreen = (props) => {
 
@@ -70,6 +72,7 @@ const AllResourcesScreen = (props) => {
         ApiHelper.getResourceData(token, (response) => {
             if (response.isSuccess) {
                 if (response.response.data.code === 200) {
+                    console.log("Error ==>", response.response.data);
                     setCoursesData(response.response.data.data.docs);
                     pagePageLength(response.response.data.data.pages);
                     setLoading(false);
@@ -103,6 +106,7 @@ const AllResourcesScreen = (props) => {
 
     const downloadDocument = (items,value) => {
         if(value === 'download'){
+            // console.log('Data ===>',items)
             Toast.show('Downloading ...',Toast.LONG);
             var date = new Date();
             let linking = items.url.split(' ');
@@ -213,14 +217,16 @@ const AllResourcesScreen = (props) => {
 
 
     const renderResourceItems = (item) => {
+        let date = moment(item.createdAt).format('DD/MM/YYYY');
         return (
-            <ResourceComponent
+            <ResourceCard
                 title={item.title}
                 imgUri={item.imageUrl}
                 url={item.contentUrl}
                 type={item.resourceType}
                 price={item.Documentprices}
                 pay={item.DocumentPayeds}
+                createdAt={date}
                 onPressContent={(title,value) => downloadDocument(title,value)}
             />
         );
@@ -292,7 +298,7 @@ const AllResourcesScreen = (props) => {
                 />
             </View>
 
-            {/*<Modal*/}
+            {/*<Model*/}
             {/*    animationIn="zoomIn"*/}
             {/*    animationOut="zoomOut"*/}
             {/*    transparent={true}*/}
@@ -303,7 +309,7 @@ const AllResourcesScreen = (props) => {
             {/*      onPressClose={() => setModalVisible(!modalVisible)}*/}
             {/*      catData={categoryData}*/}
             {/*  />*/}
-            {/*</Modal>*/}
+            {/*</Model>*/}
 
             <Modal
                 animationType={'none'}

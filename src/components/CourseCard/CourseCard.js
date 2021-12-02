@@ -1,8 +1,8 @@
 //================================ React Native Imported Files ======================================//
 
-import React from "react";
-import {StyleSheet,ImageBackground, Text, TouchableOpacity, View} from "react-native";
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
+import React, {useState} from "react";
+import {StyleSheet, ImageBackground, Text, TouchableOpacity, View, ActivityIndicator} from "react-native";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 
 //================================ Local Imported Files ======================================//
 
@@ -11,6 +11,11 @@ import colors from "../../assets/colors/colors";
 import fonts from "../../assets/fonts/fonts";
 
 const CourseCard = (props) => {
+
+  const [isLoaded,setIsLoaded] = useState(false);
+  const [isError,setIsError] = useState(false);
+  const [isShowActivity,setIsShowActivity] = useState(true);
+
   return (
     <TouchableOpacity activeOpacity={0.7} style={styles.container} onPress={() => props.onPressCourse()}>
       <ImageBackground
@@ -18,8 +23,18 @@ const CourseCard = (props) => {
           imageStyle={styles.imageView}
           style={styles.imageView}
           source={{ uri: props.imgUri }}
+          onLoadEnd={() => setIsLoaded(true)}
+          onError={() => setIsError(true)}
       >
         {props.isLock ? <LockIcon height={45} width={45}/> : null}
+        {
+          (isLoaded && !isError) ? null :
+              (isShowActivity && !isError) &&
+              <ActivityIndicator
+                  size={'small'}
+                  color={colors.button_text}
+              />
+        }
       </ImageBackground>
 
       <View style={{ justifyContent: "space-around", marginLeft: wp(3), width:wp(60),paddingVertical:wp(2)}}>

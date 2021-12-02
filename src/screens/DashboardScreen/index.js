@@ -50,23 +50,6 @@ const CourseScreen = props => {
     useEffect(() => {
         getAnnouncements();
         getDashboardData();
-        // const backAction = () => {
-        //     Alert.alert("Hold on!", "Are you sure you want to go back?", [
-        //         {
-        //             text: "Cancel",
-        //             onPress: () => null,
-        //             style: "cancel"
-        //         },
-        //         { text: "YES", onPress: () => BackHandler.exitApp() }
-        //     ]);
-        //     return true;
-        // };
-        // const backHandler = BackHandler.addEventListener(
-        //     "hardwareBackPress",
-        //     backAction
-        // );
-        //
-        // return () => backHandler.remove();
     }, [isFocused]);
 
 
@@ -74,6 +57,7 @@ const CourseScreen = props => {
         getAnnouncements();
         getDashboardData();
     }
+
 
     const getAnnouncements = () => {
         setLoading(true);
@@ -169,6 +153,7 @@ const CourseScreen = props => {
             />
         )
     }
+
 
     const _renderFeatureItems = (item) => {
         return (
@@ -418,7 +403,6 @@ const CourseScreen = props => {
                                         />
                                     </View>
                                 </View>
-
                             )
                         }
                     })}

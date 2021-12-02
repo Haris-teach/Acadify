@@ -2,10 +2,7 @@
 
 import * as React from "react";
 import "react-native-gesture-handler";
-import {
-    NavigationContainer,
-    useNavigationContainerRef,
-} from "@react-navigation/native";
+import { NavigationContainer, useNavigationContainerRef } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
@@ -40,7 +37,7 @@ import {
     PLAN_SCREEN,
     PROFILE_SCREEN,
     SETTINGS,
-    SIGNUP_SCREEN,
+    SIGNUP_SCREEN, TASK_LISTING,
     VIDEO_SCREEN,
 } from "./constants/navigators";
 import PlanScreen from "./screens/Auth/PlanScreen";
@@ -62,6 +59,7 @@ import CourseDetailScreen from "./screens/Courses/CourseDetailScreen";
 import CourseContentPlay from "./screens/Courses/CourseContentPlay";
 import AllResourcesScreen from "./screens/Resources/AllResources";
 import ResourceBuyScreen from "./screens/Resources/ResourceBuyScreen";
+import TaskListing from "./screens/ProfileSetting/Tasks/TaskListing";
 
 
 const RootStack = createNativeStackNavigator();
@@ -97,6 +95,7 @@ const MyNewStack = () => {
             <RootStack.Screen name={COURSE_CONTENT_PLAY} component={CourseContentPlay}/>
             <RootStack.Screen name={ALL_RESOURCES} component={AllResourcesScreen}/>
             <RootStack.Screen name={BUY_RESOURCES} component={ResourceBuyScreen}/>
+            <RootStack.Screen name={TASK_LISTING} component={TaskListing}/>
         </RootStack.Navigator>
     );
 };
