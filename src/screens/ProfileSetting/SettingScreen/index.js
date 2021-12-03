@@ -16,7 +16,13 @@ import {CommonActions} from "@react-navigation/native";
 
 import styles from './style';
 import SettingTabComponent from "../../../components/SettingTabComponent";
-import {LOGIN_SCREEN, PASSWORD_UPDATE, PROFILE_SCREEN, TASK_LISTING} from "../../../constants/navigators";
+import {
+    BILLING_LISTING,
+    LOGIN_SCREEN,
+    PASSWORD_UPDATE,
+    PROFILE_SCREEN,
+    TASK_LISTING
+} from "../../../constants/navigators";
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
 import AppHeaderNative from "../../../components/AppHeaderNative";
 import colors from "../../../assets/colors/colors";
@@ -76,7 +82,7 @@ const SettingScreen = (props) => {
         if(item.id === 0){
             props.navigation.navigate(PROFILE_SCREEN)
         } else if(item.id === 1){
-
+            props.navigation.navigate(BILLING_LISTING)
         } else if(item.id === 2){
 
         } else if(item.id === 3){
