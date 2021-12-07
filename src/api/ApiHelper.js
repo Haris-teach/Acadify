@@ -1,5 +1,6 @@
 import axios from "axios";
 const BASE_URL = "https://api.stagingaia.com";
+// const BASE_URL = "http://192.168.1.179:5001";
 const BASE_URL_STRIPE = "https://api.stripe.com/v1";
 const STRIPE_PUBLISHABLE_KEY =
   "pk_test_51IbuHCL3SLhyon2BLACBp27GY1ecVJhQlbD2DIX7cGCmQWHNayYdJVlP9aXAdMjK6jMKR9VD4HRCAOlGAMQMB8XU005FRCU1zA";
@@ -81,7 +82,6 @@ class ApiServices {
       },
       data: value,
     };
-    console.log("Cnonfig", config);
 
     axios(config)
       .then((response) => {
@@ -100,14 +100,11 @@ class ApiServices {
 
 
   createImageUrl = (token, type,name, callback) => {
-    console.log('Data',type,name)
     var data = JSON.stringify({
       "ContentType": type,
       "Key": name,
-      "title": "dogs"
+      "title": ''
     });
-
-    console.log('Data',data)
 
     var config = {
       method: 'post',
@@ -118,8 +115,6 @@ class ApiServices {
       },
       data : data
     };
-
-    console.log('Data',config)
 
     axios(config)
         .then(response => {
@@ -147,8 +142,6 @@ class ApiServices {
       },
       data: value,
     };
-
-    console.log('Config', config);
 
     axios(config)
         .then(response => {
@@ -188,8 +181,6 @@ class ApiServices {
       data: value,
     };
 
-    console.log("Cnonfig", config);
-
     axios(config)
       .then((response) => {
         callback({
@@ -206,7 +197,6 @@ class ApiServices {
   };
 
 
-
   getToken = async (cardName, cardNumber, cvc, month, year) => {
     const card = {
       "card[number]": cardNumber.replace(/ /g, ""),
@@ -214,7 +204,6 @@ class ApiServices {
       "card[exp_year]": year,
       "card[cvc]": cvc,
     };
-    console.log("Card", card);
     return await fetch(`${BASE_URL_STRIPE}/tokens`, {
       headers: {
         Accept: "application/json",
@@ -227,6 +216,7 @@ class ApiServices {
         .join("&"),
     }).then((response) => response.json());
   };
+
 
   getUserProfile = (token, callback) => {
     var config = {
@@ -254,6 +244,84 @@ class ApiServices {
   };
 
 
+  getCategories = (token,type,callback) => {
+    var config = {
+      method: "get",
+      url: BASE_URL + `/api/v1/category/categories?type=${type}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  };
+
+
+  getCourseTypes = (token,url,callback) => {
+    var config = {
+      method: "get",
+      url: BASE_URL + url,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  };
+
+
+  getResourceTypes = (token,url,callback) => {
+    var config = {
+      method: "get",
+      url: BASE_URL + url,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  };
+
+
   newJourney = (token,title,description,callback) => {
     var data = JSON.stringify({
       "title": title,
@@ -269,7 +337,6 @@ class ApiServices {
       },
       data : data
     };
-console.log('Config',config);
 
     axios(config)
         .then((response) => {
@@ -284,14 +351,49 @@ console.log('Config',config);
             response: error,
           });
         });
+  }
 
+
+  createGoal = (token,title,description,catId,progress,dateComplete,checkList,callback) => {
+    var data = JSON.stringify({
+      "title": title,
+      "description": description,
+      "categoryId": catId,
+      "progress": progress,
+      "dateCompleted": dateComplete,
+      "checklist": checkList
+    });
+
+    var config = {
+      method: 'post',
+      url: BASE_URL + '/api/v1/goals/user',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
   }
 
 
   getJourney = (token,callback) => {
     var config = {
       method: 'get',
-      url: BASE_URL + '/api/v1/journey/alljourney',
+      url: BASE_URL + '/api/v1/journey/alljourney/?size=30',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -312,6 +414,7 @@ console.log('Config',config);
           });
         });
   }
+
 
   getGoals = (token,callback) => {
     var config = {
@@ -338,11 +441,11 @@ console.log('Config',config);
         });
   }
 
-
-  getCoursesData = (token, callback) => {
+  getCoursesData = (token,page,callback) => {
     var config = {
       method: "get",
-      url: BASE_URL + "/api/v1/courses/?page=1",
+      // url: BASE_URL + `/api/v1/courses/?size=10&page=${page}`,
+      url: BASE_URL + '/api/v1/courses/?size=30',
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -363,6 +466,210 @@ console.log('Config',config);
         });
       });
   };
+
+  getResourceData = (token, callback) => {
+    var config = {
+      method: "get",
+      // url: BASE_URL + `/api/v1/resources/?size=15&page=${page}`,
+      url: BASE_URL + '/api/v1/resources/?size=30',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    console.log('Config',config)
+
+    axios(config)
+      .then((response) => {
+        callback({
+          isSuccess: true,
+          response: response,
+        });
+      })
+      .catch((error) => {
+        callback({
+          isSuccess: false,
+          response: error,
+        });
+      });
+  };
+
+  getDashboardData = (token, callback) => {
+    var config = {
+      method: "get",
+      url: BASE_URL + "/api/v1/dashboard/latest",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    axios(config)
+      .then((response) => {
+        callback({
+          isSuccess: true,
+          response: response,
+        });
+      })
+      .catch((error) => {
+        callback({
+          isSuccess: false,
+          response: error,
+        });
+      });
+  };
+
+  getAnnouncements = (token, callback) => {
+    var config = {
+      method: "get",
+      url: BASE_URL + "/api/v1/annoucements/latest",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  };
+
+  getSingleCourse = (token,courseId, callback) => {
+    var config = {
+      method: "get",
+      url: BASE_URL + "/api/v1/courses/" + courseId,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  };
+
+  getTasks = (token,start_date,end_date, callback) => {
+    var config = {
+      method: "get",
+      url: BASE_URL + `/api/v1/payment?start_date=${start_date}&end_date=${end_date}&size=30`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  };
+
+  enrollCourse = (token,data,callback) => {
+    var config = {
+      method: 'post',
+      url: BASE_URL + '/api/v1/courses/enroll',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  }
+
+  deleteGoal = (token,id,callback) => {
+    var config = {
+      method: 'delete',
+      url: BASE_URL + `/api/v1/goals/user/${id}`,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  }
+
+  changeSingleGoalStatus = (token,id,callback) => {
+    var config = {
+      method: 'put',
+      url: BASE_URL + `/api/v1/goals/changestatus/${id}`,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  }
 }
 
 const apiService = new ApiServices();

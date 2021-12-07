@@ -14,7 +14,6 @@ import { useDispatch } from "react-redux";
 import { CommonActions } from "@react-navigation/native";
 import Toast from "react-native-simple-toast";
 
-
 //================================ Local Imported Files ======================================//
 
 import styles from "./style";
@@ -24,23 +23,24 @@ import Button from "../../../components/Button/Button";
 import LoginLogo from "../../../assets/images/login_screen.svg";
 import {
   FORGOT_PASSWORD,
-  MY_TABS,
+  MY_DRAWER,
   SIGNUP_SCREEN,
 } from "../../../constants/navigators";
 import AppLoading from "../../../components/AppLoading";
 import ApiHelper from "../../../api/ApiHelper";
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginScreen = (props) => {
   const dispatch = useDispatch();
-  const [email, setEmail] = useState("user@mailinator.com");
-  const [password, setPassword] = useState("Dvorak1234!");
-  const [loading, setLoading] = useState(false);
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("hassan_inayat@mail.com");
+  const [password, setPassword] = useState("Password@1");
+  const [loading, setLoading]   = useState(false);
 
   const onPressLogin = () => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
     if (email === "" || email === " ") {
       Toast.show("Please Enter Email", Toast.LONG);
     } else if (reg.test(email) !== true) {
@@ -58,21 +58,26 @@ const LoginScreen = (props) => {
       if (response.isSuccess) {
         dispatch(ApiDataActions.SetLoginData(response.response.data.data));
         setLoading(false);
-        console.log("DATA", response);
         if (response.response.data.status === 200) {
-          console.log("Success ===>", response.response.data.data);
-          dispatch(ApiDataActions.SetLoginData(response.response.data.data));
-          dispatch(
-            ApiDataActions.SetUserToken(response.response.data.data.token)
-          );
-          props.navigation.dispatch(
-            CommonActions.reset({
-              index: 0,
-              routes: [{ name: MY_TABS }],
-            })
-          );
-          setPassword("");
-          setEmail("");
+          if(response.response.data.data.user.userType === 2){
+            dispatch(ApiDataActions.SetLoginData(response.response.data.data));
+            dispatch(
+                ApiDataActions.SetUserToken(response.response.data.data.token)
+            );
+            setToken(response.response.data.data.token)
+            props.navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{ name: MY_DRAWER }],
+                })
+            );
+            setPassword("");
+            setEmail("");
+          }else {
+            setTimeout(() => {
+              Toast.show('Invalid Credentials', Toast.LONG);
+            }, 200);
+          }
         } else {
           setTimeout(() => {
             Toast.show(response.response.data.message, Toast.LONG);
@@ -84,6 +89,15 @@ const LoginScreen = (props) => {
       }
     });
   };
+
+
+  const setToken = async(value) => {
+    try {
+      await AsyncStorage.setItem('token',value);
+    }catch (e) {
+      console.log('Error',e)
+    }
+  }
 
   return (
     <KeyboardAvoidingView
