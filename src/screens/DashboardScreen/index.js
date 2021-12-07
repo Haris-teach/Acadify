@@ -1,7 +1,18 @@
 //================================ React Native Imported Files ======================================//
 
 import React, {useEffect, useState} from 'react';
-import {ScrollView, StatusBar, View, Text, Image, LogBox, RefreshControl, Platform, Alert,BackHandler} from 'react-native';
+import {
+    ScrollView,
+    StatusBar,
+    View,
+    Text,
+    Image,
+    LogBox,
+    RefreshControl,
+    Platform,
+    ImageBackground,
+    ActivityIndicator
+} from 'react-native';
 import {widthPercentageToDP as wp,heightPercentageToDP as hp} from "react-native-responsive-screen";
 import {useSelector} from "react-redux";
 import Carousel from 'react-native-snap-carousel';
@@ -45,6 +56,10 @@ const CourseScreen = props => {
     const [video,setVideos] = useState([]);
     const [noUrl, setNoUrl] = useState(false);
     const [announceTest,setAnnounceTest] = useState([]);
+
+    const [isLoaded,setIsLoaded] = useState(false);
+    const [isError,setIsError] = useState(false);
+    const [isShowActivity,setIsShowActivity] = useState(true);
 
 
     useEffect(() => {
@@ -170,8 +185,8 @@ const CourseScreen = props => {
         let time = moment(item.createdAt).format('HH:mm')
         return (
             <ForumComponent
-                image={item.User.profilePictureURL}
-                name={item.User.username}
+                image={item.User?.profilePictureURL}
+                name={item.User?.username}
                 title={item.question}
                 date={date}
                 time={time}
@@ -241,7 +256,23 @@ const CourseScreen = props => {
 
                     {announceTest.length > 0 && <View style={styles.announcementView}>
                         {noUrl === false ? <View style={styles.announceUpperView}>
-                            {hasImage ? <Image source={{uri: announcement.contentUrl}} style={styles.announceImage}/> :
+                            {hasImage ?
+                                <ImageBackground
+                                    source={{uri: announcement.contentUrl}}
+                                    style={styles.announceImage}
+                                    imageStyle={styles.announceImage}
+                                    onLoadEnd={() => setIsLoaded(true)}
+                                    onError={() => setIsError(true)}
+                                >
+                                    {
+                                        (isLoaded && !isError) ? null :
+                                            (isShowActivity && !isError) &&
+                                            <ActivityIndicator
+                                                size={'small'}
+                                                color={colors.button_text}
+                                            />
+                                    }
+                                </ImageBackground> :
                                 <Video
                                     source={{uri: announcement.contentUrl}}
                                     controls={Platform.OS === 'ios'}

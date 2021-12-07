@@ -4,11 +4,12 @@ import React,{useState,useEffect} from "react";
 import {
     View,
     Text,
-    Image,
     TouchableOpacity,
     ScrollView,
     SectionList,
     StatusBar,
+    ActivityIndicator,
+    ImageBackground,
 } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import {useSelector} from "react-redux";
@@ -41,6 +42,10 @@ const CourseDetailScreen = (props) => {
     const [isDisabled,setIsDisabled]       = useState(true);
     const [showBtn,setShowBtn]             = useState(true);
 
+    const [isLoaded,setIsLoaded] = useState(false);
+    const [isError,setIsError]   = useState(false);
+    const [isShowActivity,setIsShowActivity] = useState(true);
+
 
     useEffect(() => {
         getSingleCourse();
@@ -54,8 +59,8 @@ const CourseDetailScreen = (props) => {
                 image={item.imageURL}
                 title={item.title}
                 description={item.description}
-                onPressContent={() => console.log('Section Data',section)}
-                // onPressContent={() => props.navigation.navigate(COURSE_CONTENT_PLAY,{courseDetails:courseDetails,section})}
+                // onPressContent={() => console.log('Section Data',section)}
+                onPressContent={() => props.navigation.navigate(COURSE_CONTENT_PLAY,{courseDetails:courseDetails,section})}
             />
         )
     }
@@ -67,7 +72,7 @@ const CourseDetailScreen = (props) => {
         ApiHelper.getSingleCourse(token,props.route.params.courseId,(response) => {
             if (response.isSuccess) {
                 if(response.response.data.code === 200){
-                    console.log('SingleCourse ===>',response.response.data.data)
+                    // console.log('SingleCourse ===>',response.response.data.data)
                     response.response.data.data.CourseSections?.map((value) => {
                         tempArray.push({
                             id:value.id,
@@ -186,7 +191,22 @@ const CourseDetailScreen = (props) => {
                             </View>
                             <View style={styles.imageSection}>
                                 <View style={styles.imageView}>
-                                    <Image source={courseDetails.imageURL === '' ? images.placeHolder : {uri: courseDetails.imageURL}} style={styles.imageStyles}/>
+                                    <ImageBackground
+                                        source={courseDetails.imageURL === '' ? images.placeHolder : {uri: courseDetails.imageURL}}
+                                        style={styles.imageStyles}
+                                        imageStyle={styles.imageStyles}
+                                        onLoadEnd={() => setIsLoaded(true)}
+                                        onError={() => setIsError(true)}
+                                    >
+                                        {
+                                            (isLoaded && !isError) ? null :
+                                                (isShowActivity && !isError) &&
+                                                <ActivityIndicator
+                                                    size={'small'}
+                                                    color={colors.button_text}
+                                                />
+                                        }
+                                    </ImageBackground>
                                 </View>
                             </View>
                             <View style={styles.textSection}>
@@ -224,7 +244,7 @@ const CourseDetailScreen = (props) => {
                                 renderItem={({ item,section }) => _renderContent(item,section)}
                                 renderSectionHeader={({ section: { title } }) =>
                                     <View style={[styles.contentHeading,{height:hp(4)}]}>
-                                        <Text style={[styles.titleText,{fontSize:wp(5),fontWeight:'400'}]}>{title}</Text>
+                                        <Text style={[styles.titleText,{fontSize:wp(4),fontWeight:'400'}]}>{title}</Text>
                                     </View>
                                 }
                             />

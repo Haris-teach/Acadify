@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     },
     cardDetail: {
         width: wp(100),
-        height: hp(41),
+        maxHeight: hp(41),
         backgroundColor: colors.app_background,
         borderRadius: hp(6),
         borderTopLeftRadius: 0,

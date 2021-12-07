@@ -18,6 +18,11 @@ const styles = StyleSheet.create({
   container:{
     flex:0.9,
   },
+  emptySection:{
+    height:hp(80),
+    justifyContent:'center',
+    alignItems:'center'
+  },
   dropArrow:{
     height:hp(5),
     marginLeft:wp(2),

@@ -441,7 +441,6 @@ class ApiServices {
         });
   }
 
-
   getCoursesData = (token,page,callback) => {
     var config = {
       method: "get",
@@ -467,7 +466,6 @@ class ApiServices {
         });
       });
   };
-
 
   getResourceData = (token, callback) => {
     var config = {
@@ -497,7 +495,6 @@ class ApiServices {
       });
   };
 
-
   getDashboardData = (token, callback) => {
     var config = {
       method: "get",
@@ -522,7 +519,6 @@ class ApiServices {
         });
       });
   };
-
 
   getAnnouncements = (token, callback) => {
     var config = {
@@ -574,6 +570,30 @@ class ApiServices {
         });
   };
 
+  getTasks = (token,start_date,end_date, callback) => {
+    var config = {
+      method: "get",
+      url: BASE_URL + `/api/v1/payment?start_date=${start_date}&end_date=${end_date}&size=30`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  };
 
   enrollCourse = (token,data,callback) => {
     var config = {
@@ -600,7 +620,6 @@ class ApiServices {
           });
         });
   }
-
 
   deleteGoal = (token,id,callback) => {
     var config = {

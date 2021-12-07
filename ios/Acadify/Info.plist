@@ -62,6 +62,7 @@
 		<string>Montserrat-Thin.ttf</string>
 		<string>Montserrat-ThinItalic.ttf</string>
 		<string>MicrosoftYaHei.ttf</string>
+		<string>Microsoft-YaHei-Bold.ttf</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>

@@ -12,11 +12,13 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import {useIsFocused} from "@react-navigation/native";
 import Model from "react-native-modal";
+import { widthPercentageToDP as wp, } from "react-native-responsive-screen";
 
 //================================ Local Imported Files ======================================//
 
 import styles from "./style";
 import ApiHelper from "../../../api/ApiHelper";
+import {COURSE_DETAILS} from "../../../constants/navigators";
 import AppHeaderNative from "../../../components/AppHeaderNative";
 import AppLoading from "../../../components/AppLoading";
 import Search from "../../../assets/images/searchBackground.svg";
@@ -24,7 +26,6 @@ import Filter from "../../../assets/images/filterBackground.svg";
 import DropArrow from "../../../assets/images/dropdown.svg";
 import CourseCard from "../../../components/CourseCard/CourseCard";
 import CategoryFilterModal from "../../../components/CategoryFilterModal";
-import {COURSE_DETAILS} from "../../../constants/navigators";
 import CourseDropdown from "../../../components/CourseDropDwon";
 
 
@@ -113,7 +114,7 @@ const DashboardScreen = (props) => {
         }
       } else {
         setLoading(false);
-        console.log("Error ==>", response.response);
+        console.log("Error in ==>", response.response.response);
       }
     });
   };
@@ -130,7 +131,7 @@ const DashboardScreen = (props) => {
         }
       } else {
         setLoading(false);
-        console.log("Error ==>", response.response);
+        console.log("Error in ==>", response.response);
       }
     });
   };
@@ -152,7 +153,6 @@ const DashboardScreen = (props) => {
     ApiHelper.getCourseTypes(token,url, (response) => {
       if (response.isSuccess) {
         if (response.response.data.code === 200) {
-
           response.response.data.data.docs.map((value) => {
             if(value.CoursePayeds.length > 0){
               if(value.CoursePayeds[0].paid === true){
@@ -193,7 +193,7 @@ const DashboardScreen = (props) => {
         }
       } else {
         setLoading(false);
-        console.log("Error ==>", response.response);
+        console.log("Error in ==>", response.response.data);
       }
     });
   };
@@ -291,6 +291,13 @@ const DashboardScreen = (props) => {
             onEndReachedThreshold={0}
             onEndReached={() => LoadMoreRandomData()}
             keyExtractor={(item) => item.id}
+            ListEmptyComponent={() => {
+              return(
+                  <View style={styles.emptySection}>
+                    <Text style={[styles.headerTextStyle,{fontSize:wp(5)}]}>No Courses Found</Text>
+                  </View>
+              )
+            }}
             ListHeaderComponent={() => {
               return(
                   <View style={styles.upperView}>

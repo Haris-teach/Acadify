@@ -15,7 +15,7 @@ import Calendar from "../../assets/images/calendar.svg";
 const BillComponent = (props) => {
 
     return (
-        <View style={ styles.container}>
+        <View style={[styles.container,{borderBottomWidth: props.length === props.index + 1 ? 0 : 0.25 }]}>
             <View style={styles.headingView}>
                 <View style={styles.numberView}>
                     <Text style={[styles.titleText,{fontSize:wp(4)}]}>{props.tNumber}</Text>

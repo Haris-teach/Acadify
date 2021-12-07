@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
         flex:0.1
     },
     headingView: {
-        height:hp(25),
+        flex:0.25,
         justifyContent:'center',
     },
     inputBox:{
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     },
     inputView:{
         flex:0.65,
-        alignItems:'center'
+        alignItems:'center',
     },
 
 });

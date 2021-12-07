@@ -31,6 +31,7 @@ import {BUY_RESOURCES, CREDIT_CARD} from "../../../constants/navigators";
 import CategoryFilterModal from "../../../components/CategoryFilterModal";
 import ResourceCard from "../../../components/ResourcesCard";
 
+
 const AllResourcesScreen = (props) => {
 
     const isFocused = useIsFocused();
@@ -72,7 +73,7 @@ const AllResourcesScreen = (props) => {
         ApiHelper.getResourceData(token, (response) => {
             if (response.isSuccess) {
                 if (response.response.data.code === 200) {
-                    console.log("Error ==>", response.response.data);
+                    console.log("Success ==>", response.response.data);
                     setCoursesData(response.response.data.data.docs);
                     pagePageLength(response.response.data.data.pages);
                     setLoading(false);
@@ -106,7 +107,7 @@ const AllResourcesScreen = (props) => {
 
     const downloadDocument = (items,value) => {
         if(value === 'download'){
-            // console.log('Data ===>',items)
+            console.log('Data ===>',items)
             Toast.show('Downloading ...',Toast.LONG);
             var date = new Date();
             let linking = items.url.split(' ');
@@ -114,7 +115,7 @@ const AllResourcesScreen = (props) => {
             const {config} = RNFetchBlob;
             const isIOS = Platform.OS === "ios";
             const aPath = Platform.select({ios: DocumentDir, android: DownloadDir});
-            const fPath = aPath + '/' + Math.floor(date.getTime() + date.getSeconds() / 2)+'.docs';
+            const fPath = aPath + '/' + Math.floor(date.getTime() + date.getSeconds() / 2)+`.${items.contentType}`;
 
             const configOptions = Platform.select({
                 ios: {
@@ -139,6 +140,7 @@ const AllResourcesScreen = (props) => {
                 config(configOptions)
                     .fetch('GET', linking[0])
                     .then((res) => {
+                        console.log('Downloaded ====>', res.path())
                         setTimeout(() => {
                             RNFetchBlob.ios.openDocument(res.data);
                         }, 300);
@@ -147,6 +149,26 @@ const AllResourcesScreen = (props) => {
                     .catch((errorMessage) => {
                         Toast.show(errorMessage,Toast.LONG);
                     });
+                // const { fs } = RNFetchBlob;
+                // RNFetchBlob
+                //     .config({
+                //         fileCache : true,
+                //         addAndroidDownloads: {
+                //             useDownloadManager: true,
+                //             notification: true,
+                //             title: items.title,
+                //             path: Platform.OS === "ios" ? fs.dirs.DocumentDir : fs.dirs.DCIMDir + "/me_" + "." + items.contentType,
+                //             description: "Downloading file.",
+                //         },
+                //     })
+                //     .fetch('GET', linking[0], {
+                //     })
+                //     .then((res) => {
+                //         console.log('Downloaded ====>', res.path())
+                //     })
+                //     .catch((error) => {
+                //         console.log('error', error)
+                //     })
             } else {
                 config(configOptions)
                     .fetch('GET', linking[0])
@@ -158,27 +180,6 @@ const AllResourcesScreen = (props) => {
                         Toast.show(errorMessage,Toast.LONG);
                     });
             }
-            // const { fs } = RNFetchBlob;
-            // let linking = items.url.split(' ');
-            // RNFetchBlob
-            //     .config({
-            //         fileCache : true,
-            //         addAndroidDownloads: {
-            //             useDownloadManager: true,
-            //             notification: true,
-            //             title: items.title,
-            //             path: Platform.OS === "ios" ? fs.dirs.DocumentDir : fs.dirs.DCIMDir + "/me_" + "." + 'DOCS',
-            //             description: "Downloading file.",
-            //         },
-            //     })
-            //     .fetch('GET', linking[0], {
-            //     })
-            //     .then((res) => {
-            //         console.log('Downloaded ====>', res.path())
-            //     })
-            //     .catch((error) => {
-            //         console.log('error', error)
-            //     })
         } else if (value === 'link'){
             Linking.openURL(items.url)
         } else if (value > 0){
@@ -227,6 +228,7 @@ const AllResourcesScreen = (props) => {
                 price={item.Documentprices}
                 pay={item.DocumentPayeds}
                 createdAt={date}
+                contentType={item.contentType}
                 onPressContent={(title,value) => downloadDocument(title,value)}
             />
         );

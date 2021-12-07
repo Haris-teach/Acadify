@@ -59,6 +59,8 @@ const styles = StyleSheet.create({
         height:'100%',
         resizeMode:'cover',
         borderRadius:wp(5),
+        justifyContent:'center',
+        alignItems:'center'
     },
     textSection:{
         maxHeight:hp(10),

@@ -30,6 +30,7 @@ import Monthly from '../../../assets/images/monthly.svg';
 import LIFETIME from '../../../assets/images/LIFETIME.svg';
 import {CREDIT_CARD, MY_DRAWER} from '../../../constants/navigators';
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const PlanScreen = props => {
@@ -99,6 +100,7 @@ const PlanScreen = props => {
           if (response.response.data.code === 200) {
               dispatch(ApiDataActions.SetUserToken(response.response.data.token));
               dispatch(ApiDataActions.SetLoginData(response.response.data.data));
+              setToken(response.response.data.token);
               setLoading(false);
               props.navigation.dispatch(
               CommonActions.reset({
@@ -152,6 +154,15 @@ const PlanScreen = props => {
       </TouchableOpacity>
     );
   };
+
+
+    const setToken = async(value) => {
+        try {
+            await AsyncStorage.setItem('token',value);
+        }catch (e) {
+            console.log('Error',e)
+        }
+    }
 
   return (
     <ScrollView

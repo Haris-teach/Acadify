@@ -112,7 +112,7 @@ const MyDrawer = () => {
                 drawerPosition: "left",
                 drawerType: "front",
                 drawerStyle: {
-                    backgroundColor: "rgba(36, 37, 41, 0.62)",
+                    backgroundColor: "rgba(36, 37, 41, 0.8)",
                     width: 90,
                     height: height_screen < 675 ? 635 : 620,
                     marginTop: height_screen < 675 ? 15 : 90,

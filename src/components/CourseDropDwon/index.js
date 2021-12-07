@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
             height: 0.5,
             width: 0.5
         },
+        elevation:10
     },
     sectionView:{
         height: hp(4.5),

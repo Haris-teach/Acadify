@@ -36,7 +36,6 @@ import AddSign from "../../../assets/images/addIcon.svg";
 import DeleteSign from "../../../assets/images/delete.svg";
 import AppHeader from "../../../components/AppHeader";
 
-
 const AddGoal = props => {
 
     const isFocused = useIsFocused();
@@ -87,7 +86,8 @@ const AddGoal = props => {
 
 
     const onPressSave = () => {
-        let testAddress = /^[^-\s][a-zA-Z_\s-]+$/;
+        // let testAddress = /^[^-\s][a-zA-Z_\s-]+$/;
+        let testAddress = /^[^-\s][a-zA-Z0-9_\s-]+$/;
         let checkValue = false;
         if(title === '' || title === ' '){
             setIsDisable(false);
@@ -142,7 +142,7 @@ const AddGoal = props => {
         setLoading(true);
         ApiHelper.createGoal(token,title,description,id,progress,date,checkList,(response) => {
             if(response.isSuccess){
-                console.log('Data',response.response.data)
+                // console.log('Data',response.response.data)
                 if(response.response.data.code === 201){
                     setLoading(false);
                     Keyboard.dismiss();

@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     announceImage:{
         height: '100%',
         width: '90%',
-        resizeMode:'stretch'
+        resizeMode:'cover',
     },
     announceTextView:{
         maxHeight:hp(220),

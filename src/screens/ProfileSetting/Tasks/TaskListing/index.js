@@ -4,9 +4,6 @@ import React, {useEffect, useState} from 'react';
 import {
     View,
     StatusBar,
-    Platform,
-    ScrollView,
-    KeyboardAvoidingView,
     TouchableOpacity,
     FlatList,
 } from 'react-native';
@@ -26,7 +23,6 @@ import Calendar from "../../../../assets/images/calendar_back.svg";
 import AppHeader from "../../../../components/AppHeader";
 import Add from "../../../../assets/images/addIcon.svg";
 import TasksComponent from "../../../../components/TasksComponent";
-
 
 const TaskListing = props => {
 

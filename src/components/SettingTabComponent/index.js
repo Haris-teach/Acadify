@@ -17,13 +17,12 @@ import Help from "../../assets/images/help.svg";
 import SignOut from "../../assets/images/signout.svg";
 import Shield from "../../assets/images/shield.svg";
 
-
 const SettingTabComponent = (props) => {
 
     const [index,setIndex] = useState('');
 
     const onPress = (value) => {
-        props.onPressCard()
+        props.onPressCard();
     }
 
     return (

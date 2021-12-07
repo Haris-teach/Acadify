@@ -29,13 +29,14 @@ import {
 import AppLoading from "../../../components/AppLoading";
 import ApiHelper from "../../../api/ApiHelper";
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginScreen = (props) => {
   const dispatch = useDispatch();
   // const [email, setEmail] = useState("");
   // const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("user@mailinator.com");
-  const [password, setPassword] = useState("Dvorak1234!");
+  const [email, setEmail] = useState("hassan_inayat@mail.com");
+  const [password, setPassword] = useState("Password@1");
   const [loading, setLoading]   = useState(false);
 
   const onPressLogin = () => {
@@ -57,14 +58,13 @@ const LoginScreen = (props) => {
       if (response.isSuccess) {
         dispatch(ApiDataActions.SetLoginData(response.response.data.data));
         setLoading(false);
-        // console.log("DATA", response);
         if (response.response.data.status === 200) {
-          // console.log("Success ===>", response.response.data.data);
           if(response.response.data.data.user.userType === 2){
             dispatch(ApiDataActions.SetLoginData(response.response.data.data));
             dispatch(
                 ApiDataActions.SetUserToken(response.response.data.data.token)
             );
+            setToken(response.response.data.data.token)
             props.navigation.dispatch(
                 CommonActions.reset({
                   index: 0,
@@ -89,6 +89,15 @@ const LoginScreen = (props) => {
       }
     });
   };
+
+
+  const setToken = async(value) => {
+    try {
+      await AsyncStorage.setItem('token',value);
+    }catch (e) {
+      console.log('Error',e)
+    }
+  }
 
   return (
     <KeyboardAvoidingView
