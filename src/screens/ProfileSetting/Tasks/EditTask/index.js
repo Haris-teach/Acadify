@@ -10,7 +10,7 @@ import {
     KeyboardAvoidingView,
     TouchableOpacity,
     Platform,
-    Keyboard,
+    Keyboard, Alert,
 } from 'react-native';
 import {useSelector} from "react-redux";
 import Toast from "react-native-simple-toast";
@@ -31,6 +31,7 @@ import DateImage from "../../../../assets/images/date.svg";
 import AppHeader from "../../../../components/AppHeader";
 import EditIcon from "../../../../assets/images/delete-Icon.svg";
 
+
 const EditTask = props => {
 
     let Data = props.route.params.item;
@@ -47,7 +48,7 @@ const EditTask = props => {
     const [endDateModal,setEndDateModal] = useState(false);
     const [open, setOpen]                = useState(false);
     const [openPriority, setOpenPriority]= useState(false);
-    const items = [
+    const priorityItems = [
         {
             id: 0,
             label: 'High',
@@ -64,7 +65,7 @@ const EditTask = props => {
             value: 'Low'
         }
     ];
-    const priorityItems = [
+    const items = [
         {
             id: 0,
             label: 'Active',
@@ -113,30 +114,39 @@ const EditTask = props => {
             setIsDisable(false);
             Toast.show('Please Select Due Date',Toast.LONG)
         }  else {
-            onSaveApi();
+            let start = moment(date).format('YYYY-MM-DD')
+            let end = moment(endDate).format('YYYY-MM-DD');
+            if (start > end) {
+                alert('Due Date must be greater or Equal to Start Date!')
+            } else if (start === end) {
+                onSaveApi();
+            } else if (end >= end) {
+                onSaveApi();
+            }
         }
     }
 
 
     const onSaveApi = () => {
         setLoading(true);
-        ApiHelper.createGoal(token,title,status,priority,description,date,endDate,(response) => {
+        ApiHelper.updateUserTask(Data.id,token,title,status,priority,description,date,endDate,(response) => {
             if(response.isSuccess){
-                // console.log('Data',response.response.data)
-                if(response.response.data.code === 201){
+                setLoading(false);
+                // console.log('Response ==>',response.response.data)
+                if(response.response.data.code === 200){
                     setLoading(false);
                     Keyboard.dismiss();
                     setTitle('');
                     setDescription('');
                     setTimeout(() => {
-                        Toast.show('Task Successfully Created',Toast.LONG)
+                        Toast.show('Task Successfully Updated',Toast.LONG)
                     },200)
                     props.navigation.goBack();
                 }
             }else {
                 setLoading(false);
                 setIsDisable(false);
-                console.log('Response',response.response.response.data.error)
+                console.log('Error Response ==>',response.response.response.data)
             }
         })
     };
@@ -166,6 +176,47 @@ const EditTask = props => {
     };
 
 
+    const onPressDelete = () => {
+        Alert.alert(
+            "Delete Task",
+            "Are you sure you want this Task? ",
+            [
+                {
+                    text: "No",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                },
+                { text: "Yes", onPress: () => onDelete() }
+            ]
+        );
+    }
+
+
+    const onDelete = () => {
+        setLoading(true);
+        ApiHelper.deleteUserTask(token,Data.id,(response) => {
+            if(response.isSuccess){
+                setLoading(false);
+                // console.log('Response of Delete ==>',response.response.data)
+                if(response.response.data.code === 200){
+                    setLoading(false);
+                    Keyboard.dismiss();
+                    setTitle('');
+                    setDescription('');
+                    setTimeout(() => {
+                        Toast.show('Task Successfully Deleted',Toast.LONG)
+                    },200)
+                    props.navigation.goBack();
+                }
+            }else {
+                setLoading(false);
+                setIsDisable(false);
+                console.log('Error Response ==>',response.response.response.data)
+            }
+        })
+    }
+
+
     return (
         <KeyboardAvoidingView
             style={styles.mainContainer}
@@ -185,7 +236,7 @@ const EditTask = props => {
                     <Text style={styles.headingText}>View Task</Text>
                     <TouchableOpacity
                         activeOpacity={0.7}
-                        onPress={() => console.log('Delete')}
+                        onPress={() => onPressDelete()}
                     >
                         <EditIcon/>
                     </TouchableOpacity>

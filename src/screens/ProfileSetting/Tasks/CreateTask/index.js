@@ -45,7 +45,7 @@ const CreateTask = props => {
     const [endDateModal,setEndDateModal] = useState(false);
     const [open, setOpen]                = useState(false);
     const [openPriority, setOpenPriority]= useState(false);
-    const items = [
+    const priorityItems = [
         {
             id: 0,
             label: 'High',
@@ -62,7 +62,7 @@ const CreateTask = props => {
             value: 'Low'
         }
     ];
-    const priorityItems = [
+    const items = [
         {
             id: 0,
             label: 'Active',
@@ -111,14 +111,22 @@ const CreateTask = props => {
             setIsDisable(false);
             Toast.show('Please Select Due Date',Toast.LONG)
         }  else {
-            onSaveApi();
+            let start = moment(date).format('YYYY-MM-DD')
+            let end = moment(endDate).format('YYYY-MM-DD');
+            if (start > end) {
+                alert('Due Date must be greater or Equal to Start Date!')
+            } else if (start === end) {
+                onSaveApi();
+            } else if (end >= end) {
+                onSaveApi();
+            }
         }
     }
 
 
     const onSaveApi = () => {
         setLoading(true);
-        ApiHelper.createGoal(token,title,status,priority,description,date,endDate,(response) => {
+        ApiHelper.createUserTask(token,title,status,priority,description,date,endDate,(response) => {
             if(response.isSuccess){
                 // console.log('Data',response.response.data)
                 if(response.response.data.code === 201){

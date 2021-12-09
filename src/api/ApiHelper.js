@@ -416,6 +416,106 @@ class ApiServices {
   }
 
 
+  createUserTask = (token,title,status,priority,description,date,endDate,callback) => {
+
+    var data = JSON.stringify({
+      "title": title,
+      "priority": priority,
+      "status": status,
+      "startDate": date,
+      "dueDate": endDate,
+      "description": description
+    });
+
+    var config = {
+      method: 'post',
+      url: BASE_URL + '/api/v1/tasks/user',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  }
+
+
+  updateUserTask = (id,token,title,status,priority,description,date,endDate,callback) => {
+    var data = JSON.stringify({
+      "title": title,
+      "priority": priority,
+      "status": status,
+      "startDate": date,
+      "dueDate": endDate,
+      "description": description
+    });
+
+    var config = {
+      method: 'put',
+      url: BASE_URL + `/api/v1/tasks/${id}`,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  }
+
+
+  deleteUserTask = (token,id,callback) => {
+
+    var config = {
+      method: 'delete',
+      url: BASE_URL + `/api/v1/tasks/user/${id}`,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  }
+
+
   getJourney = (token,callback) => {
     var config = {
       method: 'get',
