@@ -311,7 +311,10 @@ const DashboardScreen = (props) => {
                       <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Searched')}>
                         <Search/>
                       </TouchableOpacity>
-                      <TouchableOpacity activeOpacity={0.7} onPress={() => setModalVisible(!modalVisible)}>
+                      <TouchableOpacity activeOpacity={0.7} onPress={() => {
+                        console.log('Pressed')
+                        // setModalVisible(!modalVisible)
+                      }}>
                         <Filter/>
                       </TouchableOpacity>
                     </View>

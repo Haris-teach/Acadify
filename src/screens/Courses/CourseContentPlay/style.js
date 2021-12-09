@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
     },
     sectionView:{
       width:wp(100),
+        paddingBottom:hp(2)
     },
     contentHeading:{
         height:hp(10),

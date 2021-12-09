@@ -72,7 +72,7 @@ const CourseDetailScreen = (props) => {
         ApiHelper.getSingleCourse(token,props.route.params.courseId,(response) => {
             if (response.isSuccess) {
                 if(response.response.data.code === 200){
-                    // console.log('SingleCourse ===>',response.response.data.data)
+                    console.log('SingleCourse ===>',response.response.data.data)
                     response.response.data.data.CourseSections?.map((value) => {
                         tempArray.push({
                             id:value.id,

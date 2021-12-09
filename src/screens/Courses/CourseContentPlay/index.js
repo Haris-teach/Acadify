@@ -23,6 +23,8 @@ import CourseContentView from "../../../components/CourseContentListComponent";
 
 const CourseContentPlay = (props) => {
 
+    console.log('Props',props.route.params.section.data)
+
     const token = useSelector((state) => state.ApiData.token);
     const [title,setTitle]        = useState('');
     const [cardData,setCardData]  = useState([]);
@@ -50,10 +52,9 @@ const CourseContentPlay = (props) => {
 
 
     const onCardContentPress = (item) => {
-        if(item.contentType === 'text'){
+        if(item.contentType === 'text' || item.contentType === 'link'){
             Linking.openURL(item.videoURL)
         }else {
-            console.log('Item',item);
             setData(item)
         }
     }
@@ -78,12 +79,10 @@ const CourseContentPlay = (props) => {
                             <View style={styles.headingView}>
                                 <Text style={styles.titleText} numberOfLines={1}>{title}</Text>
                             </View>
-                            {Data.contentType !== 'text' && <View style={styles.videoSection}>
+                            {Data.contentType !== 'text' && Data.contentType !== 'link' && <View style={styles.videoSection}>
                                 {Data.contentType === 'image' ?
-                                    // <Text>{Data.videoURL}</Text>
-                                    <Image source={{uri: Data.videoURL}} style={styles.announceImage}/>
-                                    :
-                                    (Data.contentType === 'video' &&
+                                    <Image source={{uri: Data.videoURL}} style={styles.announceImage}/> :
+                                    (Data.contentType === 'video' ?
                                         <Video
                                             source={{uri: Data.videoURL}}
                                             controls={Platform.OS === 'ios'}
@@ -93,7 +92,7 @@ const CourseContentPlay = (props) => {
                                             playInBackground={false}
                                             resizeMode={'cover'}
                                         />
-                                    )}
+                                    :null)}
                             </View>}
                         </View>
 

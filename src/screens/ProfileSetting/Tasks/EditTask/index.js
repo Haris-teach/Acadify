@@ -31,7 +31,6 @@ import DateImage from "../../../../assets/images/date.svg";
 import AppHeader from "../../../../components/AppHeader";
 import EditIcon from "../../../../assets/images/delete-Icon.svg";
 
-
 const EditTask = props => {
 
     let Data = props.route.params.item;
@@ -275,7 +274,7 @@ const EditTask = props => {
                             setValue={setStatus}
                         />
                     </View>
-                    <View style={styles.inputBox}>
+                    <View style={[styles.inputBox,{zIndex:-5}]}>
                         <Text style={styles.titleText}>Priority</Text>
                         <DropDownPicker
                             style={styles.dateViewStyle}
@@ -288,7 +287,7 @@ const EditTask = props => {
                             showArrowIcon={true}
                             closeAfterSelecting={true}
                             showTickIcon={false}
-                            zIndex={888}
+                            zIndex={8888}
                             dropDownContainerStyle={{backgroundColor:colors.image_background,marginTop:hp(2),borderColor:'transparent',borderTopStartRadius:hp(1),borderTopEndRadius:hp(1),zIndex:0}}
                             arrowIconStyle={{tintColor:colors.white,height:25,width:25}}
                             listItemLabelStyle={{color:colors.white}}
@@ -298,7 +297,7 @@ const EditTask = props => {
                             setValue={setPriority}
                         />
                     </View>
-                    <View style={[styles.inputBox,{height:hp(20)}]}>
+                    <View style={[styles.inputBox,{height:hp(20),zIndex:-10}]}>
                         <Text style={styles.titleText}>Description</Text>
                         <TextInput
                             placeholder={'Enter your description here'}
