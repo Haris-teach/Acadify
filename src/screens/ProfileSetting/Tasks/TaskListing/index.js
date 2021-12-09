@@ -17,39 +17,35 @@ import styles from './style';
 import colors from '../../../../assets/colors/colors';
 import ApiHelper from "../../../../api/ApiHelper";
 import images from "../../../../assets/images/images";
-import {ADD_GOAL} from "../../../../constants/navigators";
+import {CREATE_TASK, EDIT_TASK} from "../../../../constants/navigators";
 import AppLoading from "../../../../components/AppLoading";
 import Calendar from "../../../../assets/images/calendar_back.svg";
 import AppHeader from "../../../../components/AppHeader";
 import Add from "../../../../assets/images/addIcon.svg";
 import TasksComponent from "../../../../components/TasksComponent";
+import moment from "moment";
+
 
 const TaskListing = props => {
 
     const isFocused = useIsFocused();
     const token = useSelector(state => state.ApiData.token);
     const [loading,setLoading]         = useState(false);
-    const [items, setItems]            = useState([
-        {
-            id:0,
-        },
-        {
-            id:1,
-
-        }
-    ]);
+    const [items, setItems]            = useState([]);
 
 
     useEffect(() => {
-        // getTasks();
+        getTasks();
     },[isFocused])
 
 
     const getTasks = () => {
         setLoading(true);
-        ApiHelper.getCategories(token,'ACCOUNTABILITY',(response) => {
+        ApiHelper.getUserTasks(token,(response) => {
             if(response.isSuccess){
+                console.log('data',response.response);
                 if(response.response.data.code === 200){
+                    setItems(response.response.data.data);
                     setLoading(false);
                 }
             }else {
@@ -61,9 +57,14 @@ const TaskListing = props => {
 
 
     const _renderTasksItems = (item) => {
+        let date = moment(item.dueDate).format('DD/MM/YYYY');
         return(
             <TasksComponent
-
+                title={item.title}
+                priority={item.priority}
+                status={item.status}
+                dueDate={date}
+                onPressTask={() => props.navigation.navigate(EDIT_TASK,{item})}
             />
         )
     }
@@ -84,7 +85,7 @@ const TaskListing = props => {
                 <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Pressed')}>
                     <Calendar/>
                 </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.7} style={{paddingLeft: wp(3)}} onPress={() => props.navigation.navigate(ADD_GOAL)}>
+                <TouchableOpacity activeOpacity={0.7} style={{paddingLeft: wp(3)}} onPress={() => props.navigation.navigate(CREATE_TASK)}>
                     <Add/>
                 </TouchableOpacity>
             </View>

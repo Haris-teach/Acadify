@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     },
     headingText: {
         fontWeight: '700',
-        fontSize: 24,
+        fontSize: wp(6.2),
         color: colors.white,
         fontFamily: fonts.regular,
     },

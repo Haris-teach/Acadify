@@ -1,6 +1,6 @@
 import axios from "axios";
-const BASE_URL = "https://api.stagingaia.com";
-// const BASE_URL = "http://192.168.1.179:5001";
+// const BASE_URL = "https://api.stagingaia.com";
+const BASE_URL = "http://192.168.0.21:5001";
 const BASE_URL_STRIPE = "https://api.stripe.com/v1";
 const STRIPE_PUBLISHABLE_KEY =
   "pk_test_51IbuHCL3SLhyon2BLACBp27GY1ecVJhQlbD2DIX7cGCmQWHNayYdJVlP9aXAdMjK6jMKR9VD4HRCAOlGAMQMB8XU005FRCU1zA";
@@ -248,6 +248,32 @@ class ApiServices {
     var config = {
       method: "get",
       url: BASE_URL + `/api/v1/category/categories?type=${type}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  };
+
+
+  getUserTasks = (token,callback) => {
+    var config = {
+      method: "get",
+      url: BASE_URL + '/api/v1/tasks/user',
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",

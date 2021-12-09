@@ -18,15 +18,18 @@ import {
     ADD_CARD,
     ADD_GOAL,
     ADD_JOURNEY,
-    ALL_RESOURCES, BILLING_LISTING,
+    ALL_RESOURCES,
+    BILLING_LISTING,
     BUY_RESOURCES,
     COURSE_CONTENT_PLAY,
     COURSE_DETAILS,
     COURSE_SCREEN,
+    CREATE_TASK,
     CREDIT_CARD,
     DASHBOARD_SCREEN,
     EDIT_ACCOUNTABILITY,
     EDIT_PROFILE_SCREEN,
+    EDIT_TASK,
     FORGOT_PASSWORD,
     GET_ACCOUNTABILITY,
     JOURNEY,
@@ -37,7 +40,8 @@ import {
     PLAN_SCREEN,
     PROFILE_SCREEN,
     SETTINGS,
-    SIGNUP_SCREEN, TASK_LISTING,
+    SIGNUP_SCREEN,
+    TASK_LISTING,
     VIDEO_SCREEN,
 } from "./constants/navigators";
 import PlanScreen from "./screens/Auth/PlanScreen";
@@ -61,6 +65,8 @@ import AllResourcesScreen from "./screens/Resources/AllResources";
 import ResourceBuyScreen from "./screens/Resources/ResourceBuyScreen";
 import TaskListing from "./screens/ProfileSetting/Tasks/TaskListing";
 import BillingListing from "./screens/ProfileSetting/Billing";
+import CreateTask from "./screens/ProfileSetting/Tasks/CreateTask";
+import EditTask from "./screens/ProfileSetting/Tasks/EditTask";
 
 
 const RootStack = createNativeStackNavigator();
@@ -98,6 +104,8 @@ const MyNewStack = () => {
             <RootStack.Screen name={BUY_RESOURCES} component={ResourceBuyScreen}/>
             <RootStack.Screen name={TASK_LISTING} component={TaskListing}/>
             <RootStack.Screen name={BILLING_LISTING} component={BillingListing}/>
+            <RootStack.Screen name={CREATE_TASK} component={CreateTask}/>
+            <RootStack.Screen name={EDIT_TASK} component={EditTask}/>
         </RootStack.Navigator>
     );
 };

@@ -80,7 +80,9 @@ const CourseContentPlay = (props) => {
                             </View>
                             {Data.contentType !== 'text' && <View style={styles.videoSection}>
                                 {Data.contentType === 'image' ?
-                                    <Image source={{uri: Data.videoURL}} style={styles.announceImage}/> :
+                                    // <Text>{Data.videoURL}</Text>
+                                    <Image source={{uri: Data.videoURL}} style={styles.announceImage}/>
+                                    :
                                     (Data.contentType === 'video' &&
                                         <Video
                                             source={{uri: Data.videoURL}}

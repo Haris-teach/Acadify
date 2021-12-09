@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '90%',
         resizeMode:'cover',
+        backgroundColor:'red'
     },
     announceTextView:{
         maxHeight:hp(220),

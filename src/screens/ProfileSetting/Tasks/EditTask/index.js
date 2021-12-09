@@ -29,16 +29,18 @@ import Button from '../../../../components/Button/Button';
 import AppLoading from "../../../../components/AppLoading";
 import DateImage from "../../../../assets/images/date.svg";
 import AppHeader from "../../../../components/AppHeader";
+import EditIcon from "../../../../assets/images/delete-Icon.svg";
 
-const CreateTask = props => {
+const EditTask = props => {
 
+    let Data = props.route.params.item;
     const token = useSelector(state => state.ApiData.token);
-    const [title,setTitle]               = useState('');
-    const [description,setDescription]   = useState('');
-    const [status, setStatus]            = useState('Select status');
-    const [priority, setPriority]        = useState('Select priority');
-    const [date,setDate]                 = useState('MM/DD/YYYY');
-    const [endDate,setEndDate]           = useState('MM/DD/YYYY');
+    const [title,setTitle]               = useState(Data.title);
+    const [description,setDescription]   = useState(Data.description);
+    const [status, setStatus]            = useState(Data.status);
+    const [priority, setPriority]        = useState(Data.priority);
+    const [date,setDate]                 = useState(moment(Data.startDate).format('MM/DD/YYYY'));
+    const [endDate,setEndDate]           = useState(moment(Data.dueDate).format('MM/DD/YYYY'));
     const [isDisable,setIsDisable]       = useState(false);
     const [loading,setLoading]           = useState(false);
     const [dateModal,setDateModal]       = useState(false);
@@ -180,7 +182,13 @@ const CreateTask = props => {
                     />
                 </View>
                 <View style={styles.headingView}>
-                    <Text style={styles.headingText}>Create New Task</Text>
+                    <Text style={styles.headingText}>View Task</Text>
+                    <TouchableOpacity
+                        activeOpacity={0.7}
+                        onPress={() => console.log('Delete')}
+                    >
+                        <EditIcon/>
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.inputView}>
                     <View style={styles.inputBox}>
@@ -271,34 +279,34 @@ const CreateTask = props => {
                     </View>
 
 
-                <View style={styles.buttonView}>
-                    <View style={styles.btnView}>
-                        <Button
-                            width={wp(40)}
-                            buttonText={'Cancel'}
-                            onPress={() => props.navigation.goBack()}
-                        />
+                    <View style={styles.buttonView}>
+                        <View style={styles.btnView}>
+                            <Button
+                                width={wp(40)}
+                                buttonText={Data.status === 'COMPLETED' ? 'Cancel' : 'Complete' }
+                                onPress={() => props.navigation.goBack()}
+                            />
+                        </View>
+                        <View style={styles.btnView}>
+                            <Button
+                                width={wp(40)}
+                                buttonText={'Save'}
+                                bgColor={colors.white}
+                                borderColor={colors.white}
+                                textColor={colors.black}
+                                disabled={isDisable}
+                                onPress={() => onPressSave()}
+                            />
+                        </View>
                     </View>
-                    <View style={styles.btnView}>
-                        <Button
-                            width={wp(40)}
-                            buttonText={'Add'}
-                            bgColor={colors.white}
-                            borderColor={colors.white}
-                            textColor={colors.black}
-                            disabled={isDisable}
-                            onPress={() => onPressSave()}
-                        />
-                    </View>
-                </View>
-                <DateTimePickerModal
-                    isVisible={dateModal}
-                    mode={"date"}
-                    timePickerModeAndroid={"clock"}
-                    minimumDate={new Date()}
-                    onConfirm={(value) => onConfirmDate(value)}
-                    onCancel={() => onCancelDate()}
-                />
+                    <DateTimePickerModal
+                        isVisible={dateModal}
+                        mode={"date"}
+                        timePickerModeAndroid={"clock"}
+                        minimumDate={new Date()}
+                        onConfirm={(value) => onConfirmDate(value)}
+                        onCancel={() => onCancelDate()}
+                    />
                     <DateTimePickerModal
                         isVisible={endDateModal}
                         mode={"date"}
@@ -313,4 +321,4 @@ const CreateTask = props => {
     );
 };
 
-export default CreateTask;
+export default EditTask;

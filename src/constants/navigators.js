@@ -25,4 +25,6 @@ export const ALL_RESOURCES = 'ALL_RESOURCES';
 export const BUY_RESOURCES = 'BUY_RESOURCES';
 export const TASK_LISTING = 'TASK_LISTING';
 export const BILLING_LISTING = 'BILLING_LISTING';
+export const CREATE_TASK = 'CREATE_TASK';
+export const EDIT_TASK = 'EDIT_TASK';
 

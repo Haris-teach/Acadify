@@ -35,7 +35,7 @@ const LoginScreen = (props) => {
   const dispatch = useDispatch();
   // const [email, setEmail] = useState("");
   // const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("hassan_inayat@mail.com");
+  const [email, setEmail] = useState("hassan@mail.com");
   const [password, setPassword] = useState("Password@1");
   const [loading, setLoading]   = useState(false);
 
