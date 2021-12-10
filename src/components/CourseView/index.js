@@ -1,20 +1,41 @@
 //================================ React Native Imported Files ======================================//
 
-import React from "react";
+import React, {useState} from "react";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
-import {View, StyleSheet, Text, Image} from "react-native";
+import {View, StyleSheet, Text, ImageBackground, ActivityIndicator} from "react-native";
 
 //================================ Local Imported Files ======================================//
 
 import colors from "../../assets/colors/colors";
 import fonts from "../../assets/fonts/fonts";
+import LockIcon from "../../assets/images/lock_course.svg";
 
 const CourseView = (props) => {
+
+    const [isLoaded,setIsLoaded] = useState(false);
+    const [isError,setIsError] = useState(false);
+    const [isShowActivity,setIsShowActivity] = useState(true);
 
     return (
         <View style={[styles.container,{width:props.width}]}>
             <View style={[styles.imageSection,{width:props.width}]}>
-                <Image source={{uri:props.image}} style={styles.imageStyle}/>
+                <ImageBackground
+                    source={{uri:props.image}}
+                    style={styles.imageStyle}
+                    imageStyle={styles.imageStyle}
+                    onLoadEnd={() => setIsLoaded(true)}
+                    onError={() => setIsError(true)}
+                >
+                    {props.isLock ? <LockIcon height={45} width={45}/> : null}
+                    {
+                        (isLoaded && !isError) ? null :
+                            (isShowActivity && !isError) &&
+                            <ActivityIndicator
+                                size={'small'}
+                                color={colors.button_text}
+                            />
+                    }
+                </ImageBackground>
             </View>
             <View style={[styles.textView,{width:props.width}]}>
                 <Text style={styles.nameText} numberOfLines={2}>{props.name}</Text>
@@ -58,6 +79,8 @@ const styles = StyleSheet.create({
         width:'100%',
         borderTopLeftRadius:wp(6),
         borderTopRightRadius:wp(6),
+        justifyContent:'center',
+        alignItems:'center'
     }
 });
 

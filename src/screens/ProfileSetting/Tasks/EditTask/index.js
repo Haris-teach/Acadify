@@ -233,12 +233,12 @@ const EditTask = props => {
                 </View>
                 <View style={styles.headingView}>
                     <Text style={styles.headingText}>View Task</Text>
-                    <TouchableOpacity
+                    {Data.isCreadtedByAdmin === false ? <TouchableOpacity
                         activeOpacity={0.7}
                         onPress={() => onPressDelete()}
                     >
                         <EditIcon/>
-                    </TouchableOpacity>
+                    </TouchableOpacity> : null}
                 </View>
                 <View style={styles.inputView}>
                     <View style={styles.inputBox}>
@@ -246,6 +246,7 @@ const EditTask = props => {
                         <TextInput
                             placeholder={'Enter Task name'}
                             style={styles.inputStyle}
+                            editable={!Data.isCreadtedByAdmin}
                             placeholderTextColor={colors.inputColor}
                             onChangeText={(text) => setTitle(text)}
                             value={title}
@@ -260,6 +261,7 @@ const EditTask = props => {
                             setOpen={setOpen}
                             placeholder={status}
                             value={status}
+                            disabled={Data.isCreadtedByAdmin}
                             placeholderStyle={{color:colors.inputColor}}
                             showArrowIcon={true}
                             closeAfterSelecting={true}
@@ -283,6 +285,7 @@ const EditTask = props => {
                             setOpen={setOpenPriority}
                             placeholder={priority}
                             value={priority}
+                            disabled={Data.isCreadtedByAdmin}
                             placeholderStyle={{color:colors.inputColor}}
                             showArrowIcon={true}
                             closeAfterSelecting={true}
@@ -304,6 +307,7 @@ const EditTask = props => {
                             style={[styles.inputStyle,{height:hp(15),paddingTop:wp(5)}]}
                             placeholderTextColor={colors.inputColor}
                             multiline={true}
+                            editable={!Data.isCreadtedByAdmin}
                             textAlignVertical={'top'}
                             onChangeText={(text) => setDescription(text)}
                             value={description}
@@ -311,18 +315,18 @@ const EditTask = props => {
                     </View>
                     <View style={[styles.inputBox,{height:hp(12),marginTop:wp(2)}]} >
                         <Text style={styles.titleText}>Start Date</Text>
-                        <TouchableOpacity style={styles.dateViewStyle} activeOpacity={0.7} onPress={() => setDateModal(!dateModal)}>
+                        <TouchableOpacity style={styles.dateViewStyle} activeOpacity={0.7} disabled={Data.isCreadtedByAdmin} onPress={() => setDateModal(!dateModal)}>
                             <Text style={date === 'MM/DD/YYYY' ? styles.placeHolderText : [styles.placeHolderText,{color:colors.white}]}>{date}</Text>
-                            <TouchableOpacity style={styles.dateView} activeOpacity={0.7} onPress={() => setDateModal(!dateModal)}>
+                            <TouchableOpacity style={styles.dateView} disabled={Data.isCreadtedByAdmin} activeOpacity={0.7} onPress={() => setDateModal(!dateModal)}>
                                 <DateImage/>
                             </TouchableOpacity>
                         </TouchableOpacity>
                     </View>
                     <View style={[styles.inputBox,{height:hp(12),marginTop:wp(2)}]} >
                         <Text style={styles.titleText}>Due Date</Text>
-                        <TouchableOpacity style={styles.dateViewStyle} activeOpacity={0.7} onPress={() => setEndDateModal(!endDateModal)}>
+                        <TouchableOpacity style={styles.dateViewStyle} disabled={Data.isCreadtedByAdmin} activeOpacity={0.7} onPress={() => setEndDateModal(!endDateModal)}>
                             <Text style={endDate === 'MM/DD/YYYY' ? styles.placeHolderText : [styles.placeHolderText,{color:colors.white}]}>{endDate}</Text>
-                            <TouchableOpacity style={styles.dateView} activeOpacity={0.7} onPress={() => setEndDateModal(!endDateModal)}>
+                            <TouchableOpacity style={styles.dateView} disabled={Data.isCreadtedByAdmin} activeOpacity={0.7} onPress={() => setEndDateModal(!endDateModal)}>
                                 <DateImage/>
                             </TouchableOpacity>
                         </TouchableOpacity>
@@ -332,22 +336,23 @@ const EditTask = props => {
                     <View style={styles.buttonView}>
                         <View style={styles.btnView}>
                             <Button
-                                width={wp(40)}
-                                buttonText={Data.status === 'COMPLETED' ? 'Cancel' : 'Complete' }
-                                onPress={() => props.navigation.goBack()}
+                                width={Data.isCreadtedByAdmin ? wp(80) :wp(40)}
+                                buttonText={'Cancel'}
+                                // buttonText={Data.status === 'COMPLETED' ? 'Cancel' : 'Complete' }
+                                onPress={() => props.navigation.goBack() }
                             />
                         </View>
-                        <View style={styles.btnView}>
+                        {Data.isCreadtedByAdmin !== true ? <View style={styles.btnView}>
                             <Button
                                 width={wp(40)}
-                                buttonText={'Save'}
+                                buttonText={'Update'}
                                 bgColor={colors.white}
                                 borderColor={colors.white}
                                 textColor={colors.black}
                                 disabled={isDisable}
                                 onPress={() => onPressSave()}
                             />
-                        </View>
+                        </View> : null}
                     </View>
                     <DateTimePickerModal
                         isVisible={dateModal}

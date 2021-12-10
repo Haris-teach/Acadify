@@ -161,7 +161,7 @@ const MenuBar = (props) => {
       <DrawerContentScrollView {...props} showsVerticalScrollIndicator={false}>
         <TouchableOpacity
             onPress={() => onHome()}
-            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : Platform.OS === 'android' ?  hp(5) : null}]}
+            style={[styles.activeIconHolder2,{marginTop: height_screen < 675 ? 25 : Platform.OS === 'android' ?  hp(5) : -hp(1)}]}
         >
           <View style={home ? styles.focusLine : [styles.focusLine,{backgroundColor:'transparent'}]}/>
           <View style={styles.iconView}>

@@ -30,13 +30,14 @@ import AppLoading from "../../../components/AppLoading";
 import ApiHelper from "../../../api/ApiHelper";
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {SET_USER_RESOURCE} from "../../../../redux/store/actions/ApiData";
 
 const LoginScreen = (props) => {
   const dispatch = useDispatch();
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("hassan@mail.com");
-  const [password, setPassword] = useState("Password@1");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  // const [email, setEmail] = useState("user@mailinator.com");
+  // const [password, setPassword] = useState("Dvorak123!");
   const [loading, setLoading]   = useState(false);
 
   const onPressLogin = () => {
@@ -59,11 +60,11 @@ const LoginScreen = (props) => {
         dispatch(ApiDataActions.SetLoginData(response.response.data.data));
         setLoading(false);
         if (response.response.data.status === 200) {
+          setRights(response.response.data.data)
           if(response.response.data.data.user.userType === 2){
+            // console.log("Response ==>", response.response.data.data);
             dispatch(ApiDataActions.SetLoginData(response.response.data.data));
-            dispatch(
-                ApiDataActions.SetUserToken(response.response.data.data.token)
-            );
+            dispatch(ApiDataActions.SetUserToken(response.response.data.data.token));
             setToken(response.response.data.data.token)
             props.navigation.dispatch(
                 CommonActions.reset({
@@ -97,6 +98,25 @@ const LoginScreen = (props) => {
     }catch (e) {
       console.log('Error',e)
     }
+  }
+
+
+  const setRights = (data) => {
+    data.user.UserRights.map((value) => {
+      if(value.access === 'resources'){
+        dispatch(ApiDataActions.SetUserResource(true));
+      } else if(value.access === 'goals'){
+        dispatch(ApiDataActions.SetUserGoal(true));
+      } else if(value.access === 'journey'){
+        dispatch(ApiDataActions.SetUserJourney(true));
+      } else if(value.access === 'courses'){
+        dispatch(ApiDataActions.SetUserCourse(true));
+      } else if(value.access === 'zoom'){
+        dispatch(ApiDataActions.SetUserZoom(true));
+      } else if(value.access === 'forum'){
+        dispatch(ApiDataActions.SetUserForum(true));
+      }
+    })
   }
 
   return (

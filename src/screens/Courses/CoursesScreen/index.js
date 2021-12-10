@@ -33,9 +33,11 @@ const DashboardScreen = (props) => {
 
   const isFocused = useIsFocused();
   const token = useSelector((state) => state.ApiData.token);
+  let course = useSelector(state => state.ApiData.course);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [dropModal, setDropModal] = useState(false);
+  const [lockModal, setLockModal] = useState(false);
   let [coursesData, setCoursesData] = useState([]);
   let [page, setPage] = useState(1);
   let [categoryData, setCategoryData] = useState([]);
@@ -62,10 +64,14 @@ const DashboardScreen = (props) => {
 
 
   useEffect(() => {
-    setCatText('All Courses');
-    setPage(1);
-    getUserProfile();
-    getCategories();
+    if(course){
+      setCatText('All Courses');
+      setPage(1);
+      getUserProfile();
+      getCategories();
+    } else {
+      setLockModal(true);
+    }
   }, [isFocused]);
 
 

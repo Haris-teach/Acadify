@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     },
     container:{
         flex:0.9,
-        // paddingBottom:hp(3)
+        paddingBottom:hp(3)
     },
     dropArrow:{
         height:hp(5),

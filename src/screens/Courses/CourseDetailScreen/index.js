@@ -59,8 +59,8 @@ const CourseDetailScreen = (props) => {
                 image={item.imageURL}
                 title={item.title}
                 description={item.description}
-                // onPressContent={() => console.log('Section Data',section)}
-                onPressContent={() => props.navigation.navigate(COURSE_CONTENT_PLAY,{courseDetails:courseDetails,section})}
+                onPressContent={() => console.log('Section Data',section)}
+                // onPressContent={() => props.navigation.navigate(COURSE_CONTENT_PLAY,{courseDetails:courseDetails,section})}
             />
         )
     }

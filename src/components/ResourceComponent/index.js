@@ -1,19 +1,42 @@
 //================================ React Native Imported Files ======================================//
 
-import React from "react";
+import React, {useState} from "react";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
-import {View, StyleSheet, Text, Image} from "react-native";
+import {View, StyleSheet, Text, ImageBackground, ActivityIndicator} from "react-native";
 
 //================================ Local Imported Files ======================================//
 
 import colors from "../../assets/colors/colors";
 import fonts from "../../assets/fonts/fonts";
+import LockIcon from "../../assets/images/lock_course.svg";
 
 const ResourceComponent = (props) => {
+
+    const [isLoaded,setIsLoaded] = useState(false);
+    const [isError,setIsError] = useState(false);
+    const [isShowActivity,setIsShowActivity] = useState(true);
+
     return (
         <View style={styles.container}>
             <View style={styles.upperImageView}>
-                <Image source={{uri: props.image}} style={styles.imageViewStyle}/>
+                <ImageBackground
+                    source={{uri: props.image}}
+                    style={styles.imageViewStyle}
+                    imageStyle={styles.imageViewStyle}
+                    onLoadEnd={() => setIsLoaded(true)}
+                    onError={() => setIsError(true)}
+                >
+
+                    {props.isLock ? <LockIcon height={45} width={45}/> : null}
+                    {
+                        (isLoaded && !isError) ? null :
+                            (isShowActivity && !isError) &&
+                            <ActivityIndicator
+                                size={'small'}
+                                color={colors.button_text}
+                            />
+                    }
+                </ImageBackground>
             </View>
             <View style={styles.descriptionView}>
                 <Text style={styles.textStyle} numberOfLines={1}>{props.description}</Text>
@@ -37,7 +60,9 @@ const styles = StyleSheet.create({
         height:'100%',
         width: '100%',
         borderRadius:wp(7),
-        resizeMode:'contain'
+        resizeMode:'contain',
+        justifyContent:'center',
+        alignItems:'center'
     },
     descriptionView:{
         height: hp(4),

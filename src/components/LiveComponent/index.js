@@ -1,8 +1,8 @@
 //================================ React Native Imported Files ======================================//
 
-import React from "react";
+import React, {useState} from "react";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
-import {View, StyleSheet, Text, ImageBackground} from "react-native";
+import {View, StyleSheet, Text, ImageBackground, ActivityIndicator} from "react-native";
 
 //================================ Local Imported Files ======================================//
 
@@ -12,18 +12,34 @@ import LiveIcon from "../../assets/images/Live_btn.svg";
 
 const LiveComponent = (props) => {
 
+    const [isLoaded,setIsLoaded] = useState(false);
+    const [isError,setIsError] = useState(false);
+    const [isShowActivity,setIsShowActivity] = useState(true);
+
+
     return (
         <View style={[styles.container,{width:props.width}]}>
             <View style={[styles.imageSection,{width:props.width}]}>
                 <ImageBackground
                     borderRadius={wp(6)}
                     source={{uri:props.image}}
+                    imageStyle={styles.imageStyle}
                     style={styles.imageStyle}
+                    onLoadEnd={() => setIsLoaded(true)}
+                    onError={() => setIsError(true)}
                 >
-                    <View style={[styles.liveView,{width:props.width}]}>
+                    {isLoaded === false ? null : <View style={[styles.liveView, {width: props.width}]}>
                         <LiveIcon height={15} width={15}/>
                         <Text style={styles.liveText}>Live</Text>
-                    </View>
+                    </View>}
+                    {
+                        (isLoaded && !isError) ? null :
+                            (isShowActivity && !isError) &&
+                            <ActivityIndicator
+                                size={'small'}
+                                color={colors.button_text}
+                            />
+                    }
                 </ImageBackground>
             </View>
             <View style={[styles.textView,{width:props.width}]}>

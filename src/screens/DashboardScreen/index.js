@@ -92,6 +92,7 @@ const CourseScreen = props => {
         ApiHelper.getDashboardData(token,(resp) => {
             if(resp.isSuccess){
                 setLoading(false);
+                // console.log('Resp',resp.response)
                 setSortData(resp.response.data.data)
                 setItems(resp.response.data.courses)
                 setAccountItems(resp.response.data.accountability)

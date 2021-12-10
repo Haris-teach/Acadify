@@ -77,12 +77,12 @@ const ResourceCard = (props) => {
                 {props.type === 'DOCUMENTS' && (props.pay.length > 0 && props.pay[0].paid === false ?<View style={styles.iconView}>
                     <Lock height={18} width={18}/>
                     <Text style={{paddingLeft: wp(2), color: colors.white,fontFamily:fonts.semi,marginTop: wp(1.2)}}
-                          numberOfLines={2}>US ${props.pay[0].price / 100}.00</Text>
+                          numberOfLines={2}>${props.pay[0].price / 100}.00</Text>
                 </View> : null)}
                 {props.type === 'DOCUMENTS' && (props.pay.length < 1 && props.price[0]?.isFree === false ? <View style={styles.iconView}>
                     <Lock height={18} width={18}/>
                     <Text style={{paddingLeft: wp(2), color: colors.white,fontFamily:fonts.semi,marginTop: wp(1.2)}}
-                          numberOfLines={2}>US ${props.price[0].price / 100}.00</Text>
+                          numberOfLines={2}>${props.price[0].price / 100}.00</Text>
                 </View> : null)}
                 {props.type === 'DOCUMENTS' && (props.pay.length < 1 && props.price[0]?.isFree === true ? <View style={styles.iconView}>
                     <Download height={18} width={18}/>
