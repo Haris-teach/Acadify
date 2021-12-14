@@ -16,7 +16,6 @@ const LiveComponent = (props) => {
     const [isError,setIsError] = useState(false);
     const [isShowActivity,setIsShowActivity] = useState(true);
 
-
     return (
         <View style={[styles.container,{width:props.width}]}>
             <View style={[styles.imageSection,{width:props.width}]}>

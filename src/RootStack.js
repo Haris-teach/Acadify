@@ -43,6 +43,7 @@ import {
     SIGNUP_SCREEN,
     TASK_LISTING,
     VIDEO_SCREEN,
+    CALENDAR_TASK
 } from "./constants/navigators";
 import PlanScreen from "./screens/Auth/PlanScreen";
 import CardScreen from "./screens/Auth/CardScreen";
@@ -67,7 +68,7 @@ import TaskListing from "./screens/ProfileSetting/Tasks/TaskListing";
 import BillingListing from "./screens/ProfileSetting/Billing";
 import CreateTask from "./screens/ProfileSetting/Tasks/CreateTask";
 import EditTask from "./screens/ProfileSetting/Tasks/EditTask";
-
+import CalendarTask from "./screens/ProfileSetting/Tasks/CalendarTask";
 
 const RootStack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -106,6 +107,7 @@ const MyNewStack = () => {
             <RootStack.Screen name={BILLING_LISTING} component={BillingListing}/>
             <RootStack.Screen name={CREATE_TASK} component={CreateTask}/>
             <RootStack.Screen name={EDIT_TASK} component={EditTask}/>
+            <RootStack.Screen name={CALENDAR_TASK} component={CalendarTask}/>
         </RootStack.Navigator>
     );
 };

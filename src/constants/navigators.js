@@ -27,4 +27,5 @@ export const TASK_LISTING = 'TASK_LISTING';
 export const BILLING_LISTING = 'BILLING_LISTING';
 export const CREATE_TASK = 'CREATE_TASK';
 export const EDIT_TASK = 'EDIT_TASK';
+export const CALENDAR_TASK = 'CALENDAR_TASK';
 

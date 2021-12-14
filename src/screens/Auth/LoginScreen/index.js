@@ -34,10 +34,10 @@ import {SET_USER_RESOURCE} from "../../../../redux/store/actions/ApiData";
 
 const LoginScreen = (props) => {
   const dispatch = useDispatch();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  // const [email, setEmail] = useState("user@mailinator.com");
-  // const [password, setPassword] = useState("Dvorak123!");
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("user@mailinator.com");
+  const [password, setPassword] = useState("Dvorak123!");
   const [loading, setLoading]   = useState(false);
 
   const onPressLogin = () => {

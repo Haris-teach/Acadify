@@ -17,7 +17,7 @@ import styles from './style';
 import colors from '../../../../assets/colors/colors';
 import ApiHelper from "../../../../api/ApiHelper";
 import images from "../../../../assets/images/images";
-import {CREATE_TASK, EDIT_TASK} from "../../../../constants/navigators";
+import {CREATE_TASK, EDIT_TASK,CALENDAR_TASK} from "../../../../constants/navigators";
 import AppLoading from "../../../../components/AppLoading";
 import Calendar from "../../../../assets/images/calendar_back.svg";
 import AppHeader from "../../../../components/AppHeader";
@@ -82,7 +82,7 @@ const TaskListing = props => {
                 />
             </View>
             <View style={styles.headingView}>
-                <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Pressed')}>
+                <TouchableOpacity activeOpacity={0.7} onPress={() => props.navigation.navigate(CALENDAR_TASK)}>
                     <Calendar/>
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={0.7} style={{paddingLeft: wp(3)}} onPress={() => props.navigation.navigate(CREATE_TASK)}>
