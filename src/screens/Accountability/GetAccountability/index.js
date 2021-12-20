@@ -12,7 +12,6 @@ import {useSelector} from "react-redux";
 import {useIsFocused} from "@react-navigation/native";
 import {widthPercentageToDP as wp} from "react-native-responsive-screen";
 import {AnimatedCircularProgress} from "react-native-circular-progress";
-import Toast from "react-native-simple-toast";
 import moment from "moment";
 
 //================================ Local Imported Files ======================================//
@@ -22,7 +21,6 @@ import {ADD_GOAL, EDIT_ACCOUNTABILITY} from "../../../constants/navigators";
 import ApiHelper from "../../../api/ApiHelper";
 import colors from "../../../assets/colors/colors";
 import Add from "../../../assets/images/addIcon.svg";
-import AppHeaderNative from "../../../components/AppHeaderNative";
 import AppLoading from "../../../components/AppLoading";
 import Search from "../../../assets/images/searchBackground.svg";
 import Filter from "../../../assets/images/filterBackground.svg";
@@ -62,21 +60,6 @@ const GetAccountability = (props) => {
     }
 
 
-    const renderItems = (item,index) => {
-    //     let date = moment(item.createdAt).format('DD/MM/YYYY');
-    //     return(
-    //         <AccountabilityComponent
-    //             id={item.id}
-    //             index={index}
-    //             progress={item.progress}
-    //             title={item.title}
-    //             date={date}
-    //             description={item.description}
-    //         />
-    //     )
-    }
-
-
     const renderCheckBox = (item,index) => {
         return(
             <View style={styles.tickView}>
@@ -92,18 +75,18 @@ const GetAccountability = (props) => {
 
 
     const onChangeStatus = (item,index) => {
-        setLoading(true);
-        ApiHelper.changeSingleGoalStatus(token,item.id,(response) => {
-            if(response.isSuccess){
-                if(response.response.data.code === 200){
-                    setLoading(false);
-                    // console.log('data',response.response.data)
-                }
-            }else {
-                setLoading(false);
-                console.log('Response',response.response.response)
-            }
-        })
+        // setLoading(true);
+        // ApiHelper.changeSingleGoalStatus(token,item.id,(response) => {
+        //     if(response.isSuccess){
+        //         if(response.response.data.code === 200){
+        //             setLoading(false);
+        //             // console.log('data',response.response.data)
+        //         }
+        //     }else {
+        //         setLoading(false);
+        //         console.log('Response',response.response.response)
+        //     }
+        // })
     }
 
 
@@ -120,14 +103,6 @@ const GetAccountability = (props) => {
         <View style={styles.mainContainer}>
             {AppLoading.renderLoading(loading)}
             <StatusBar backgroundColor={colors.app_background} />
-            <View style={styles.headerView}>
-                <AppHeaderNative
-                    leftIconPath={true}
-                    rightIconOnePath={true}
-                    onLeftIconPress={() => props.navigation.openDrawer()}
-                    onRightIconPress={() => console.log('Data on Ring')}
-                />
-            </View>
             <View style={styles.listView}>
                 <FlatList
                     data={data}
@@ -149,6 +124,13 @@ const GetAccountability = (props) => {
                                         </TouchableOpacity>
                                     </View>
                                 </View>
+                            </View>
+                        )
+                    }}
+                    ListEmptyComponent={() => {
+                        return (
+                            <View style={styles.emptySection}>
+                                <Text style={[styles.headerTextStyle, {fontSize: wp(5)}]}>No Record Found</Text>
                             </View>
                         )
                     }}

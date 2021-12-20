@@ -12,14 +12,13 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import {useIsFocused} from "@react-navigation/native";
 import Model from "react-native-modal";
-import { widthPercentageToDP as wp, } from "react-native-responsive-screen";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 //================================ Local Imported Files ======================================//
 
 import styles from "./style";
 import ApiHelper from "../../../api/ApiHelper";
 import {COURSE_DETAILS} from "../../../constants/navigators";
-import AppHeaderNative from "../../../components/AppHeaderNative";
 import AppLoading from "../../../components/AppLoading";
 import Search from "../../../assets/images/searchBackground.svg";
 import Filter from "../../../assets/images/filterBackground.svg";
@@ -27,6 +26,7 @@ import DropArrow from "../../../assets/images/dropdown.svg";
 import CourseCard from "../../../components/CourseCard/CourseCard";
 import CategoryFilterModal from "../../../components/CategoryFilterModal";
 import CourseDropdown from "../../../components/CourseDropDwon";
+import Button from "../../../components/Button/Button";
 
 
 const DashboardScreen = (props) => {
@@ -42,7 +42,6 @@ const DashboardScreen = (props) => {
   let [page, setPage] = useState(1);
   let [categoryData, setCategoryData] = useState([]);
   let [catText, setCatText] = useState('All Courses');
-
   let dropText = [
     {
       id:0,
@@ -81,6 +80,7 @@ const DashboardScreen = (props) => {
     ApiHelper.getCoursesData(token,page,(response) => {
       if (response.isSuccess) {
         if (response.response.data.code === 200) {
+          console.log('Data',response.response.data)
           response.response.data.data.docs.map((value) => {
             if(value.CoursePayeds.length > 0){
               if(value.CoursePayeds[0].paid === true){
@@ -281,54 +281,56 @@ const DashboardScreen = (props) => {
   return (
     <View style={styles.mainContainer}>
       {AppLoading.renderLoading(loading)}
-      <View style={styles.headerView}>
-        <AppHeaderNative
-          leftIconPath={true}
-          rightIconOnePath={true}
-          onLeftIconPress={() => props.navigation.openDrawer()}
-          onRightIconPress={() => console.log('Data on Ring')}
-        />
-      </View>
-
         <View style={styles.container}>
-          <FlatList
-            data={coursesData}
-            extraData={coursesData}
-            onEndReachedThreshold={0}
-            onEndReached={() => LoadMoreRandomData()}
-            keyExtractor={(item) => item.id}
-            ListEmptyComponent={() => {
-              return(
-                  <View style={styles.emptySection}>
-                    <Text style={[styles.headerTextStyle,{fontSize:wp(5)}]}>No Courses Found</Text>
-                  </View>
-              )
-            }}
-            ListHeaderComponent={() => {
-              return(
-                  <View style={styles.upperView}>
-                    <TouchableOpacity style={styles.headerStyle}  onPress={() => setDropModal(!dropModal)}>
-                      <Text style={styles.headerTextStyle}>{catText}</Text>
-                      <View style={styles.dropArrow}>
-                        <DropArrow/>
-                      </View>
-                    </TouchableOpacity>
-                    <View style={styles.filterIcons}>
-                      <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Searched')}>
-                        <Search/>
-                      </TouchableOpacity>
-                      <TouchableOpacity activeOpacity={0.7} onPress={() => {
-                        console.log('Pressed')
-                        // setModalVisible(!modalVisible)
-                      }}>
-                        <Filter/>
-                      </TouchableOpacity>
+          {lockModal === false ? <FlatList
+              data={coursesData}
+              extraData={coursesData}
+              onEndReachedThreshold={0}
+              onEndReached={() => LoadMoreRandomData()}
+              keyExtractor={(item) => item.id}
+              ListEmptyComponent={() => {
+                return (
+                    <View style={styles.emptySection}>
+                      <Text style={[styles.headerTextStyle, {fontSize: wp(5)}]}>No Courses Found</Text>
                     </View>
-                  </View>
-              )
-            }}
-            renderItem={({item, index}) => renderCourseItems(item,index)}
-          />
+                )
+              }}
+              ListHeaderComponent={() => {
+                return (
+                    <View style={styles.upperView}>
+                      <TouchableOpacity style={styles.headerStyle} onPress={() => setDropModal(!dropModal)}>
+                        <Text style={styles.headerTextStyle}>{catText}</Text>
+                        <View style={styles.dropArrow}>
+                          <DropArrow/>
+                        </View>
+                      </TouchableOpacity>
+                      <View style={styles.filterIcons}>
+                        <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Searched')}>
+                          <Search/>
+                        </TouchableOpacity>
+                        <TouchableOpacity activeOpacity={0.7} onPress={() => {
+                          console.log('Pressed')
+                          // setModalVisible(!modalVisible)
+                        }}>
+                          <Filter/>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                )
+              }}
+              renderItem={({item, index}) => renderCourseItems(item, index)}
+          /> :
+              <View style={styles.upgradePlan}>
+                <Text style={[styles.headerTextStyle,{fontSize:wp(6),textAlign:'center'}]}>Upgrade Your Plan To Get Access</Text>
+                <View style={{marginTop:hp(2)}}>
+                  <Button
+                      buttonText={'UPGRADE PLAN'}
+                      width={wp(50)}
+                      onPress={() => console.log('Plan Upgrade')}
+                  />
+                </View>
+              </View>
+          }
         </View>
 
       <Model

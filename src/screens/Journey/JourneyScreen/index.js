@@ -20,6 +20,9 @@ import Add from "../../../assets/images/addIcon.svg";
 import AppHeaderNative from "../../../components/AppHeaderNative";
 import AppLoading from "../../../components/AppLoading";
 import JourneyComponent from "../../../components/JourneyComponent";
+import AppHeader from "../../../components/AppHeader";
+import images from "../../../assets/images/images";
+import {widthPercentageToDP as wp} from "react-native-responsive-screen";
 
 const JourneyScreen = (props) => {
 
@@ -71,11 +74,9 @@ const JourneyScreen = (props) => {
         <View style={styles.mainContainer}>
             {AppLoading.renderLoading(loading)}
             <View style={styles.headerView}>
-                <AppHeaderNative
-                    leftIconPath={true}
-                    rightIconOnePath={true}
-                    onLeftIconPress={() => props.navigation.openDrawer()}
-                    onRightIconPress={() => console.log('Data on Ring')}
+                <AppHeader
+                    leftIconPath={images.back_icon}
+                    onLeftIconPress={() => props.navigation.goBack()}
                 />
             </View>
             <View style={styles.listView}>
@@ -94,6 +95,13 @@ const JourneyScreen = (props) => {
                                 <View style={styles.activityView}>
                                     <Text style={styles.activityText}>Activities</Text>
                                 </View>
+                            </View>
+                        )
+                    }}
+                    ListEmptyComponent={() => {
+                        return (
+                            <View style={styles.emptySection}>
+                                <Text style={[styles.headerTextStyle, {fontSize: wp(5)}]}>No Activity Found</Text>
                             </View>
                         )
                     }}

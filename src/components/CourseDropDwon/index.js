@@ -60,7 +60,7 @@ const CourseDropdown = (props) => {
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        paddingTop:hp(18),
+        paddingTop:hp(13),
         paddingLeft:wp(10),
     },
     container: {

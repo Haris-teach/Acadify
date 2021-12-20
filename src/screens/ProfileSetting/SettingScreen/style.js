@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
         flex:0.1
     },
     listView:{
-        flex:0.9,
+        flex:0.8,
         justifyContent:'center',
         alignItems:'center'
     },

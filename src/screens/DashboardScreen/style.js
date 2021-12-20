@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import colors from "../../assets/colors/colors";
 import fonts from "../../assets/fonts/fonts";
@@ -8,12 +8,13 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         backgroundColor: colors.app_background,
+        paddingTop:Platform.OS === 'ios' ? hp(5) : null
     },
     headerView:{
-        flex:0.1
+        flex:0.07
     },
     bodyView:{
-        flex:1,
+        flex:0.9,
     },
     userDetailView:{
         height:hp(15),

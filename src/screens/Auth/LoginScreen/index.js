@@ -23,7 +23,7 @@ import Button from "../../../components/Button/Button";
 import LoginLogo from "../../../assets/images/login_screen.svg";
 import {
   FORGOT_PASSWORD,
-  MY_DRAWER,
+  MY_TAB,
   SIGNUP_SCREEN,
 } from "../../../constants/navigators";
 import AppLoading from "../../../components/AppLoading";
@@ -36,7 +36,7 @@ const LoginScreen = (props) => {
   const dispatch = useDispatch();
   // const [email, setEmail] = useState("");
   // const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("user@mailinator.com");
+  const [email, setEmail] = useState("user1@mailinator.com");
   const [password, setPassword] = useState("Dvorak123!");
   const [loading, setLoading]   = useState(false);
 
@@ -69,7 +69,7 @@ const LoginScreen = (props) => {
             props.navigation.dispatch(
                 CommonActions.reset({
                   index: 0,
-                  routes: [{ name: MY_DRAWER }],
+                  routes: [{ name: MY_TAB }],
                 })
             );
             setPassword("");

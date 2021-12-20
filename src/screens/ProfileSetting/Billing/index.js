@@ -162,24 +162,34 @@ class BillingListing extends React.Component {
                 <View style={styles.headingView}>
                     <View style={styles.inputBox}>
                         <Text style={styles.titleText}>Start Date</Text>
-                        <TouchableOpacity style={styles.dateViewStyle} activeOpacity={0.7}
-                                          onPress={() => this.setState({dateModal: !this.state.dateModal})}>
-                            <Text
-                                style={this.state.date === 'MM/DD/YYYY' ? styles.placeHolderText : [styles.placeHolderText, {color: colors.white}]}>{this.state.date}</Text>
-                            <TouchableOpacity style={styles.dateView} activeOpacity={0.7}
-                                              onPress={() => this.setState({dateModal: !this.state.dateModal})}>
+                        <TouchableOpacity
+                            style={styles.dateViewStyle}
+                            activeOpacity={0.7}
+                            onPress={() => this.setState({dateModal: !this.state.dateModal})}
+                        >
+                            <Text style={this.state.date === 'MM/DD/YYYY' ? styles.placeHolderText : [styles.placeHolderText, {color: colors.white}]}>{this.state.date}</Text>
+                            <TouchableOpacity
+                                style={styles.dateView}
+                                activeOpacity={0.7}
+                                onPress={() => this.setState({dateModal: !this.state.dateModal})}
+                            >
                                 <DateImage/>
                             </TouchableOpacity>
                         </TouchableOpacity>
                     </View>
                     <View style={[styles.inputBox, {marginTop: wp(2)}]}>
                         <Text style={styles.titleText}>End Date</Text>
-                        <TouchableOpacity style={styles.dateViewStyle} activeOpacity={0.7}
-                                          onPress={() => this.setState({endDateModal: !this.state.endDateModal})}>
-                            <Text
-                                style={this.state.endDate === 'MM/DD/YYYY' ? styles.placeHolderText : [styles.placeHolderText, {color: colors.white}]}>{this.state.endDate}</Text>
-                            <TouchableOpacity style={styles.dateView} activeOpacity={0.7}
-                                              onPress={() => this.setState({endDateModal:true})}>
+                        <TouchableOpacity
+                            style={styles.dateViewStyle}
+                            activeOpacity={0.7}
+                            onPress={() => this.setState({endDateModal: !this.state.endDateModal})}
+                        >
+                            <Text style={this.state.endDate === 'MM/DD/YYYY' ? styles.placeHolderText : [styles.placeHolderText, {color: colors.white}]}>{this.state.endDate}</Text>
+                            <TouchableOpacity
+                                style={styles.dateView}
+                                activeOpacity={0.7}
+                                onPress={() => this.setState({endDateModal:true})}
+                            >
                                 <DateImage/>
                             </TouchableOpacity>
                         </TouchableOpacity>
@@ -193,6 +203,13 @@ class BillingListing extends React.Component {
                         showsVerticalScrollIndicator={false}
                         keyExtractor={(item) => item.id}
                         renderItem={({item, index}) => this._renderTasksItems(item, index)}
+                        ListEmptyComponent={() => {
+                            return (
+                                <View style={styles.emptySection}>
+                                    <Text style={[styles.headerTextStyle, {fontSize: wp(5)}]}>No Record Found</Text>
+                                </View>
+                            )
+                        }}
                     />
                 </View>
                 <DateTimePickerModal

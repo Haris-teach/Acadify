@@ -2,23 +2,23 @@
 
 import React, {useEffect, useState} from 'react';
 import {
-    ScrollView,
-    StatusBar,
     View,
     Text,
     Image,
     LogBox,
-    RefreshControl,
     Platform,
+    ScrollView,
+    StatusBar,
     ImageBackground,
-    ActivityIndicator
+    ActivityIndicator,
+    RefreshControl
 } from 'react-native';
 import {widthPercentageToDP as wp,heightPercentageToDP as hp} from "react-native-responsive-screen";
-import {useSelector} from "react-redux";
 import Carousel from 'react-native-snap-carousel';
 import {useIsFocused} from "@react-navigation/native";
 import RenderHtml from 'react-native-render-html';
 import Video from 'react-native-video';
+import {useSelector} from "react-redux";
 import moment from "moment";
 
 //================================ Local Imported Files ======================================//
@@ -28,6 +28,7 @@ import colors from "../../assets/colors/colors";
 import fonts from "../../assets/fonts/fonts";
 import images from "../../assets/images/images";
 import ApiHelper from "../../api/ApiHelper";
+import {DASHBOARD_SCREEN, GET_ACCOUNTABILITY, JOURNEY, SETTINGS} from "../../constants/navigators";
 import AppHeaderNative from "../../components/AppHeaderNative";
 import AppLoading from "../../components/AppLoading";
 import CourseView from "../../components/CourseView";
@@ -36,7 +37,6 @@ import ResourceComponent from "../../components/ResourceComponent";
 import ForumComponent from "../../components/ForumCardDesign";
 import LiveComponent from "../../components/LiveComponent";
 import FeatureComponent from "../../components/FeaturedView";
-import {COURSE_SCREEN, DASHBOARD_SCREEN} from "../../constants/navigators";
 
 LogBox.ignoreAllLogs(true);
 const CourseScreen = props => {
@@ -46,6 +46,7 @@ const CourseScreen = props => {
     const token = useSelector(state => state.ApiData.token);
     const [loading,setLoading] = useState(false);
     const [hasImage,setHasImage] = useState(false);
+    const [noUrl, setNoUrl] = useState(false);
     const [announcement,setAnnouncement] = useState('');
     const [items,setItems] = useState([]);
     const [accountItems,setAccountItems] = useState([]);
@@ -54,7 +55,6 @@ const CourseScreen = props => {
     const [liveItems,setLiveItems] = useState([]);
     const [sortData,setSortData] = useState([]);
     const [video,setVideos] = useState([]);
-    const [noUrl, setNoUrl] = useState(false);
     const [announceTest,setAnnounceTest] = useState([]);
 
     const [isLoaded,setIsLoaded] = useState(false);
@@ -223,15 +223,15 @@ const CourseScreen = props => {
             {AppLoading.renderLoading(loading)}
             <View style={styles.headerView}>
                 <AppHeaderNative
-                    leftIconPath={true}
-                    rightIconOnePath={true}
-                    onLeftIconPress={() => props.navigation.openDrawer()}
-                    onRightIconPress={() => console.log('Data on Ring')}
+                    onPressSetting={() => props.navigation.navigate(SETTINGS)}
+                    onPressJourney={() => props.navigation.navigate(JOURNEY)}
+                    onPressChat={() => console.log('Chat Pressed')}
+                    onPressRing={() => console.log('Notification Pressed')}
                 />
             </View>
             {loading ? null : (
                 <ScrollView
-                    style={[styles.bodyView,{marginBottom:hp(2)}]}
+                    style={[styles.bodyView,{marginBottom:hp(10)}]}
                     showsVerticalScrollIndicator={false}
                     refreshControl={
                         <RefreshControl
@@ -335,7 +335,7 @@ const CourseScreen = props => {
                                  <View style={[styles.courseView,{height:hp(23)}]}>
                                         <View style={styles.courseTitle}>
                                             <Text style={[styles.userNameText,styles.headerText]}>Accountability</Text>
-                                            <Text style={[styles.userNameText,styles.showAll]} onPress={() => console.log('Pressed')}>Show all</Text>
+                                            <Text style={[styles.userNameText,styles.showAll]} onPress={() => props.navigation.navigate(GET_ACCOUNTABILITY)}>Show all</Text>
                                         </View>
                                         <View style={styles.videoSection}>
                                             <Carousel
@@ -362,7 +362,6 @@ const CourseScreen = props => {
                                        <Carousel
                                            data={resourceItems}
                                            keyExtractor={(item) => item.id}
-                                           // layout={'tinder'}
                                            renderItem={({item}) => _renderResourceItems(item)}
                                            autoplay={true}
                                            activeSlideAlignment={'start'}

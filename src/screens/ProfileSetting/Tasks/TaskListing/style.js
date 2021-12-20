@@ -5,6 +5,7 @@ import {
     widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import colors from '../../../../assets/colors/colors';
+import fonts from "../../../../assets/fonts/fonts";
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -25,6 +26,17 @@ const styles = StyleSheet.create({
         flex:0.9,
         alignItems:'center',
     },
+    emptySection:{
+        height:hp(70),
+        justifyContent:'center',
+        alignItems:'center',
+    },
+    headerTextStyle:{
+        fontFamily:fonts.semi,
+        fontWeight:'700',
+        color:colors.white,
+        fontSize:24
+    }
 });
 
 export default styles;

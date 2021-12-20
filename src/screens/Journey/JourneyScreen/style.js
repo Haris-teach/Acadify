@@ -42,6 +42,11 @@ const styles = StyleSheet.create({
         color:colors.white,
         fontFamily:fonts.semi
     },
+    emptySection:{
+        height:hp(60),
+        justifyContent:'center',
+        alignItems:'center',
+    },
     headerTextStyle:{
         fontFamily:fonts.semi,
         fontWeight:'700',

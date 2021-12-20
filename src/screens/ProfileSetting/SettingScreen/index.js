@@ -23,8 +23,9 @@ import {
     TASK_LISTING
 } from "../../../constants/navigators";
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
-import AppHeaderNative from "../../../components/AppHeaderNative";
 import colors from "../../../assets/colors/colors";
+import AppHeader from "../../../components/AppHeader";
+import images from "../../../assets/images/images";
 
 
 const SettingScreen = (props) => {
@@ -64,6 +65,7 @@ const SettingScreen = (props) => {
             title:'Sign out'
         },
     ])
+
 
     const renderItems = (item,index) => {
         return(
@@ -129,11 +131,9 @@ const SettingScreen = (props) => {
         <View style={styles.mainContainer}>
             <StatusBar backgroundColor={colors.app_background} />
             <View style={styles.headerView}>
-                <AppHeaderNative
-                    leftIconPath={true}
-                    rightIconOnePath={true}
-                    onLeftIconPress={() => props.navigation.openDrawer()}
-                    onRightIconPress={() => console.log('Data on Ring')}
+                <AppHeader
+                    leftIconPath={images.back_icon}
+                    onLeftIconPress={() => props.navigation.goBack()}
                 />
             </View>
             <View style={styles.listView}>

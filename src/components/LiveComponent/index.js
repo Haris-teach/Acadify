@@ -81,7 +81,6 @@ const styles = StyleSheet.create({
         width:'100%',
         borderTopLeftRadius:wp(6),
         borderTopRightRadius:wp(6),
-        justifyContent:'center',
         alignItems:'center',
     },
     liveView:{

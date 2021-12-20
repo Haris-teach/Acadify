@@ -5,11 +5,12 @@ import {
     View,
     StatusBar,
     TouchableOpacity,
-    FlatList,
+    FlatList, Text,
 } from 'react-native';
 import {useSelector} from "react-redux";
 import {useIsFocused} from "@react-navigation/native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
+import moment from "moment";
 
 //================================ Local Imported Files ======================================//
 
@@ -23,7 +24,6 @@ import Calendar from "../../../../assets/images/calendar_back.svg";
 import AppHeader from "../../../../components/AppHeader";
 import Add from "../../../../assets/images/addIcon.svg";
 import TasksComponent from "../../../../components/TasksComponent";
-import moment from "moment";
 
 
 const TaskListing = props => {
@@ -96,6 +96,13 @@ const TaskListing = props => {
                     showsVerticalScrollIndicator={false}
                     keyExtractor={(item) => item.id}
                     renderItem={({item}) => _renderTasksItems(item)}
+                    ListEmptyComponent={() => {
+                        return (
+                            <View style={styles.emptySection}>
+                                <Text style={[styles.headerTextStyle, {fontSize: wp(5)}]}>No Task Found</Text>
+                            </View>
+                        )
+                    }}
                 />
             </View>
         </View>

@@ -57,6 +57,17 @@ const styles = StyleSheet.create({
         flex:0.65,
         alignItems:'center',
     },
+    emptySection:{
+        height:hp(50),
+        justifyContent:'center',
+        alignItems:'center',
+    },
+    headerTextStyle:{
+        fontFamily:fonts.semi,
+        fontWeight:'700',
+        color:colors.white,
+        fontSize:24
+    }
 
 });
 

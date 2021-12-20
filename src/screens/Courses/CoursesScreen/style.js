@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet } from "react-native";
+import {Platform, StyleSheet} from "react-native";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -11,9 +11,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: colors.app_background,
-  },
-  headerView:{
-    flex:0.1,
+    paddingTop:Platform.OS === 'ios' ? hp(5) : null
   },
   container:{
     flex:0.9,
@@ -54,6 +52,7 @@ const styles = StyleSheet.create({
     alignItems:'center',
     justifyContent:'space-between',
   },
+
   headerTextStyle:{
     fontFamily:fonts.semi,
     fontWeight:'700',
@@ -69,7 +68,6 @@ const styles = StyleSheet.create({
   listText: {
     color: colors.white,
   },
-
   dropStyle:{
     position:'absolute',
     top:hp(18),
@@ -80,14 +78,18 @@ const styles = StyleSheet.create({
     width:wp(40),
     borderRadius:wp(5),
     backgroundColor:colors.image_background,
-    // paddingHorizontal:wp(5),
-    // flexDirection:'row',
     alignItems:'center',
     justifyContent:'space-between',
     borderWidth:0
   },
   containerStyle: {
   },
+  upgradePlan:{
+    height:hp(90),
+    width:wp(100),
+    justifyContent:"center",
+    alignItems:'center',
+  }
 });
 
 export default styles;

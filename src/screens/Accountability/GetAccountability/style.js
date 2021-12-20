@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import {
     heightPercentageToDP as hp,
     widthPercentageToDP as wp,
@@ -11,17 +11,20 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         backgroundColor: colors.app_background,
-    },
-    headerView:{
-        flex:0.1
+        paddingTop:Platform.OS === 'ios' ? hp(5) : null
     },
     listView:{
         flex:0.9,
-        paddingBottom:hp(3)
+        paddingBottom:hp(1),
     },
     upperView:{
         height:hp(10),
         width:wp(100),
+    },
+    emptySection:{
+        height:hp(70),
+        justifyContent:'center',
+        alignItems:'center',
     },
     headerStyle:{
         height:hp(10),
