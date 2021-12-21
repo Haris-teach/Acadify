@@ -6,9 +6,9 @@ import {
     Text,
     StatusBar,
     TextInput,
+    ScrollView,
     Platform,
     Keyboard,
-    ScrollView,
     KeyboardAvoidingView,
     TouchableOpacity,
     FlatList,
@@ -35,6 +35,7 @@ import DateImage from "../../../assets/images/date.svg";
 import AddSign from "../../../assets/images/addIcon.svg";
 import DeleteSign from "../../../assets/images/delete.svg";
 import AppHeader from "../../../components/AppHeader";
+
 
 const AddGoal = props => {
 
@@ -391,6 +392,7 @@ const AddGoal = props => {
                 <DateTimePickerModal
                     isVisible={dateModal}
                     mode={"date"}
+                    minimumDate={new Date()}
                     timePickerModeAndroid={"clock"}
                     onConfirm={(value) => onConfirmDate(value)}
                     onCancel={() => onCancelDate()}

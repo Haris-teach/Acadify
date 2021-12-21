@@ -1,20 +1,19 @@
 //================================ React Native Imported Files ======================================//
 
-import React, {useState} from "react";
+import React from "react";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
-import {View, StyleSheet, Text, Image, TouchableOpacity} from "react-native";
+import {StyleSheet, View, Text, Image, TouchableOpacity} from "react-native";
 
 //================================ Local Imported Files ======================================//
 
 import colors from "../../assets/colors/colors";
 import fonts from "../../assets/fonts/fonts";
+import images from "../../assets/images/images";
 import Clock from "../../assets/images/clock.svg";
 import Calendar from "../../assets/images/calendar.svg";
-import images from "../../assets/images/images";
 
 
 const NotificationComponent = (props) => {
-
 
     return (
         <TouchableOpacity
@@ -53,7 +52,7 @@ const styles = StyleSheet.create({
     container: {
         height: hp(10),
         width: wp(90),
-        marginVertical: wp(2),
+        marginVertical: wp(1),
         borderRadius:wp(3),
         alignSelf:'center',
         flexDirection:'row',

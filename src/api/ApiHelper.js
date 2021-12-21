@@ -444,7 +444,7 @@ class ApiServices {
   }
 
 
-  editGoal = (token,goalId,title,description,catId,progress,dateComplete,checkList,deleteList,newCheckList,callback) => {
+  editGoal = (token,goalId,title,description,catId,progress,dateComplete,checkList,deleteList,callback) => {
     var data = JSON.stringify({
       "title": title,
       "description": description,

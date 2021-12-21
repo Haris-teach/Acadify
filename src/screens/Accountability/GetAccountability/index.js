@@ -72,7 +72,6 @@ const GetAccountability = (props) => {
 
 
     const renderCheckBox = (item,index) => {
-        console.log('data',item,index)
         return(
             <View style={styles.tickView}>
                 <TouchableOpacity style={styles.tickIcon} onPress={() => onChangeStatus(item,index)} activeOpacity={0.7}>
@@ -156,7 +155,7 @@ const GetAccountability = (props) => {
                     }}
                     keyExtractor={(item) => item.id}
                     renderItem={({item,index}) => {
-                        let date = moment(item.dateCompleted).format('DD/MM/YYYY');
+                        let date = moment(item.dateCompleted).format('MM/DD/YYYY');
                         return(
                             <TouchableOpacity style={index !== props.index ? styles.container : [styles.container,{backgroundColor:'#1F1F1F',borderRadius:wp(6)}]} activeOpacity={0.7} onPress={() => props.navigation.navigate(EDIT_ACCOUNTABILITY,{item})}>
                                 <View style={styles.innerContainer}>

@@ -55,7 +55,7 @@ const JourneyScreen = (props) => {
 
 
     const renderItems = (item,index) => {
-        let date = moment(item.createdAt).format('DD/MM/YYYY');
+        let date = moment(item.createdAt).format('MM/DD/YYYY');
         let time = moment(item.createdAt).format('HH:mm')
         return(
             <JourneyComponent
