@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {Platform, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {
     heightPercentageToDP as hp,
     widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import colors from "../../../assets/colors/colors";
-import fonts from "../../../assets/fonts/fonts";
+import colors from "../../assets/colors/colors";
+import fonts from "../../assets/fonts/fonts";
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
         flex:0.9,
         justifyContent:'center',
         alignItems:'center',
+        paddingBottom:hp(2)
     },
     headerStyle:{
         height:hp(10),
@@ -31,7 +32,12 @@ const styles = StyleSheet.create({
         fontWeight:'700',
         color:colors.white,
         fontSize:24
-    }
+    },
+    emptySection:{
+        height:hp(70),
+        justifyContent:'center',
+        alignItems:'center',
+    },
 
 });
 

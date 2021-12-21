@@ -28,7 +28,13 @@ import colors from "../../assets/colors/colors";
 import fonts from "../../assets/fonts/fonts";
 import images from "../../assets/images/images";
 import ApiHelper from "../../api/ApiHelper";
-import {DASHBOARD_SCREEN, GET_ACCOUNTABILITY, JOURNEY, SETTINGS} from "../../constants/navigators";
+import {
+    DASHBOARD_SCREEN,
+    GET_ACCOUNTABILITY,
+    JOURNEY,
+    NOTIFICATION,
+    SETTINGS
+} from "../../constants/navigators";
 import AppHeaderNative from "../../components/AppHeaderNative";
 import AppLoading from "../../components/AppLoading";
 import CourseView from "../../components/CourseView";
@@ -226,7 +232,7 @@ const CourseScreen = props => {
                     onPressSetting={() => props.navigation.navigate(SETTINGS)}
                     onPressJourney={() => props.navigation.navigate(JOURNEY)}
                     onPressChat={() => console.log('Chat Pressed')}
-                    onPressRing={() => console.log('Notification Pressed')}
+                    onPressRing={() => props.navigation.navigate(NOTIFICATION)}
                 />
             </View>
             {loading ? null : (
@@ -311,7 +317,7 @@ const CourseScreen = props => {
                     {sortData && sortData.map((value) => {
                         if(value.name === 'livetraining' && value.itemCount > 0 && liveItems.length > 0 ){
                             return(
-                                <View style={styles.courseView}>
+                                <View style={[styles.courseView,{height:hp(25)}]}>
                                     <View style={styles.courseTitle}>
                                         <Text style={[styles.userNameText,styles.headerText]}>Live Training</Text>
                                         <Text style={[styles.userNameText,styles.showAll]} onPress={() => console.log('Pressed')}>Show all</Text>
@@ -332,7 +338,7 @@ const CourseScreen = props => {
                             )
                         }else if(value.name === 'accountability' && value.itemCount > 0 && accountItems.length > 0){
                             return(
-                                 <View style={[styles.courseView,{height:hp(23)}]}>
+                                 <View style={[styles.courseView,{height:hp(25)}]}>
                                         <View style={styles.courseTitle}>
                                             <Text style={[styles.userNameText,styles.headerText]}>Accountability</Text>
                                             <Text style={[styles.userNameText,styles.showAll]} onPress={() => props.navigation.navigate(GET_ACCOUNTABILITY)}>Show all</Text>
@@ -374,7 +380,7 @@ const CourseScreen = props => {
                             )
                         } else if(value.name === 'forum' && value.itemCount > 0 && forumItems.length > 0){
                             return(
-                                <View style={[styles.courseView,{height:hp(23)}]}>
+                                <View style={[styles.courseView,{height:hp(25)}]}>
                                     <View style={styles.courseTitle}>
                                         <Text style={[styles.userNameText,styles.headerText]}>Forum</Text>
                                         <Text style={[styles.userNameText,styles.showAll]} onPress={() => console.log('Pressed')}>Show all</Text>
@@ -417,7 +423,7 @@ const CourseScreen = props => {
                             )
                         }else if(value.name === 'videos' && value.itemCount > 0 && video.length > 0 ){
                             return (
-                                <View style={styles.courseView}>
+                                <View style={[styles.courseView,{height:hp(25)}]}>
                                     <View style={styles.courseTitle}>
                                         <Text style={[styles.userNameText,styles.headerText]}>Featured Video</Text>
                                         <Text style={[styles.userNameText,styles.showAll]} onPress={() => console.log('Pressed')}>Show all</Text>

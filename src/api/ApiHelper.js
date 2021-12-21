@@ -348,6 +348,34 @@ class ApiServices {
   };
 
 
+  getNotifications = (token,page,callback) => {
+    var config = {
+      method: "get",
+      url: BASE_URL +`/api/v1/notification?admin=false&page=${page}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    console.log('Config',config)
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  };
+
+
   newJourney = (token,title,description,callback) => {
     var data = JSON.stringify({
       "title": title,
@@ -399,6 +427,46 @@ class ApiServices {
       },
       data : data
     };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  }
+
+
+  editGoal = (token,goalId,title,description,catId,progress,dateComplete,checkList,deleteList,newCheckList,callback) => {
+    var data = JSON.stringify({
+      "title": title,
+      "description": description,
+      "categoryId": catId,
+      "progress": progress,
+      "dateCompleted": dateComplete,
+      "checklist": [],
+      "previous_checklist": checkList,
+      "delete_checklist": deleteList
+    });
+
+    var config = {
+      method: 'put',
+      url: BASE_URL + '/api/v1/goals/'+ goalId,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+
+    console.log('Config',config)
 
     axios(config)
         .then((response) => {
@@ -776,6 +844,31 @@ class ApiServices {
     var config = {
       method: 'put',
       url: BASE_URL + `/api/v1/goals/changestatus/${id}`,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  }
+
+  getNotificationsSeen = (token,id,callback) => {
+    var config = {
+      method: 'put',
+      url: BASE_URL + `/api/v1/notification/read/${id}`,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`

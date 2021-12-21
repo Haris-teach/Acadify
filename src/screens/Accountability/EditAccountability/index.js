@@ -56,6 +56,8 @@ const EditAccountability = props => {
     const [checkList, setCheckList]    = useState(data.ChecklistItems);
     const [textInputs, setTextInputs]  = useState([]);
     const [items, setItems]            = useState([]);
+    const [deleteList, setDeleteList]  = useState([]);
+    const [newCheckList, setNewCheckList]  = useState([]);
 
 
     useEffect(() => {
@@ -121,7 +123,7 @@ const EditAccountability = props => {
                 })
                 if(checkValue){
                     setIsDisable(false);
-                    Toast.show('Please Enter Checklist Name',Toast.LONG)
+                    Toast.show('Please Enter Checklist Title',Toast.LONG)
                 }else{
                     for (let i = 0; i < items.length; i++) {
                         if (items[i].value === value) {
@@ -142,7 +144,7 @@ const EditAccountability = props => {
 
     const onSaveApi = (id) => {
         setLoading(true);
-        ApiHelper.newJourney(token,title,description,id,progress,date,checkList,(response) => {
+        ApiHelper.editGoal(token,data.id,title,description,id,progress,date,checkList,deleteList,(response) => {
             if(response.isSuccess){
                 if(response.response.data.code === 200){
                     setLoading(false);
@@ -151,13 +153,13 @@ const EditAccountability = props => {
                     setDescription('');
                     setTimeout(() => {
                         Toast.show('Goal Successfully Updated',Toast.LONG)
-                    },200)
+                    },500)
                     props.navigation.goBack();
                 }
             }else {
                 setLoading(false);
                 setIsDisable(false);
-                console.log('Response',response.response)
+                console.log('Response',response.response.response)
             }
         })
     };
@@ -167,7 +169,8 @@ const EditAccountability = props => {
         const filteredData = checkList.filter((value,index) => index !== indexes);
         const filtered = textInputs.filter((value,index) => index !== indexes);
         setCheckList(filteredData);
-        setTextInputs(filtered)
+        setTextInputs(filtered);
+        setDeleteList([...deleteList, item.id])
     }
 
 
@@ -203,9 +206,9 @@ const EditAccountability = props => {
 
 
     const updateState = (index,value) => {
-        const Textdata = [...checkList];
-        Textdata[index].name = value;
-        setTextInputs(Textdata)
+        const textData = [...checkList];
+        textData[index].name = value;
+        setTextInputs(textData)
     }
 
 

@@ -29,4 +29,5 @@ export const BILLING_LISTING = 'BILLING_LISTING';
 export const CREATE_TASK = 'CREATE_TASK';
 export const EDIT_TASK = 'EDIT_TASK';
 export const CALENDAR_TASK = 'CALENDAR_TASK';
+export const NOTIFICATION = 'NOTIFICATION';
 

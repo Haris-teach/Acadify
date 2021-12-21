@@ -5,12 +5,12 @@ import {
     View,
     Text,
     FlatList,
-    TouchableOpacity,
     StatusBar,
+    TouchableOpacity,
 } from 'react-native';
 import {useSelector} from "react-redux";
 import {useIsFocused} from "@react-navigation/native";
-import {widthPercentageToDP as wp} from "react-native-responsive-screen";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import {AnimatedCircularProgress} from "react-native-circular-progress";
 import moment from "moment";
 
@@ -28,19 +28,29 @@ import DropDown from "../../../assets/images/dropdown-gold.svg";
 import UpDrop from "../../../assets/images/arrow_upward.svg";
 import UnSelect from "../../../assets/images/unselectBox.svg";
 import Grouped from "../../../assets/images/selected.svg";
+import Button from "../../../components/Button/Button";
+
 
 const GetAccountability = (props) => {
 
     const isFocused = useIsFocused();
     const token = useSelector(state => state.ApiData.token);
+    let goal = useSelector(state => state.ApiData.goal);
     const [loading,setLoading] = useState(false);
     const [data,setData] = useState([])
+    const [lockModal, setLockModal] = useState(false);
+
     const [selectedIndex,setSelectedIndex] = useState('');
+    const [selectedItem,setSelectedItem]   = useState('');
 
 
     useEffect(() => {
-        setSelectedIndex('')
-        getGoals();
+        if(goal){
+            setSelectedIndex('')
+            getGoals();
+        } else {
+            setLockModal(true)
+        }
     }, [isFocused]);
 
 
@@ -49,6 +59,7 @@ const GetAccountability = (props) => {
         ApiHelper.getGoals(token,(response) => {
             if(response.isSuccess){
                 if(response.response.data.code === 200){
+                    console.log('Data',response.response.data.data.docs)
                     setData(response.response.data.data.docs)
                     setLoading(false);
                 }
@@ -61,6 +72,7 @@ const GetAccountability = (props) => {
 
 
     const renderCheckBox = (item,index) => {
+        console.log('data',item,index)
         return(
             <View style={styles.tickView}>
                 <TouchableOpacity style={styles.tickIcon} onPress={() => onChangeStatus(item,index)} activeOpacity={0.7}>
@@ -75,26 +87,33 @@ const GetAccountability = (props) => {
 
 
     const onChangeStatus = (item,index) => {
-        // setLoading(true);
-        // ApiHelper.changeSingleGoalStatus(token,item.id,(response) => {
-        //     if(response.isSuccess){
-        //         if(response.response.data.code === 200){
-        //             setLoading(false);
-        //             // console.log('data',response.response.data)
-        //         }
-        //     }else {
-        //         setLoading(false);
-        //         console.log('Response',response.response.response)
-        //     }
-        // })
+        setLoading(true);
+        ApiHelper.changeSingleGoalStatus(token,item.id,(response) => {
+            if(response.isSuccess){
+                if(response.response.data.code === 200){
+                    let newArray=data;
+                    newArray[selectedIndex].ChecklistItems[index].status = !item.status;
+                    setData(() => {
+                        return[...newArray];
+                    });
+                    setLoading(false);
+                    // console.log('data',response.response.data)
+                }
+            }else {
+                setLoading(false);
+                console.log('Response',response.response.response)
+            }
+        })
     }
 
 
-    const onPressOpen = (index) => {
+    const onPressOpen = (item,index) => {
         if(selectedIndex === index){
             setSelectedIndex('')
+            setSelectedItem('')
         }else{
             setSelectedIndex(index)
+            setSelectedItem(item)
         }
     }
 
@@ -104,10 +123,11 @@ const GetAccountability = (props) => {
             {AppLoading.renderLoading(loading)}
             <StatusBar backgroundColor={colors.app_background} />
             <View style={styles.listView}>
-                <FlatList
-                    data={data}
-                    extraData={data}
-                    ListHeaderComponent={() => {
+                {lockModal === false ?
+                    <FlatList
+                        data={data}
+                        extraData={data}
+                        ListHeaderComponent={() => {
                         return(
                             <View style={styles.upperView}>
                                 <View style={styles.headerStyle}>
@@ -136,7 +156,7 @@ const GetAccountability = (props) => {
                     }}
                     keyExtractor={(item) => item.id}
                     renderItem={({item,index}) => {
-                        let date = moment(item.createdAt).format('DD/MM/YYYY');
+                        let date = moment(item.dateCompleted).format('DD/MM/YYYY');
                         return(
                             <TouchableOpacity style={index !== props.index ? styles.container : [styles.container,{backgroundColor:'#1F1F1F',borderRadius:wp(6)}]} activeOpacity={0.7} onPress={() => props.navigation.navigate(EDIT_ACCOUNTABILITY,{item})}>
                                 <View style={styles.innerContainer}>
@@ -164,7 +184,7 @@ const GetAccountability = (props) => {
                                                 }
                                             </AnimatedCircularProgress>
                                         </View>
-                                        <TouchableOpacity style={styles.dropArrow} activeOpacity={0.7} onPress={() => item.ChecklistItems.length > 0 ? onPressOpen(index) : null}>
+                                        <TouchableOpacity style={styles.dropArrow} activeOpacity={0.7} onPress={() => item.ChecklistItems.length > 0 ? onPressOpen(item,index) : null}>
                                             {selectedIndex === index ? <UpDrop height={20} width={20}/> : <DropDown height={20} width={20}/>}
                                         </TouchableOpacity>
                                     </View>
@@ -181,7 +201,16 @@ const GetAccountability = (props) => {
                             </TouchableOpacity>
                         )
                     }}
-                />
+                /> :  <View style={styles.upgradePlan}>
+                    <Text style={[styles.headerTextStyle,{fontSize:wp(6),fontWeight:'500',textAlign:'center'}]}>Upgrade Your Plan To Get Access</Text>
+                    <View style={{marginTop:hp(2)}}>
+                        <Button
+                            buttonText={'UPGRADE PLAN'}
+                            width={wp(50)}
+                            onPress={() => console.log('Plan Upgrade')}
+                        />
+                    </View>
+                </View>}
             </View>
         </View>
     );

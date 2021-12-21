@@ -136,8 +136,12 @@ const styles = StyleSheet.create({
         borderTopColor:colors.button_text,
         borderTopWidth:0.3,
     },
-
-
+    upgradePlan:{
+        height:hp(90),
+        width:wp(100),
+        justifyContent:"center",
+        alignItems:'center',
+    }
 
 
 });

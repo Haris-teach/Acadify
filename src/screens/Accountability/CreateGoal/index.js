@@ -119,7 +119,7 @@ const AddGoal = props => {
                 })
                 if(checkValue){
                     setIsDisable(false);
-                    Toast.show('Please Enter Checklist Name',Toast.LONG)
+                    Toast.show('Please Enter Checklist Title',Toast.LONG)
                 }else{
                     for (let i = 0; i < items.length; i++) {
                         if (items[i].value === value) {
@@ -204,9 +204,9 @@ const AddGoal = props => {
 
 
     const updateState = (index,value) => {
-        const Textdata = [...checkList];
-        Textdata[index].name = value;
-        setTextInputs(Textdata)
+        const textData = [...checkList];
+        textData[index].name = value;
+        setTextInputs(textData)
     }
 
 

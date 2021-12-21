@@ -47,7 +47,7 @@ import {
     SIGNUP_SCREEN,
     TASK_LISTING,
     VIDEO_SCREEN,
-    CALENDAR_TASK, MY_TAB
+    CALENDAR_TASK, MY_TAB, NOTIFICATION
 } from "./constants/navigators";
 import PlanScreen from "./screens/Auth/PlanScreen";
 import CardScreen from "./screens/Auth/CardScreen";
@@ -88,6 +88,7 @@ import ForumInActive from "./assets/dropIcon/forumIn.svg";
 import ForumActive from "./assets/dropIcon/forumA.svg";
 import ResourcesInActive from "./assets/dropIcon/resourceIn.svg";
 import ResourcesActive from "./assets/dropIcon/resourceA.svg";
+import NotificationScreen from "./screens/Notification";
 
 
 const RootStack = createNativeStackNavigator();
@@ -129,7 +130,8 @@ const MyNewStack = () => {
             <RootStack.Screen name={EDIT_TASK} component={EditTask}/>
             <RootStack.Screen name={CALENDAR_TASK} component={CalendarTask}/>
             <RootStack.Screen name={MY_TAB} component={MyTabs}/>
-            <Drawer.Screen    name={SETTINGS} component={SettingScreen} />
+            <RootStack.Screen name={SETTINGS} component={SettingScreen} />
+            <RootStack.Screen name={NOTIFICATION} component={NotificationScreen} />
         </RootStack.Navigator>
     );
 };
