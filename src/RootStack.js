@@ -47,7 +47,7 @@ import {
     SIGNUP_SCREEN,
     TASK_LISTING,
     VIDEO_SCREEN,
-    CALENDAR_TASK, MY_TAB, NOTIFICATION
+    CALENDAR_TASK, MY_TAB, NOTIFICATION, LIVE_EVENTS
 } from "./constants/navigators";
 import PlanScreen from "./screens/Auth/PlanScreen";
 import CardScreen from "./screens/Auth/CardScreen";
@@ -89,6 +89,7 @@ import ForumActive from "./assets/dropIcon/forumA.svg";
 import ResourcesInActive from "./assets/dropIcon/resourceIn.svg";
 import ResourcesActive from "./assets/dropIcon/resourceA.svg";
 import NotificationScreen from "./screens/Notification";
+import LiveEvents from "./screens/LiveEvents/EventListing";
 
 
 const RootStack = createNativeStackNavigator();
@@ -132,6 +133,7 @@ const MyNewStack = () => {
             <RootStack.Screen name={MY_TAB} component={MyTabs}/>
             <RootStack.Screen name={SETTINGS} component={SettingScreen} />
             <RootStack.Screen name={NOTIFICATION} component={NotificationScreen} />
+            <RootStack.Screen name={LIVE_EVENTS} component={LiveEvents} />
         </RootStack.Navigator>
     );
 };
@@ -241,10 +243,10 @@ const MyTabs = () => {
                 }}
             />
             <Tab.Screen
-                name="Live Training"
-                component={DashboardScreen}
+                name={LIVE_EVENTS}
+                component={LiveEvents}
                 options={{
-                    title:'Live Training',
+                    title:'Live Events',
                     tabBarIcon: ({focused}) =>
                         focused ? <LiveActive /> : <LiveInActive />,
                 }}
@@ -259,8 +261,8 @@ const MyTabs = () => {
                 }}
             />
             <Tab.Screen
-                name="Resources"
-                component={DashboardScreen}
+                name={ALL_RESOURCES}
+                component={AllResourcesScreen}
                 options={{
                     title:'Resources',
                     tabBarIcon: ({focused}) =>

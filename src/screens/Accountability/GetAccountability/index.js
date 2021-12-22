@@ -200,8 +200,9 @@ const GetAccountability = (props) => {
                             </TouchableOpacity>
                         )
                     }}
-                /> :  <View style={styles.upgradePlan}>
-                    <Text style={[styles.headerTextStyle,{fontSize:wp(6),fontWeight:'500',textAlign:'center'}]}>Upgrade Your Plan To Get Access</Text>
+                /> :
+                    <View style={styles.upgradePlan}>
+                        <Text style={[styles.headerTextStyle,{fontSize:wp(6),fontWeight:'500',textAlign:'center'}]}>Upgrade Your Plan To Get Access</Text>
                     <View style={{marginTop:hp(2)}}>
                         <Button
                             buttonText={'UPGRADE PLAN'}

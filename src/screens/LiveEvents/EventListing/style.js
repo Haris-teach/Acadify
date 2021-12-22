@@ -16,6 +16,11 @@ const styles = StyleSheet.create({
     container:{
         flex:0.9,
     },
+    emptySection:{
+        height:hp(80),
+        justifyContent:'center',
+        alignItems:'center'
+    },
     dropArrow:{
         height:hp(5),
         marginLeft:wp(2),
@@ -47,6 +52,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'space-between',
     },
+
     headerTextStyle:{
         fontFamily:fonts.semi,
         fontWeight:'700',
@@ -62,7 +68,6 @@ const styles = StyleSheet.create({
     listText: {
         color: colors.white,
     },
-
     dropStyle:{
         position:'absolute',
         top:hp(18),
@@ -73,14 +78,18 @@ const styles = StyleSheet.create({
         width:wp(40),
         borderRadius:wp(5),
         backgroundColor:colors.image_background,
-        // paddingHorizontal:wp(5),
-        // flexDirection:'row',
         alignItems:'center',
         justifyContent:'space-between',
         borderWidth:0
     },
     containerStyle: {
     },
+    upgradePlan:{
+        height:hp(90),
+        width:wp(100),
+        justifyContent:"center",
+        alignItems:'center',
+    }
 });
 
 export default styles;

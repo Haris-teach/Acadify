@@ -114,6 +114,12 @@ const SettingScreen = (props) => {
                     text: "Yes",
                     onPress: () => {
                         dispatch(ApiDataActions.SetLoginData(''));
+                        dispatch(ApiDataActions.SetUserResource(false));
+                        dispatch(ApiDataActions.SetUserGoal(false));
+                        dispatch(ApiDataActions.SetUserJourney(false));
+                        dispatch(ApiDataActions.SetUserCourse(false));
+                        dispatch(ApiDataActions.SetUserZoom(false));
+                        dispatch(ApiDataActions.SetUserForum(false));
                         props.navigation.dispatch(
                             CommonActions.reset({
                                 index: 0,

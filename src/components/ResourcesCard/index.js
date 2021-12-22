@@ -38,7 +38,7 @@ const ResourceCard = (props) => {
     return (
         <TouchableOpacity
             activeOpacity={0.7}
-            style={styles.container}
+            style={props.length - 1 !== props.index ? [styles.container,{ borderColor: '#929292', borderBottomWidth:0.25,}] : styles.container }
             disabled={props.isDisable}
             onPress={() => checkTerms()}
         >
@@ -104,8 +104,6 @@ const styles = StyleSheet.create({
     container: {
         height: hp(14),
         width: wp(90),
-        borderColor: '#929292',
-        borderBottomWidth:0.25,
         flexDirection: "row",
         alignSelf:'center',
         justifyContent:'center',
@@ -122,7 +120,7 @@ const styles = StyleSheet.create({
         width: hp(9),
         borderRadius: wp(6),
         justifyContent:'center',
-        alignItems:'center'
+        alignItems:'center',
     },
     textMainView:{
         justifyContent: "center",

@@ -21,7 +21,6 @@ import moment from "moment";
 
 import styles from "./style";
 import ApiHelper from "../../../api/ApiHelper";
-import AppHeaderNative from "../../../components/AppHeaderNative";
 import AppLoading from "../../../components/AppLoading";
 import Search from "../../../assets/images/searchBackground.svg";
 import Filter from "../../../assets/images/filterBackground.svg";
@@ -217,7 +216,7 @@ const AllResourcesScreen = (props) => {
     };
 
 
-    const renderResourceItems = (item) => {
+    const renderResourceItems = (item,index) => {
         let date = moment(item.createdAt).format('DD/MM/YYYY');
         return (
             <ResourceCard
@@ -227,7 +226,9 @@ const AllResourcesScreen = (props) => {
                 type={item.resourceType}
                 price={item.Documentprices}
                 pay={item.DocumentPayeds}
+                length={coursesData.length}
                 createdAt={date}
+                index={index}
                 contentType={item.contentType}
                 onPressContent={(title,value) => downloadDocument(title,value)}
             />
@@ -260,14 +261,6 @@ const AllResourcesScreen = (props) => {
     return (
         <View style={styles.mainContainer}>
             {AppLoading.renderLoading(loading)}
-            <View style={styles.headerView}>
-                <AppHeaderNative
-                    leftIconPath={true}
-                    rightIconOnePath={true}
-                    onLeftIconPress={() => props.navigation.openDrawer()}
-                    onRightIconPress={() => console.log('Data on Ring')}
-                />
-            </View>
 
             <View style={styles.container}>
                 <FlatList
@@ -296,7 +289,7 @@ const AllResourcesScreen = (props) => {
                             </View>
                         )
                     }}
-                    renderItem={({item}) => renderResourceItems(item)}
+                    renderItem={({item,index}) => renderResourceItems(item,index)}
                 />
             </View>
 

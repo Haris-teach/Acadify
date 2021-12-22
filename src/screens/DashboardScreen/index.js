@@ -31,9 +31,9 @@ import ApiHelper from "../../api/ApiHelper";
 import {
     DASHBOARD_SCREEN,
     GET_ACCOUNTABILITY,
-    JOURNEY,
     NOTIFICATION,
-    SETTINGS
+    JOURNEY,
+    SETTINGS, ALL_RESOURCES, LIVE_EVENTS
 } from "../../constants/navigators";
 import AppHeaderNative from "../../components/AppHeaderNative";
 import AppLoading from "../../components/AppLoading";
@@ -319,8 +319,8 @@ const CourseScreen = props => {
                             return(
                                 <View style={[styles.courseView,{height:hp(25)}]}>
                                     <View style={styles.courseTitle}>
-                                        <Text style={[styles.userNameText,styles.headerText]}>Live Training</Text>
-                                        <Text style={[styles.userNameText,styles.showAll]} onPress={() => console.log('Pressed')}>Show all</Text>
+                                        <Text style={[styles.userNameText,styles.headerText]}>Live Events</Text>
+                                        <Text style={[styles.userNameText,styles.showAll]} onPress={() => props.navigation.navigate(LIVE_EVENTS)}>Show all</Text>
                                     </View>
                                     <View style={styles.videoSection}>
                                         <Carousel
@@ -362,7 +362,7 @@ const CourseScreen = props => {
                                <View style={[styles.courseView,{height:hp(25)}]}>
                                    <View style={styles.courseTitle}>
                                        <Text style={[styles.userNameText,styles.headerText]}>Resources</Text>
-                                       <Text style={[styles.userNameText,styles.showAll]} onPress={() => console.log('Pressed')}>Show all</Text>
+                                       <Text style={[styles.userNameText,styles.showAll]} onPress={() => props.navigation.navigate(ALL_RESOURCES)}>Show all</Text>
                                    </View>
                                    <View style={styles.videoSection}>
                                        <Carousel

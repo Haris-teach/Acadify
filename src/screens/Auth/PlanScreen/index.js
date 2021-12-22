@@ -13,24 +13,24 @@ import {widthPercentageToDP} from 'react-native-responsive-screen';
 import Toast from 'react-native-simple-toast';
 import {CommonActions} from '@react-navigation/native';
 import {useDispatch, useSelector} from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //================================ Local Imported Files ======================================//
 
 import styles from './style';
 import colors from '../../../assets/colors/colors';
 import images from "../../../assets/images/images";
+import ApiHelper from '../../../api/ApiHelper';
+import {CREDIT_CARD, MY_TAB} from '../../../constants/navigators';
+import AppLoading from '../../../components/AppLoading';
 import Button from '../../../components/Button/Button';
 import AppHeader from '../../../components/AppHeader';
-import AppLoading from '../../../components/AppLoading';
-import ApiHelper from '../../../api/ApiHelper';
 import Yearly from '../../../assets/images/yearly.svg';
 import Free from '../../../assets/images/free.svg';
 import Tick from '../../../assets/images/tick.svg';
 import Monthly from '../../../assets/images/monthly.svg';
 import LIFETIME from '../../../assets/images/LIFETIME.svg';
-import {CREDIT_CARD, MY_DRAWER} from '../../../constants/navigators';
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const PlanScreen = props => {
@@ -55,7 +55,7 @@ const PlanScreen = props => {
       if (response.isSuccess) {
         setLoading(false);
         if (response.response.data.code === 200) {
-          console.log('Response', response.response.data);
+          // console.log('Response', response.response.data);
           setIndexValue(0);
           setPackages(response.response.data.result[0].Stripes);
           setIndexFeature(response.response.data.result[0].Stripes[0].Rights);
@@ -105,7 +105,7 @@ const PlanScreen = props => {
               props.navigation.dispatch(
               CommonActions.reset({
                 index: 0,
-                routes: [{name: MY_DRAWER}],
+                routes: [{name: MY_TAB}],
               }),
             );
           } else {

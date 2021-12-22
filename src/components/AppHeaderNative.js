@@ -1,14 +1,16 @@
+//================================ React Native Imported Files ======================================//
+
 import React, {Component} from 'react';
 import {
     TouchableOpacity,
     View,
-    StyleSheet,
-    Text, Platform,
+    Text,
+    StyleSheet
 } from 'react-native';
-import {
-    heightPercentageToDP as hp,
-    widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+
+//================================ React Native Imported Files ======================================//
+
 import colors from '../assets/colors/colors';
 import Journey from "../assets/dropIcon/journey.svg";
 import Ring from "../assets/images/bell.svg";
