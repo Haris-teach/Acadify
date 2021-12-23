@@ -3,7 +3,7 @@ const BASE_URL = "https://api.stagingaia.com";
 // const BASE_URL = "http://192.168.0.21:5001";
 const BASE_URL_STRIPE = "https://api.stripe.com/v1";
 const STRIPE_PUBLISHABLE_KEY =
-  "pk_test_51IbuHCL3SLhyon2BLACBp27GY1ecVJhQlbD2DIX7cGCmQWHNayYdJVlP9aXAdMjK6jMKR9VD4HRCAOlGAMQMB8XU005FRCU1zA";
+    "pk_test_51IbuHCL3SLhyon2BLACBp27GY1ecVJhQlbD2DIX7cGCmQWHNayYdJVlP9aXAdMjK6jMKR9VD4HRCAOlGAMQMB8XU005FRCU1zA";
 
 class ApiServices {
   constructor(props) {}
@@ -98,7 +98,6 @@ class ApiServices {
       });
   };
 
-
   createImageUrl = (token, type,name, callback) => {
     var data = JSON.stringify({
       "ContentType": type,
@@ -131,7 +130,6 @@ class ApiServices {
         });
   };
 
-
   updateProfile = (token,value, callback) => {
     var config = {
       method: 'put',
@@ -158,9 +156,7 @@ class ApiServices {
         });
   };
 
-
   onSignUpPaidApi = (id,stripeId, data, callback) => {
-    console.log("Stripe ID", stripeId);
     let value = JSON.stringify({
       email: data.email,
       firstName: data.firstName,
@@ -196,7 +192,6 @@ class ApiServices {
       });
   };
 
-
   getToken = async (cardName, cardNumber, cvc, month, year) => {
     const card = {
       "card[number]": cardNumber.replace(/ /g, ""),
@@ -216,7 +211,6 @@ class ApiServices {
         .join("&"),
     }).then((response) => response.json());
   };
-
 
   getUserProfile = (token, callback) => {
     var config = {
@@ -243,7 +237,6 @@ class ApiServices {
       });
   };
 
-
   getCategories = (token,type,callback) => {
     var config = {
       method: "get",
@@ -268,7 +261,6 @@ class ApiServices {
           });
         });
   };
-
 
   getUserTasks = (token,callback) => {
     var config = {
@@ -295,7 +287,6 @@ class ApiServices {
         });
   };
 
-
   getCourseTypes = (token,url,callback) => {
     var config = {
       method: "get",
@@ -321,7 +312,6 @@ class ApiServices {
         });
   };
 
-
   getResourceTypes = (token,url,callback) => {
     var config = {
       method: "get",
@@ -346,7 +336,6 @@ class ApiServices {
           });
         });
   };
-
 
   getNotifications = (token,page,callback) => {
     var config = {
@@ -374,7 +363,6 @@ class ApiServices {
           });
         });
   };
-
 
   newJourney = (token,title,description,callback) => {
     var data = JSON.stringify({
@@ -406,7 +394,6 @@ class ApiServices {
           });
         });
   }
-
 
   createGoal = (token,title,description,catId,progress,dateComplete,checkList,callback) => {
     var data = JSON.stringify({
@@ -443,7 +430,6 @@ class ApiServices {
         });
   }
 
-
   editGoal = (token,goalId,title,description,catId,progress,dateComplete,checkList,deleteList,callback) => {
     var data = JSON.stringify({
       "title": title,
@@ -451,9 +437,9 @@ class ApiServices {
       "categoryId": catId,
       "progress": progress,
       "dateCompleted": dateComplete,
-      "checklist": [],
-      "previous_checklist": checkList,
-      "delete_checklist": deleteList
+      "checklist": checkList,
+      // "previous_checklist": checkList,
+      // "delete_checklist": deleteList,
     });
 
     var config = {
@@ -483,9 +469,7 @@ class ApiServices {
         });
   }
 
-
   createUserTask = (token,title,status,priority,description,date,endDate,callback) => {
-
     var data = JSON.stringify({
       "title": title,
       "priority": priority,
@@ -519,7 +503,6 @@ class ApiServices {
           });
         });
   }
-
 
   updateUserTask = (id,token,title,status,priority,description,date,endDate,callback) => {
     var data = JSON.stringify({
@@ -556,7 +539,6 @@ class ApiServices {
         });
   }
 
-
   deleteUserTask = (token,id,callback) => {
 
     var config = {
@@ -583,7 +565,6 @@ class ApiServices {
         });
   }
 
-
   getJourney = (token,callback) => {
     var config = {
       method: 'get',
@@ -608,7 +589,6 @@ class ApiServices {
           });
         });
   }
-
 
   getGoals = (token,callback) => {
     var config = {
@@ -660,7 +640,6 @@ class ApiServices {
         });
       });
   };
-
 
   getEvents = (token,url,callback) => {
     var config = {

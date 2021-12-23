@@ -31,4 +31,5 @@ export const EDIT_TASK = 'EDIT_TASK';
 export const CALENDAR_TASK = 'CALENDAR_TASK';
 export const NOTIFICATION = 'NOTIFICATION';
 export const LIVE_EVENTS = 'LIVE_EVENTS';
+export const FORUM = 'FORUM';
 

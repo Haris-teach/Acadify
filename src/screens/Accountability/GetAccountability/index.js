@@ -73,14 +73,14 @@ const GetAccountability = (props) => {
 
     const renderCheckBox = (item,index) => {
         return(
-            <View style={styles.tickView}>
+            <TouchableOpacity style={styles.tickView} onPress={() => onChangeStatus(item,index)} activeOpacity={0.7}>
                 <TouchableOpacity style={styles.tickIcon} onPress={() => onChangeStatus(item,index)} activeOpacity={0.7}>
                     {item.status === false ? <UnSelect height={20} width={20}/> : <Grouped height={20} width={20}/>}
                 </TouchableOpacity>
                 <View style={styles.textView}>
                     <Text style={item.status === false ? styles.listText : [styles.listText,{color:colors.checklist_item,textDecorationLine:'line-through'}]} numberOfLines={1}>{item.name}</Text>
                 </View>
-            </View>
+            </TouchableOpacity>
         )
     }
 

@@ -57,7 +57,6 @@ const EditAccountability = props => {
     const [textInputs, setTextInputs]  = useState([]);
     const [items, setItems]            = useState([]);
     const [deleteList, setDeleteList]  = useState([]);
-    const [newCheckList, setNewCheckList]  = useState([]);
 
 
     useEffect(() => {
@@ -215,6 +214,7 @@ const EditAccountability = props => {
     const renderItems = (item,index) => {
         return(
             <Swipeable
+                key={item.id}
                 enabled={!data.isCreatedByAdmin}
                 renderRightActions = {() => leftAction(item,index)}
                 onSwipeableRightOpen = {() => console.log('Open')}
@@ -332,9 +332,19 @@ const EditAccountability = props => {
                     </View>
                     <View style={[styles.inputBox,{height:hp(12),marginTop:wp(2)}]}>
                         <Text style={styles.titleText}>Target Date</Text>
-                        <TouchableOpacity style={styles.dateViewStyle} disabled={data.isCreatedByAdmin} activeOpacity={0.7} onPress={() => setDateModal(!dateModal)}>
+                        <TouchableOpacity
+                            style={styles.dateViewStyle}
+                            disabled={data.isCreatedByAdmin}
+                            activeOpacity={0.7}
+                            onPress={() => setDateModal(!dateModal)}
+                        >
                             <Text style={date === 'MM/DD/YYYY' ? styles.placeHolderText : [styles.placeHolderText,{color:colors.white}]}>{date}</Text>
-                            <TouchableOpacity style={styles.dateView} disabled={data.isCreatedByAdmin} activeOpacity={0.7} onPress={() => setDateModal(true)}>
+                            <TouchableOpacity
+                                style={styles.dateView}
+                                disabled={data.isCreatedByAdmin}
+                                activeOpacity={0.7}
+                                onPress={() => setDateModal(true)}
+                            >
                                 <DateImage/>
                             </TouchableOpacity>
                         </TouchableOpacity>
@@ -399,8 +409,11 @@ const EditAccountability = props => {
                     <View style={[styles.inputBox,{height:hp(5),zIndex:-1}]}>
                         <View style={styles.checkListView}>
                             <Text style={styles.titleText}>Checklist</Text>
-                            {data.isCreatedByAdmin !== true ?  <TouchableOpacity activeOpacity={0.7} disabled={data.isCreatedByAdmin}
-                                               onPress={() => onAddNewList()}>
+                            {data.isCreatedByAdmin !== true ?  <TouchableOpacity
+                                activeOpacity={0.7}
+                                disabled={data.isCreatedByAdmin}
+                                onPress={() => onAddNewList()}
+                            >
                                 <AddSign height={25} width={25}/>
                             </TouchableOpacity> : null}
                         </View>

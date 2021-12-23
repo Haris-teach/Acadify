@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
         fontSize:24
     },
     container: {
-        maxHeight: hp(40),
+        maxHeight: hp(100),
         width: wp(90),
         marginVertical: wp(2),
         alignSelf:'center',
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
      flexDirection:'row'
     },
     flatListView:{
-        maxHeight:hp(25),
+        maxHeight:hp(100),
         borderBottomLeftRadius:wp(7),
         borderBottomRightRadius:wp(7),
         alignItems:'center',

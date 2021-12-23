@@ -47,7 +47,7 @@ import {
     SIGNUP_SCREEN,
     TASK_LISTING,
     VIDEO_SCREEN,
-    CALENDAR_TASK, MY_TAB, NOTIFICATION, LIVE_EVENTS
+    CALENDAR_TASK, MY_TAB, NOTIFICATION, LIVE_EVENTS, FORUM
 } from "./constants/navigators";
 import PlanScreen from "./screens/Auth/PlanScreen";
 import CardScreen from "./screens/Auth/CardScreen";
@@ -72,6 +72,9 @@ import CreateTask from "./screens/ProfileSetting/Tasks/CreateTask";
 import EditTask from "./screens/ProfileSetting/Tasks/EditTask";
 import CalendarTask from "./screens/ProfileSetting/Tasks/CalendarTask";
 import BillingListing from "./screens/ProfileSetting/Billing";
+import NotificationScreen from "./screens/Notification";
+import LiveEvents from "./screens/LiveEvents/EventListing";
+import ForumListing from "./screens/Forum/ForumListing";
 import MenuBar from "./components/MenuBar";
 
 //================================ Bottom Icons ======================================//
@@ -88,8 +91,6 @@ import ForumInActive from "./assets/dropIcon/forumIn.svg";
 import ForumActive from "./assets/dropIcon/forumA.svg";
 import ResourcesInActive from "./assets/dropIcon/resourceIn.svg";
 import ResourcesActive from "./assets/dropIcon/resourceA.svg";
-import NotificationScreen from "./screens/Notification";
-import LiveEvents from "./screens/LiveEvents/EventListing";
 
 
 const RootStack = createNativeStackNavigator();
@@ -252,8 +253,8 @@ const MyTabs = () => {
                 }}
             />
             <Tab.Screen
-                name="Forum"
-                component={DashboardScreen}
+                name={FORUM}
+                component={ForumListing}
                 options={{
                     title:'Forum',
                     tabBarIcon: ({focused}) =>

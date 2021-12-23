@@ -33,7 +33,10 @@ import {
     GET_ACCOUNTABILITY,
     NOTIFICATION,
     JOURNEY,
-    SETTINGS, ALL_RESOURCES, LIVE_EVENTS
+    SETTINGS,
+    ALL_RESOURCES,
+    LIVE_EVENTS,
+    FORUM
 } from "../../constants/navigators";
 import AppHeaderNative from "../../components/AppHeaderNative";
 import AppLoading from "../../components/AppLoading";
@@ -383,7 +386,7 @@ const CourseScreen = props => {
                                 <View style={[styles.courseView,{height:hp(25)}]}>
                                     <View style={styles.courseTitle}>
                                         <Text style={[styles.userNameText,styles.headerText]}>Forum</Text>
-                                        <Text style={[styles.userNameText,styles.showAll]} onPress={() => console.log('Pressed')}>Show all</Text>
+                                        <Text style={[styles.userNameText,styles.showAll]} onPress={() => props.navigation.navigate(FORUM)}>Show all</Text>
                                     </View>
                                     <View style={styles.videoSection}>
                                         <Carousel
