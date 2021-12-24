@@ -10,8 +10,8 @@ import {
   StatusBar,
 } from "react-native";
 import { TextInput } from "react-native-paper";
-import { useDispatch } from "react-redux";
 import { CommonActions } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
 import Toast from "react-native-simple-toast";
 
 //================================ Local Imported Files ======================================//
@@ -62,10 +62,10 @@ const LoginScreen = (props) => {
         if (response.response.data.status === 200) {
           setRights(response.response.data.data)
           if(response.response.data.data.user.userType === 2){
-            // console.log("Response ==>", response.response.data.data);
+            console.log("Login Response ==>", response.response.data.data);
             dispatch(ApiDataActions.SetLoginData(response.response.data.data));
             dispatch(ApiDataActions.SetUserToken(response.response.data.data.token));
-            setToken(response.response.data.data.token)
+            setData(JSON.stringify(response.response.data.data))
             props.navigation.dispatch(
                 CommonActions.reset({
                   index: 0,
@@ -92,9 +92,9 @@ const LoginScreen = (props) => {
   };
 
 
-  const setToken = async(value) => {
+  const setData = async(value) => {
     try {
-      await AsyncStorage.setItem('token',value);
+      await AsyncStorage.setItem('user',value);
     }catch (e) {
       console.log('Error',e)
     }

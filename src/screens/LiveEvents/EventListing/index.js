@@ -6,7 +6,7 @@ import {
     Text,
     TouchableOpacity,
     FlatList,
-    Modal
+    Modal, StatusBar
 } from "react-native";
 import { useState } from "react";
 import { useSelector } from "react-redux";
@@ -66,7 +66,7 @@ const LiveEvents = (props) => {
 
 
     const getLiveEvents = (type) => {
-        setLoading(false);
+        setLoading(true);
         let tempArray = [];
         let url=`/api/v1/zoom/getAll?type=${type}`;
         ApiHelper.getEvents(token,url,(response) => {
@@ -163,12 +163,14 @@ const LiveEvents = (props) => {
 
 
     const setMoreData = () => {
+
     }
 
 
     return (
         <View style={styles.mainContainer}>
             {AppLoading.renderLoading(loading)}
+            <StatusBar hidden={true}/>
             <View style={styles.container}>
                 {lockModal === false ?
                     <FlatList
@@ -177,13 +179,13 @@ const LiveEvents = (props) => {
                         onEndReachedThreshold={0}
                         onEndReached={() => LoadMoreRandomData()}
                         keyExtractor={(item) => item.id}
-                        ListEmptyComponent={() => {
-                            return (
-                                <View style={styles.emptySection}>
-                                    <Text style={[styles.headerTextStyle, {fontSize: wp(5)}]}>No Events Found</Text>
-                                </View>
-                            )
-                        }}
+                        // ListEmptyComponent={() => {
+                        //     return (
+                        //         <View style={styles.emptySection}>
+                        //             <Text style={[styles.headerTextStyle, {fontSize: wp(5)}]}>No Events Found</Text>
+                        //         </View>
+                        //     )
+                        // }}
                         ListHeaderComponent={() => {
                             return (
                                 <View style={styles.upperView}>

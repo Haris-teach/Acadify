@@ -21,14 +21,10 @@ const SettingTabComponent = (props) => {
 
     const [index,setIndex] = useState('');
 
-    const onPress = (value) => {
-        props.onPressCard();
-    }
-
     return (
         <TouchableOpacity
             style={index !== props.index ? styles.container : [styles.container,{backgroundColor:'#1F1F1F',borderRadius:wp(6)}]}
-            onPress={() => onPress(props.index)}
+            onPress={() =>  props.onPressCard()}
         >
             <View style={styles.imageView}>
                 {props.title === 'Profile' ? <Profile/> : null}

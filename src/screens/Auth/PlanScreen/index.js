@@ -100,7 +100,7 @@ const PlanScreen = props => {
           if (response.response.data.code === 200) {
               dispatch(ApiDataActions.SetUserToken(response.response.data.token));
               dispatch(ApiDataActions.SetLoginData(response.response.data.data));
-              setToken(response.response.data.token);
+              setData(JSON.stringify(response.response.data.data));
               setLoading(false);
               props.navigation.dispatch(
               CommonActions.reset({
@@ -156,9 +156,9 @@ const PlanScreen = props => {
   };
 
 
-    const setToken = async(value) => {
+    const setData = async(value) => {
         try {
-            await AsyncStorage.setItem('token',value);
+            await AsyncStorage.setItem('user',value);
         }catch (e) {
             console.log('Error',e)
         }

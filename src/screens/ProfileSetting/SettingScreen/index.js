@@ -22,10 +22,11 @@ import {
     PROFILE_SCREEN,
     TASK_LISTING
 } from "../../../constants/navigators";
-import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
 import colors from "../../../assets/colors/colors";
-import AppHeader from "../../../components/AppHeader";
 import images from "../../../assets/images/images";
+import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
+import AppHeader from "../../../components/AppHeader";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const SettingScreen = (props) => {
@@ -113,6 +114,13 @@ const SettingScreen = (props) => {
                 {
                     text: "Yes",
                     onPress: () => {
+                        props.navigation.dispatch(
+                            CommonActions.reset({
+                                index: 0,
+                                routes: [{name: LOGIN_SCREEN}],
+                            }),
+                        );
+                        AsyncStorage.clear();
                         dispatch(ApiDataActions.SetLoginData(''));
                         dispatch(ApiDataActions.SetUserResource(false));
                         dispatch(ApiDataActions.SetUserGoal(false));
@@ -121,12 +129,6 @@ const SettingScreen = (props) => {
                         dispatch(ApiDataActions.SetUserZoom(false));
                         dispatch(ApiDataActions.SetUserForum(false));
                         dispatch(ApiDataActions.SetDashboard(false));
-                        props.navigation.dispatch(
-                            CommonActions.reset({
-                                index: 0,
-                                routes: [{name: LOGIN_SCREEN}],
-                            }),
-                        );
                     }
                 },
             ]

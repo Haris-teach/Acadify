@@ -28,7 +28,7 @@ const LiveEvent = (props) => {
                 onLoadEnd={() => setIsLoaded(true)}
                 onError={() => setIsError(true)}
             >
-                {props.isLock === true && isLoaded !== false ? <LockIcon height={45} width={45}/> : <PlayIcon height={45} width={45}/>}
+                {props.isLock === true && isLoaded === false ? <LockIcon height={45} width={45}/> : <PlayIcon height={45} width={45}/>}
                 {
                     (isLoaded && !isError) ? null :
                         (isShowActivity && !isError) &&
