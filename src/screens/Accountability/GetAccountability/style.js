@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
     },
     listView:{
         flex:0.9,
-        paddingBottom:hp(1),
     },
     upperView:{
         height:hp(10),
@@ -71,8 +70,13 @@ const styles = StyleSheet.create({
         paddingLeft:wp(6),
         justifyContent:'center',
     },
+    titleUpperText:{
+        height:hp(4),
+        width:wp(44),
+        flexDirection:'row',
+        alignItems:'center',
+    },
     titleText:{
-        width:wp(47),
         fontSize:wp(3.8),
         fontWeight:'500',
         color:colors.white,

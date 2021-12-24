@@ -3,7 +3,7 @@ const BASE_URL = "https://api.stagingaia.com";
 // const BASE_URL = "http://192.168.0.21:5001";
 const BASE_URL_STRIPE = "https://api.stripe.com/v1";
 const STRIPE_PUBLISHABLE_KEY =
-    "pk_test_51IbuHCL3SLhyon2BLACBp27GY1ecVJhQlbD2DIX7cGCmQWHNayYdJVlP9aXAdMjK6jMKR9VD4HRCAOlGAMQMB8XU005FRCU1zA";
+    "pk_test_p70ntuGAVS0fwxQrqHagViMn00ndsuW2zD";
 
 class ApiServices {
   constructor(props) {}

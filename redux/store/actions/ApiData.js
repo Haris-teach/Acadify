@@ -8,6 +8,7 @@ export const SET_USER_JOURNEY = 'SET_USER_JOURNEY';
 export const SET_USER_COURSE = 'SET_USER_COURSE';
 export const SET_USER_ZOOM = 'SET_USER_ZOOM';
 export const SET_USER_FORUM = 'SET_USER_FORUM';
+export const SET_DASHBOARD = 'SET_DASHBOARD';
 
 export const SetLoginData = res => {
   return {type: SET_LOGIN_DATA, response: res};
@@ -44,4 +45,8 @@ export const SetUserZoom = res => {
 
 export const SetUserForum = res => {
   return {type: SET_USER_FORUM, response: res};
+};
+
+export const SetDashboard = res => {
+  return {type: SET_DASHBOARD, response: res};
 };

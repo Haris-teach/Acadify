@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     headingView: {
-        height: hp(10),
+        height: hp(5),
         width: wp(100),
         alignItems:'center',
         justifyContent:'space-between',
@@ -37,8 +37,9 @@ const styles = StyleSheet.create({
         fontFamily: fonts.regular,
     },
     inputView:{
-        height: hp(72),
+        height: hp(70),
         width: wp(100),
+        marginTop:hp(2),
         alignItems:'center',
     },
     inputBox:{
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
         width:wp(90),
         borderRadius:wp(5),
         backgroundColor:colors.image_background,
-        paddingLeft:wp(5),
+        paddingHorizontal:wp(5),
         fontFamily:fonts.regular,
         fontWeight:'500',
         color:colors.white
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-        zIndex:-1
+        zIndex:-1,
     },
     btnView: {
         height: hp(20),
@@ -119,6 +120,7 @@ const styles = StyleSheet.create({
         width:wp(90),
         flexDirection:'row',
         justifyContent:'space-between',
+        alignItems:'center',
     },
     newView:{
         height:hp(3),
@@ -139,7 +141,7 @@ const styles = StyleSheet.create({
         fontSize:wp(4)
     },
     listView:{
-        marginTop:wp(3),
+        marginVertical:wp(2),
         height:hp(6),
         width:wp(90),
         borderRadius:wp(5),
@@ -158,7 +160,7 @@ const styles = StyleSheet.create({
         color:colors.white,
     },
     flatListView:{
-        marginTop:hp(4),
+        marginTop:hp(6),
         justifyContent:'center',
         alignItems:'center',
     }

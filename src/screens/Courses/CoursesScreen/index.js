@@ -2,11 +2,11 @@
 
 import React, { useEffect } from "react";
 import {
-    View,
-    Text,
-    TouchableOpacity,
-    FlatList,
-    Modal
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  Modal,
 } from "react-native";
 import { useState } from "react";
 import { useSelector } from "react-redux";
@@ -23,10 +23,10 @@ import AppLoading from "../../../components/AppLoading";
 import Search from "../../../assets/images/searchBackground.svg";
 import Filter from "../../../assets/images/filterBackground.svg";
 import DropArrow from "../../../assets/images/dropdown.svg";
+import Button from "../../../components/Button/Button";
 import CourseCard from "../../../components/CourseCard/CourseCard";
 import CategoryFilterModal from "../../../components/CategoryFilterModal";
 import CourseDropdown from "../../../components/CourseDropDwon";
-import Button from "../../../components/Button/Button";
 
 
 const DashboardScreen = (props) => {
@@ -80,7 +80,6 @@ const DashboardScreen = (props) => {
     ApiHelper.getCoursesData(token,page,(response) => {
       if (response.isSuccess) {
         if (response.response.data.code === 200) {
-          console.log('Data',response.response.data)
           response.response.data.data.docs.map((value) => {
             if(value.CoursePayeds.length > 0){
               if(value.CoursePayeds[0].paid === true){
@@ -288,13 +287,13 @@ const DashboardScreen = (props) => {
               onEndReachedThreshold={0}
               onEndReached={() => LoadMoreRandomData()}
               keyExtractor={(item) => item.id}
-              ListEmptyComponent={() => {
-                return (
-                    <View style={styles.emptySection}>
-                      <Text style={[styles.headerTextStyle, {fontSize: wp(5)}]}>No Courses Found</Text>
-                    </View>
-                )
-              }}
+              // ListEmptyComponent={() => {
+              //   return (
+              //       <View style={styles.emptySection}>
+              //         <Text style={[styles.headerTextStyle, {fontSize: wp(5)}]}>No Courses Found</Text>
+              //       </View>
+              //   )
+              // }}
               ListHeaderComponent={() => {
                 return (
                     <View style={styles.upperView}>

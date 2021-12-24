@@ -47,7 +47,7 @@ import {
     SIGNUP_SCREEN,
     TASK_LISTING,
     VIDEO_SCREEN,
-    CALENDAR_TASK, MY_TAB, NOTIFICATION, LIVE_EVENTS, FORUM
+    CALENDAR_TASK, MY_TAB, NOTIFICATION, LIVE_EVENTS, FORUM, SPLASH_SCREEN
 } from "./constants/navigators";
 import PlanScreen from "./screens/Auth/PlanScreen";
 import CardScreen from "./screens/Auth/CardScreen";
@@ -91,6 +91,7 @@ import ForumInActive from "./assets/dropIcon/forumIn.svg";
 import ForumActive from "./assets/dropIcon/forumA.svg";
 import ResourcesInActive from "./assets/dropIcon/resourceIn.svg";
 import ResourcesActive from "./assets/dropIcon/resourceA.svg";
+import SplashScreen from "./screens/Auth/SplashScreen";
 
 
 const RootStack = createNativeStackNavigator();
@@ -98,11 +99,12 @@ const Drawer = createDrawerNavigator();
 const MyNewStack = () => {
     return (
         <RootStack.Navigator
-            initialRouteName={LANDING_SCREEN}
+            initialRouteName={SPLASH_SCREEN}
             screenOptions={{
                 headerShown: false,
             }}
         >
+            <RootStack.Screen name={SPLASH_SCREEN} component={SplashScreen} />
             <RootStack.Screen name={LANDING_SCREEN} component={LandingScreen} />
             <RootStack.Screen name={DASHBOARD_SCREEN} component={DashboardScreen} />
             <RootStack.Screen name={LOGIN_SCREEN} component={LoginScreen} />

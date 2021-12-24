@@ -1,6 +1,9 @@
 import * as React from 'react';
 import {Platform, StyleSheet} from 'react-native';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import {
+    heightPercentageToDP as hp,
+    widthPercentageToDP as wp
+} from 'react-native-responsive-screen';
 import colors from "../../assets/colors/colors";
 import fonts from "../../assets/fonts/fonts";
 
@@ -14,7 +17,8 @@ const styles = StyleSheet.create({
         flex:0.07
     },
     bodyView:{
-        flex:0.9,
+        flex:0.83,
+        // marginTop:Platform.OS === 'ios' ? hp(1) : null,
     },
     userDetailView:{
         height:hp(15),
@@ -65,8 +69,8 @@ const styles = StyleSheet.create({
     announceTextView:{
         maxHeight:hp(220),
         width:wp(100),
-        justifyContent:'center',
         paddingBottom:hp(2),
+        justifyContent:'center',
     },
     announceView:{
         height:hp(5),

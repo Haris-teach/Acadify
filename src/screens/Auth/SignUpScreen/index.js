@@ -84,7 +84,7 @@ const SignUpScreen = props => {
         lastName: lastName,
         email: email,
         password: password,
-        userName: `${firstName} + ${lastName}`,
+        userName: `${firstName} ${lastName}`,
         phoneNumber: phoneNumber,
       };
       dispatch(ApiDataActions.SetSignUpData(data));

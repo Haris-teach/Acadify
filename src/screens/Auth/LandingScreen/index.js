@@ -15,6 +15,7 @@ import {LOGIN_SCREEN} from '../../../constants/navigators';
 const LandingScreen = props => {
   return (
     <View style={styles.mainContainer}>
+        <StatusBar hidden={true}/>
       <StatusBar backgroundColor={colors.app_background} />
       <ImageBackground source={images.landing_image} style={styles.imageStyle}>
         <View style={styles.logoView}>

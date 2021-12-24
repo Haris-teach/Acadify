@@ -21,11 +21,11 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
     upperView:{
-        height:hp(15),
+        height:hp(10),
         width:wp(100),
     },
     headerStyle:{
-        height:hp(10),
+        height:hp(5),
         width:wp(100),
         paddingHorizontal:wp(7.5),
         flexDirection:'row',
@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
         height:hp(5),
         width:wp(100),
         paddingHorizontal:wp(7.5),
+        justifyContent:'center',
     },
     activityText:{
         fontSize:wp(4.2),

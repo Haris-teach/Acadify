@@ -9,6 +9,8 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-nat
 import colors from "../../assets/colors/colors";
 import fonts from "../../assets/fonts/fonts";
 import LockIcon from "../../assets/images/lock_course.svg";
+import PlayIcon from "../../assets/images/play.svg";
+
 
 const LiveEvent = (props) => {
 
@@ -26,7 +28,7 @@ const LiveEvent = (props) => {
                 onLoadEnd={() => setIsLoaded(true)}
                 onError={() => setIsError(true)}
             >
-                {props.isLock === true && isLoaded !== false ? <LockIcon height={45} width={45}/> : null}
+                {props.isLock === true && isLoaded !== false ? <LockIcon height={45} width={45}/> : <PlayIcon height={45} width={45}/>}
                 {
                     (isLoaded && !isError) ? null :
                         (isShowActivity && !isError) &&
@@ -40,7 +42,8 @@ const LiveEvent = (props) => {
             <View style={{ justifyContent: "space-evenly", marginLeft: wp(3), width:wp(60),paddingVertical:wp(2)}}>
                 <Text style={styles.text} numberOfLines={2}>{props.title} </Text>
                 <Text style={{width:wp(50) ,color: colors.greyTxt }} numberOfLines={2}>{props.description}</Text>
-                <Text style={[styles.text, { fontWeight: "700", fontSize: wp(5) }]} numberOfLines={1}>{props.price > 0 ? `$ ${props.price/100}` : 'Free' }</Text>
+                <Text style={[styles.text, {fontWeight:'700',fontSize: wp(4) }]} numberOfLines={1}>{props.month}</Text>
+                {/*<Text style={[styles.text, { fontWeight: "700", fontSize: wp(5) }]} numberOfLines={1}>{props.price > 0 ? `$ ${props.price/100}` : 'Free' }</Text>*/}
             </View>
 
         </TouchableOpacity>
@@ -51,25 +54,25 @@ const styles = StyleSheet.create({
     container: {
         width: wp(90),
         height: hp(15),
-        backgroundColor: colors.image_background,
-        borderRadius: wp(6),
         flexDirection: "row",
         alignSelf:'center',
-        marginVertical:wp(2)
+        marginVertical:wp(2),
+        borderRadius: wp(6),
+        backgroundColor: colors.image_background,
     },
     imageView: {
+        borderRadius: wp(6),
         height: hp(15),
         width: hp(15),
-        borderRadius: wp(6),
         justifyContent:'center',
-        alignItems:'center'
+        alignItems:'center',
     },
     text: {
         width:wp(50),
-        color: colors.white,
-        fontWeight: "500",
         fontSize:wp(4),
         fontFamily:fonts.semi,
+        color: colors.white,
+        fontWeight: "500",
     },
 });
 

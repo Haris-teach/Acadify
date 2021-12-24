@@ -1,11 +1,15 @@
 import React from 'react';
 import {
+  SET_DASHBOARD,
   SET_LOGIN_DATA,
-  SET_SIGNUP_DATA, SET_USER_COURSE, SET_USER_FORUM,
+  SET_SIGNUP_DATA,
+  SET_USER_COURSE,
+  SET_USER_FORUM,
   SET_USER_GOAL,
   SET_USER_JOURNEY,
   SET_USER_RESOURCE,
-  SET_USER_TOKEN, SET_USER_ZOOM
+  SET_USER_TOKEN,
+  SET_USER_ZOOM
 } from '../actions/ApiData';
 
 const initialState = {
@@ -19,6 +23,7 @@ const initialState = {
   journey:false,
   resource:false,
   zoom:false,
+  dashboard:false
 };
 
 const ApiData = (state = initialState, action) => {
@@ -51,6 +56,9 @@ const ApiData = (state = initialState, action) => {
       return state;
     case SET_USER_COURSE:
       state.course = action.response;
+      return state;
+    case SET_DASHBOARD:
+      state.dashboard = action.response;
       return state;
 
     default:

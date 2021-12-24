@@ -83,23 +83,23 @@ const styles = StyleSheet.create({
     container: {
         height:hp(5),
         width:wp(100),
-        backgroundColor:'red',
         flexDirection:'row',
         alignItems:'flex-end',
-
     },
     leftView:{
-        flex:0.55,
+        height:hp(5),
+        width:wp(55),
         paddingLeft:wp(5),
         justifyContent:'center',
         alignItems:'flex-start'
     },
     rightView:{
-        flex:0.45,
+        height:hp(5),
+        width:wp(45),
         flexDirection:'row',
         paddingRight:wp(5),
         justifyContent:'space-between',
-        alignItems:'flex-start',
+        alignItems:'center',
     },
     iconStyle:{
         justifyContent:'center',

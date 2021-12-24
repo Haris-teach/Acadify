@@ -18,7 +18,7 @@ import Carousel from 'react-native-snap-carousel';
 import {useIsFocused} from "@react-navigation/native";
 import RenderHtml from 'react-native-render-html';
 import Video from 'react-native-video';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
 
 //================================ Local Imported Files ======================================//
@@ -46,13 +46,17 @@ import ResourceComponent from "../../components/ResourceComponent";
 import ForumComponent from "../../components/ForumCardDesign";
 import LiveComponent from "../../components/LiveComponent";
 import FeatureComponent from "../../components/FeaturedView";
+import * as ApiDataActions from "../../../redux/store/actions/ApiData";
+
 
 LogBox.ignoreAllLogs(true);
 const CourseScreen = props => {
 
     const isFocused = useIsFocused();
+    const dispatch = useDispatch();
     let userData = useSelector(state => state.ApiData.loginData);
     const token = useSelector(state => state.ApiData.token);
+    const dashboard = useSelector(state => state.ApiData.dashboard);
     const [loading,setLoading] = useState(false);
     const [hasImage,setHasImage] = useState(false);
     const [noUrl, setNoUrl] = useState(false);
@@ -84,6 +88,7 @@ const CourseScreen = props => {
 
 
     const getAnnouncements = () => {
+        // setLoading(!dashboard);
         setLoading(true);
         ApiHelper.getAnnouncements(token,(resp) => {
             if(resp.isSuccess){
@@ -110,6 +115,7 @@ const CourseScreen = props => {
                 setLiveItems(resp.response.data.livetraining)
                 setVideos(resp.response.data.videos)
                 setAnnounceTest(resp.response.data.announcement)
+                dispatch(ApiDataActions.SetDashboard(true));
             }else{
                 setLoading(false);
             }
@@ -240,7 +246,7 @@ const CourseScreen = props => {
             </View>
             {loading ? null : (
                 <ScrollView
-                    style={[styles.bodyView,{marginBottom:hp(10)}]}
+                    style={[styles.bodyView,{marginBottom:hp(7)}]}
                     showsVerticalScrollIndicator={false}
                     refreshControl={
                         <RefreshControl

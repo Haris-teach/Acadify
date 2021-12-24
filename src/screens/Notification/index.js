@@ -8,6 +8,7 @@ import {
     StatusBar,
 } from 'react-native';
 import {useSelector} from "react-redux";
+import {widthPercentageToDP as wp} from "react-native-responsive-screen";
 import moment from "moment";
 
 //================================ Local Imported Files ======================================//
@@ -19,7 +20,6 @@ import AppHeader from "../../components/AppHeader";
 import ApiHelper from "../../api/ApiHelper";
 import AppLoading from "../../components/AppLoading";
 import NotificationComponent from "../../components/NotificationComponent";
-import {widthPercentageToDP as wp} from "react-native-responsive-screen";
 
 
 const NotificationScreen = (props) => {
@@ -111,22 +111,22 @@ const NotificationScreen = (props) => {
                     extraData={notification}
                     onEndReachedThreshold={0}
                     onEndReached={() => LoadMoreRandomData()}
-                    ListEmptyComponent={() => {
-                        return (
-                            <View style={styles.emptySection}>
-                                <Text style={[styles.headerTextStyle, {fontSize: wp(5)}]}>No Record Found</Text>
-                            </View>
-                        )
-                    }}
+                    // ListEmptyComponent={() => {
+                    //     return (
+                    //         <View style={styles.emptySection}>
+                    //             <Text style={[styles.headerTextStyle, {fontSize: wp(5)}]}>No Record Found</Text>
+                    //         </View>
+                    //     )
+                    // }}
                     ListHeaderComponent={() => {
-                        return(
+                        return (
                             <View style={styles.headerStyle}>
                                 <Text style={styles.headerTextStyle}>Notifications</Text>
                             </View>
                         )
                     }}
                     keyExtractor={(item) => item.id}
-                    renderItem={({item,index}) => renderItems(item,index)}
+                    renderItem={({item, index}) => renderItems(item, index)}
                 />
             </View>
         </View>

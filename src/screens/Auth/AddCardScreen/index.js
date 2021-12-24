@@ -30,7 +30,8 @@ import Button from '../../../components/Button/Button';
 import AppHeader from '../../../components/AppHeader';
 import AppLoading from '../../../components/AppLoading';
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
-import {LOGIN_SCREEN, MY_TABS} from "../../../constants/navigators";
+import {LOGIN_SCREEN, MY_TAB, MY_TABS} from "../../../constants/navigators";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AddCardScreen = props => {
 
@@ -85,10 +86,13 @@ const AddCardScreen = props => {
         if (response.response.data.code === 200) {
           console.log('Success ===>', response.response.data);
           dispatch(ApiDataActions.SetUserToken(response.response.data.token));
+          dispatch(ApiDataActions.SetLoginData(response.response.data.data));
+          setToken(response.response.data.token);
+          setLoading(false);
           props.navigation.dispatch(
               CommonActions.reset({
                 index: 0,
-                routes: [{name: MY_TABS}],
+                routes: [{name: MY_TAB}],
               }),
           );
         } else {
@@ -100,6 +104,14 @@ const AddCardScreen = props => {
         console.log('Error ==>', response.response);
       }
     });
+  }
+
+  const setToken = async(value) => {
+    try {
+      await AsyncStorage.setItem('token',value);
+    }catch (e) {
+      console.log('Error',e)
+    }
   }
 
   return (
@@ -324,8 +336,8 @@ const AddCardScreen = props => {
               bgColor={colors.white}
               borderColor={colors.white}
               textColor={colors.black}
-              // onPress={() => onPay()}
-              onPress={() => props.navigation.navigate(LOGIN_SCREEN)}
+              onPress={() => onPay()}
+              // onPress={() => props.navigation.navigate(LOGIN_SCREEN)}
             />
           </View>
         </View>

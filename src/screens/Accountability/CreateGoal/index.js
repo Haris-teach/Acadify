@@ -112,15 +112,16 @@ const AddGoal = props => {
         //     Toast.show('Please Select Progress',Toast.LONG)
         // }
         else {
+            setIsDisable(true);
             if(checkList.length > 0){
                 checkList.map((value) => {
-                    if(value.name === ''){
+                    if(value.name === '' || testAddress.test(value.name) !== true){
                        checkValue = true;
                     }
                 })
                 if(checkValue){
                     setIsDisable(false);
-                    Toast.show('Please Enter Checklist Title',Toast.LONG)
+                    Toast.show('Please Enter Valid Checklist Title',Toast.LONG)
                 }else{
                     for (let i = 0; i < items.length; i++) {
                         if (items[i].value === value) {
@@ -157,6 +158,9 @@ const AddGoal = props => {
             }else {
                 setLoading(false);
                 setIsDisable(false);
+                setTimeout(() => {
+                    Toast.show(response.response.response.data.error,Toast.LONG)
+                },200)
                 console.log('Response',response.response.response.data.error)
             }
         })
@@ -278,7 +282,7 @@ const AddGoal = props => {
                         <Text style={styles.titleText}>Description</Text>
                         <TextInput
                             placeholder={'Enter your description here'}
-                            style={[styles.inputStyle,{height:hp(15),paddingTop:wp(5)}]}
+                            style={[styles.inputStyle,{height:hp(15),paddingTop:wp(5),paddingBottom:wp(5)}]}
                             placeholderTextColor={colors.inputColor}
                             multiline={true}
                             textAlignVertical={'top'}

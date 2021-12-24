@@ -66,7 +66,7 @@ const LiveEvents = (props) => {
 
 
     const getLiveEvents = (type) => {
-        setLoading(true);
+        setLoading(false);
         let tempArray = [];
         let url=`/api/v1/zoom/getAll?type=${type}`;
         ApiHelper.getEvents(token,url,(response) => {
@@ -139,7 +139,7 @@ const LiveEvents = (props) => {
 
 
     const renderCourseItems = (item,index) => {
-        let month = moment(item.startDate).format('MMM')
+        let month = moment(item.startDate).format('MM/DD/YYYY')
         return (
             <LiveEvent
                 description={item.description}
@@ -170,7 +170,8 @@ const LiveEvents = (props) => {
         <View style={styles.mainContainer}>
             {AppLoading.renderLoading(loading)}
             <View style={styles.container}>
-                {lockModal === false ? <FlatList
+                {lockModal === false ?
+                    <FlatList
                         data={coursesData}
                         extraData={coursesData}
                         onEndReachedThreshold={0}

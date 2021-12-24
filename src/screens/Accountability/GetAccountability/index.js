@@ -28,6 +28,7 @@ import DropDown from "../../../assets/images/dropdown-gold.svg";
 import UpDrop from "../../../assets/images/arrow_upward.svg";
 import UnSelect from "../../../assets/images/unselectBox.svg";
 import Grouped from "../../../assets/images/selected.svg";
+import GroupIcon from "../../../assets/images/group.svg";
 import Button from "../../../components/Button/Button";
 
 
@@ -146,13 +147,13 @@ const GetAccountability = (props) => {
                             </View>
                         )
                     }}
-                    ListEmptyComponent={() => {
-                        return (
-                            <View style={styles.emptySection}>
-                                <Text style={[styles.headerTextStyle, {fontSize: wp(5)}]}>No Record Found</Text>
-                            </View>
-                        )
-                    }}
+                    // ListEmptyComponent={() => {
+                    //     return (
+                    //         <View style={styles.emptySection}>
+                    //             <Text style={[styles.headerTextStyle, {fontSize: wp(5)}]}>No Record Found</Text>
+                    //         </View>
+                    //     )
+                    // }}
                     keyExtractor={(item) => item.id}
                     renderItem={({item,index}) => {
                         let date = moment(item.dateCompleted).format('MM/DD/YYYY');
@@ -160,7 +161,12 @@ const GetAccountability = (props) => {
                             <TouchableOpacity style={index !== props.index ? styles.container : [styles.container,{backgroundColor:'#1F1F1F',borderRadius:wp(6)}]} activeOpacity={0.7} onPress={() => props.navigation.navigate(EDIT_ACCOUNTABILITY,{item})}>
                                 <View style={styles.innerContainer}>
                                     <View style={styles.rightView}>
-                                        <Text style={styles.titleText} numberOfLines={1}>{item.title}</Text>
+                                        <View style={styles.titleUpperText}>
+                                            <Text style={styles.titleText} numberOfLines={1}>{item.title}</Text>
+                                            <View style={{paddingLeft:wp(2),justifyContent:'center',alignItems:"center",marginTop:wp(1)}}>
+                                                {item.isCreatedByAdmin ?  <GroupIcon height={18} width={18}/> : null}
+                                            </View>
+                                        </View>
                                         <Text style={[styles.titleText,{fontSize:wp(3.6)}]} numberOfLines={1}>{item.description}</Text>
                                         <Text style={[styles.titleText,{width:wp(50),color:colors.inputColor}]} numberOfLines={1}>Target Date:<Text style={[styles.titleText,{color:colors.greyTxt}]} numberOfLines={1}> {date}</Text></Text>
                                     </View>

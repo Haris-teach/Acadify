@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.app_background,
     },
     headerView:{
-        flex:0.1
+        flex:0.1,
     },
     listView:{
         flex:0.9,
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
     headerStyle:{
-        height:hp(10),
+        height:hp(5),
         width:wp(100),
         paddingLeft:wp(10),
         justifyContent:'center',

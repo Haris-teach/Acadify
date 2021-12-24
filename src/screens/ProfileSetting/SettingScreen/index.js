@@ -120,6 +120,7 @@ const SettingScreen = (props) => {
                         dispatch(ApiDataActions.SetUserCourse(false));
                         dispatch(ApiDataActions.SetUserZoom(false));
                         dispatch(ApiDataActions.SetUserForum(false));
+                        dispatch(ApiDataActions.SetDashboard(false));
                         props.navigation.dispatch(
                             CommonActions.reset({
                                 index: 0,
