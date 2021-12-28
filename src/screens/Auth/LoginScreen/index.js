@@ -13,6 +13,7 @@ import { TextInput } from "react-native-paper";
 import { CommonActions } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import Toast from "react-native-simple-toast";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //================================ Local Imported Files ======================================//
 
@@ -29,7 +30,6 @@ import {
 import AppLoading from "../../../components/AppLoading";
 import ApiHelper from "../../../api/ApiHelper";
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {SET_USER_RESOURCE} from "../../../../redux/store/actions/ApiData";
 
 const LoginScreen = (props) => {

@@ -1,68 +1,44 @@
 //================================ React Native Imported Files ======================================//
 
-import React, { useEffect } from "react";
-import {
-    View,
-    Text,
-    TouchableOpacity,
-    FlatList,
-    Modal, StatusBar
-} from "react-native";
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import {useIsFocused} from "@react-navigation/native";
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
+import React, {useEffect, useState} from "react";
+import {FlatList, Text, TouchableOpacity, View,} from "react-native";
+import {useSelector} from "react-redux";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import moment from "moment";
 
 //================================ Local Imported Files ======================================//
 
 import styles from "./style";
 import ApiHelper from "../../../api/ApiHelper";
+import colors from "../../../assets/colors/colors";
+import {EVENTS_DETAILS} from "../../../constants/navigators";
 import AppLoading from "../../../components/AppLoading";
-import Search from "../../../assets/images/searchBackground.svg";
-import Filter from "../../../assets/images/filterBackground.svg";
-import DropArrow from "../../../assets/images/dropdown.svg";
 import Button from "../../../components/Button/Button";
-import CourseDropdown from "../../../components/CourseDropDwon";
 import LiveEvent from "../../../components/LiveEvent";
 
 
-const LiveEvents = (props) => {
+const LiveEvents = ({navigation}) => {
 
-    const isFocused = useIsFocused();
     const token = useSelector((state) => state.ApiData.token);
     let zoom = useSelector(state => state.ApiData.zoom);
     const [loading, setLoading] = useState(false);
-    const [dropModal, setDropModal] = useState(false);
     const [lockModal, setLockModal] = useState(false);
     let [coursesData, setCoursesData] = useState([]);
     let [page, setPage] = useState(1);
-    let [catText, setCatText] = useState('Live Events');
-    let dropText = [
-        {
-            id:0,
-            name:'Live Events'
-        },
-        {
-            id:1,
-            name:'Past Events'
-        },
-        {
-            id:2,
-            name:'Upcoming Events'
-        },
-    ];
+    let [catText, setCatText] = useState('Live');
 
 
     useEffect(() => {
-        if(zoom){
-            setCatText('Live Events');
-            setPage(1);
-            getLiveEvents('live');
-        } else {
-            setLockModal(true);
-        }
-    }, [isFocused]);
+        return navigation.addListener('focus', () => {
+            if (zoom) {
+                setCatText('Live');
+                setPage(1);
+                getLiveEvents('live');
+            } else {
+                setLockModal(true);
+            }
+        });
+    }, [navigation]);
 
 
     const getLiveEvents = (type) => {
@@ -128,11 +104,14 @@ const LiveEvents = (props) => {
 
 
     const onSelectType = (text) => {
-        if(text === 'Live Events'){
+        if(text === 'Live'){
+            setCatText('Live');
             getLiveEvents('live')
-        } else if(text === 'Past Events'){
+        } else if(text === 'Past'){
+            setCatText('Past')
             getLiveEvents('past')
-        } else if(text === 'Upcoming Events'){
+        } else if(text === 'Upcoming'){
+            setCatText('Upcoming')
             getLiveEvents('schedule')
         }
     };
@@ -140,6 +119,8 @@ const LiveEvents = (props) => {
 
     const renderCourseItems = (item,index) => {
         let month = moment(item.startDate).format('MM/DD/YYYY')
+        let day = moment(item.startDate).format('ddd')
+        let time = moment(item.startDate).format('HH:mm')
         return (
             <LiveEvent
                 description={item.description}
@@ -149,8 +130,10 @@ const LiveEvents = (props) => {
                 title={item.title}
                 price={item.price}
                 date={item.date}
+                day={day}
+                time={time}
                 month={month}
-                onPressCourse={() => console.log('Data')}
+                onPressCourse={() => navigation.navigate(EVENTS_DETAILS,{item})}
             />
         );
     }
@@ -170,7 +153,26 @@ const LiveEvents = (props) => {
     return (
         <View style={styles.mainContainer}>
             {AppLoading.renderLoading(loading)}
-            <StatusBar hidden={true}/>
+            <View style={styles.upperView}>
+                <TouchableOpacity
+                    style={catText === 'Live'? [styles.headerStyle,{backgroundColor:colors.live_tabs,borderWidth:0}] : styles.headerStyle}
+                    onPress={() => onSelectType('Live')}
+                >
+                    <Text style={styles.headerTextStyle}>Live</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={catText === 'Past'? [styles.headerStyle,{backgroundColor:colors.live_tabs,borderWidth:0}] : styles.headerStyle}
+                    onPress={() => onSelectType('Past')}
+                >
+                    <Text style={styles.headerTextStyle}>Past</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={catText === 'Upcoming'? [styles.headerStyle,{backgroundColor:colors.live_tabs,borderWidth:0}] : styles.headerStyle}
+                    onPress={() => onSelectType('Upcoming')}
+                >
+                    <Text style={styles.headerTextStyle}>Upcoming</Text>
+                </TouchableOpacity>
+            </View>
             <View style={styles.container}>
                 {lockModal === false ?
                     <FlatList
@@ -179,36 +181,6 @@ const LiveEvents = (props) => {
                         onEndReachedThreshold={0}
                         onEndReached={() => LoadMoreRandomData()}
                         keyExtractor={(item) => item.id}
-                        // ListEmptyComponent={() => {
-                        //     return (
-                        //         <View style={styles.emptySection}>
-                        //             <Text style={[styles.headerTextStyle, {fontSize: wp(5)}]}>No Events Found</Text>
-                        //         </View>
-                        //     )
-                        // }}
-                        ListHeaderComponent={() => {
-                            return (
-                                <View style={styles.upperView}>
-                                    <TouchableOpacity style={styles.headerStyle} onPress={() => setDropModal(!dropModal)}>
-                                        <Text style={styles.headerTextStyle}>{catText}</Text>
-                                        <View style={styles.dropArrow}>
-                                            <DropArrow/>
-                                        </View>
-                                    </TouchableOpacity>
-                                    {/*<View style={styles.filterIcons}>*/}
-                                    {/*    <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Searched')}>*/}
-                                    {/*        <Search/>*/}
-                                    {/*    </TouchableOpacity>*/}
-                                    {/*    <TouchableOpacity activeOpacity={0.7} onPress={() => {*/}
-                                    {/*        console.log('Pressed')*/}
-                                    {/*        // setModalVisible(!modalVisible)*/}
-                                    {/*    }}>*/}
-                                    {/*        <Filter/>*/}
-                                    {/*    </TouchableOpacity>*/}
-                                    {/*</View>*/}
-                                </View>
-                            )
-                        }}
                         renderItem={({item, index}) => renderCourseItems(item, index)}
                     /> :
                     <View style={styles.upgradePlan}>
@@ -223,25 +195,6 @@ const LiveEvents = (props) => {
                     </View>
                 }
             </View>
-
-
-            <Modal
-                animationType={'none'}
-                transparent={true}
-                visible={dropModal}
-                onRequestClose={() => setDropModal(!dropModal)}
-            >
-                <CourseDropdown
-                    onPressClose={() => setDropModal(!dropModal)}
-                    text={dropText}
-                    fromCourse={false}
-                    onSelect={(text) => {
-                        setCatText(text)
-                        setDropModal(!dropModal)
-                        onSelectType(text)
-                    }}
-                />
-            </Modal>
 
         </View>
     );

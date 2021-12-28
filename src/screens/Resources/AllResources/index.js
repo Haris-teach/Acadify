@@ -184,7 +184,8 @@ const AllResourcesScreen = (props) => {
         } else if (value > 0){
             props.navigation.navigate(BUY_RESOURCES,{
                 fromResource: true,
-                price: value * 100
+                price: value * 100,
+                resourceId: items.id,
             })
         }
     };
@@ -220,6 +221,7 @@ const AllResourcesScreen = (props) => {
         let date = moment(item.createdAt).format('DD/MM/YYYY');
         return (
             <ResourceCard
+                id={item.id}
                 title={item.title}
                 imgUri={item.imageUrl}
                 url={item.contentUrl}

@@ -2,8 +2,7 @@ import axios from "axios";
 const BASE_URL = "https://api.stagingaia.com";
 // const BASE_URL = "http://192.168.0.21:5001";
 const BASE_URL_STRIPE = "https://api.stripe.com/v1";
-const STRIPE_PUBLISHABLE_KEY =
-    "pk_test_p70ntuGAVS0fwxQrqHagViMn00ndsuW2zD";
+const STRIPE_PUBLISHABLE_KEY = "pk_test_p70ntuGAVS0fwxQrqHagViMn00ndsuW2zD";
 
 class ApiServices {
   constructor(props) {}
@@ -677,8 +676,6 @@ class ApiServices {
       },
     };
 
-    console.log('Config',config)
-
     axios(config)
       .then((response) => {
         callback({
@@ -794,10 +791,10 @@ class ApiServices {
         });
   };
 
-  enrollCourse = (token,data,callback) => {
+  enrollCourse = (token,data,url,callback) => {
     var config = {
       method: 'post',
-      url: BASE_URL + '/api/v1/courses/enroll',
+      url: BASE_URL + url,
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'

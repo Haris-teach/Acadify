@@ -34,16 +34,19 @@ const styles = StyleSheet.create({
     upperView:{
         height:hp(10),
         width:wp(100),
-        paddingHorizontal:wp(5),
         flexDirection:'row',
-        justifyContent:'space-between',
+        justifyContent:'space-evenly',
         alignItems:'center',
     },
     headerStyle:{
-        height:hp(10),
-        width:wp(65),
-        flexDirection:'row',
-        alignItems:'center',
+        height:hp(5),
+        width:wp(27),
+        borderRadius:wp(4),
+        justifyContent:'center',
+        alignItems:"center",
+        backgroundColor:colors.app_background,
+        borderWidth:1,
+        borderColor:colors.button_text
     },
     filterIcons:{
         height:hp(10),
@@ -52,12 +55,11 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'space-between',
     },
-
     headerTextStyle:{
         fontFamily:fonts.semi,
-        fontWeight:'700',
+        fontWeight:'500',
         color:colors.white,
-        fontSize:wp(6)
+        fontSize:wp(4)
     },
     headingContainer: {
         height: hp(8),

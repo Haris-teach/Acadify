@@ -1,8 +1,8 @@
 //================================ React Native Imported Files ======================================//
 
-import React from "react";
+import React, {useState} from "react";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
-import {View, StyleSheet, Text, Image} from "react-native";
+import {View, StyleSheet, Text, ImageBackground, ActivityIndicator} from "react-native";
 
 //================================ Local Imported Files ======================================//
 
@@ -12,13 +12,33 @@ import Clock from "../../assets/images/clock_gold.svg";
 import Calendar from "../../assets/images/calendar_gold.svg";
 import images from "../../assets/images/images";
 
-
 const ForumComponent = (props) => {
+
+    const [isLoaded,setIsLoaded] = useState(false);
+    const [isError,setIsError] = useState(false);
+    const [isShowActivity,setIsShowActivity] = useState(true);
+
+
     return (
         <View style={styles.container}>
             <View style={styles.upperImageView}>
                 <View style={styles.userDetails}>
-                    <Image source={props.image !== 'null' ? {uri:props.image} : images.placeHolder } style={styles.userImage}/>
+                    <ImageBackground
+                        source={props.image !== 'null' ? {uri:props.image} : images.placeHolder }
+                        imageStyle={styles.userImage}
+                        style={styles.userImage}
+                        onLoadEnd={() => setIsLoaded(true)}
+                        onError={() => setIsError(true)}
+                    >
+                        {
+                            (isLoaded && !isError) ? null :
+                                (isShowActivity && !isError) &&
+                                <ActivityIndicator
+                                    size={'small'}
+                                    color={colors.button_text}
+                                />
+                        }
+                    </ImageBackground>
                     <Text style={[styles.textStyle,{width:wp(20),paddingLeft:5}]} numberOfLines={1}>{props.name}</Text>
                 </View>
                 <View style={styles.dateMainView}>
@@ -63,7 +83,9 @@ const styles = StyleSheet.create({
         height:hp(5),
         width: hp(5),
         borderRadius:hp(5),
-        resizeMode:'cover'
+        resizeMode:'cover',
+        justifyContent:"center",
+        alignItems:"center",
     },
     descriptionView:{
         height: hp(9),

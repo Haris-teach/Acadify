@@ -2,23 +2,22 @@
 
 import React, {useEffect, useState} from 'react';
 import {
-    View,
-    Text,
-    Image,
-    LogBox,
-    Platform,
+    ActivityIndicator,
+    ImageBackground,
+    RefreshControl,
     ScrollView,
     StatusBar,
-    ImageBackground,
-    ActivityIndicator,
-    RefreshControl
+    Platform,
+    Image,
+    LogBox,
+    Text,
+    View
 } from 'react-native';
-import {widthPercentageToDP as wp,heightPercentageToDP as hp} from "react-native-responsive-screen";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import Carousel from 'react-native-snap-carousel';
-import {useIsFocused} from "@react-navigation/native";
+import {useDispatch, useSelector} from "react-redux";
 import RenderHtml from 'react-native-render-html';
 import Video from 'react-native-video';
-import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
 
 //================================ Local Imported Files ======================================//
@@ -29,14 +28,14 @@ import fonts from "../../assets/fonts/fonts";
 import images from "../../assets/images/images";
 import ApiHelper from "../../api/ApiHelper";
 import {
-    DASHBOARD_SCREEN,
     GET_ACCOUNTABILITY,
+    DASHBOARD_SCREEN,
+    ALL_RESOURCES,
     NOTIFICATION,
+    LIVE_EVENTS,
+    FORUM,
     JOURNEY,
     SETTINGS,
-    ALL_RESOURCES,
-    LIVE_EVENTS,
-    FORUM
 } from "../../constants/navigators";
 import AppHeaderNative from "../../components/AppHeaderNative";
 import AppLoading from "../../components/AppLoading";
@@ -50,9 +49,8 @@ import * as ApiDataActions from "../../../redux/store/actions/ApiData";
 
 
 LogBox.ignoreAllLogs(true);
-const CourseScreen = props => {
+const CourseScreen = ({navigation}) => {
 
-    const isFocused = useIsFocused();
     const dispatch = useDispatch();
     let userData = useSelector(state => state.ApiData.loginData);
     const token = useSelector(state => state.ApiData.token);
@@ -76,9 +74,11 @@ const CourseScreen = props => {
 
 
     useEffect(() => {
-        getAnnouncements();
-        getDashboardData();
-    }, [isFocused]);
+        return navigation.addListener('focus', () => {
+            getAnnouncements();
+            getDashboardData();
+        });
+    }, [navigation]);
 
 
     const onRefresh = () => {
@@ -238,10 +238,10 @@ const CourseScreen = props => {
             {AppLoading.renderLoading(loading)}
             <View style={styles.headerView}>
                 <AppHeaderNative
-                    onPressSetting={() => props.navigation.navigate(SETTINGS)}
-                    onPressJourney={() => props.navigation.navigate(JOURNEY)}
+                    onPressSetting={() => navigation.navigate(SETTINGS)}
+                    onPressJourney={() => navigation.navigate(JOURNEY)}
                     onPressChat={() => console.log('Chat Pressed')}
-                    onPressRing={() => props.navigation.navigate(NOTIFICATION)}
+                    onPressRing={() => navigation.navigate(NOTIFICATION)}
                 />
             </View>
             {loading ? null : (
@@ -329,7 +329,7 @@ const CourseScreen = props => {
                                 <View style={[styles.courseView,{height:hp(25)}]}>
                                     <View style={styles.courseTitle}>
                                         <Text style={[styles.userNameText,styles.headerText]}>Live Events</Text>
-                                        <Text style={[styles.userNameText,styles.showAll]} onPress={() => props.navigation.navigate(LIVE_EVENTS)}>Show all</Text>
+                                        <Text style={[styles.userNameText,styles.showAll]} onPress={() => navigation.navigate(LIVE_EVENTS)}>Show all</Text>
                                     </View>
                                     <View style={styles.videoSection}>
                                         <Carousel
@@ -350,7 +350,7 @@ const CourseScreen = props => {
                                  <View style={[styles.courseView,{height:hp(25)}]}>
                                         <View style={styles.courseTitle}>
                                             <Text style={[styles.userNameText,styles.headerText]}>Accountability</Text>
-                                            <Text style={[styles.userNameText,styles.showAll]} onPress={() => props.navigation.navigate(GET_ACCOUNTABILITY)}>Show all</Text>
+                                            <Text style={[styles.userNameText,styles.showAll]} onPress={() => navigation.navigate(GET_ACCOUNTABILITY)}>Show all</Text>
                                         </View>
                                         <View style={styles.videoSection}>
                                             <Carousel
@@ -371,7 +371,7 @@ const CourseScreen = props => {
                                <View style={[styles.courseView,{height:hp(25)}]}>
                                    <View style={styles.courseTitle}>
                                        <Text style={[styles.userNameText,styles.headerText]}>Resources</Text>
-                                       <Text style={[styles.userNameText,styles.showAll]} onPress={() => props.navigation.navigate(ALL_RESOURCES)}>Show all</Text>
+                                       <Text style={[styles.userNameText,styles.showAll]} onPress={() => navigation.navigate(ALL_RESOURCES)}>Show all</Text>
                                    </View>
                                    <View style={styles.videoSection}>
                                        <Carousel
@@ -392,7 +392,7 @@ const CourseScreen = props => {
                                 <View style={[styles.courseView,{height:hp(25)}]}>
                                     <View style={styles.courseTitle}>
                                         <Text style={[styles.userNameText,styles.headerText]}>Forum</Text>
-                                        <Text style={[styles.userNameText,styles.showAll]} onPress={() => props.navigation.navigate(FORUM)}>Show all</Text>
+                                        <Text style={[styles.userNameText,styles.showAll]} onPress={() => navigation.navigate(FORUM)}>Show all</Text>
                                     </View>
                                     <View style={styles.videoSection}>
                                         <Carousel
@@ -413,7 +413,7 @@ const CourseScreen = props => {
                                 <View style={styles.courseView}>
                                     <View style={styles.courseTitle}>
                                         <Text style={[styles.userNameText,styles.headerText]}>Courses</Text>
-                                        <Text style={[styles.userNameText,styles.showAll]} onPress={() => props.navigation.navigate(DASHBOARD_SCREEN)}>Show all</Text>
+                                        <Text style={[styles.userNameText,styles.showAll]} onPress={() => navigation.navigate(DASHBOARD_SCREEN)}>Show all</Text>
                                     </View>
                                     <View style={styles.videoSection}>
                                         <Carousel

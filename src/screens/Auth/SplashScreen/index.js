@@ -5,6 +5,7 @@ import {StatusBar, View} from 'react-native';
 import {useDispatch} from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {CommonActions} from "@react-navigation/native";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 
 //================================ Local Imported Files ======================================//
 
@@ -12,7 +13,6 @@ import styles from './style';
 import Splash from "../../../assets/images/splash.svg";
 import {LANDING_SCREEN, MY_TAB} from "../../../constants/navigators";
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
-
 
 const SplashScreen = props => {
 
@@ -58,7 +58,7 @@ const SplashScreen = props => {
     return (
         <View style={styles.mainContainer}>
             <StatusBar hidden={true}/>
-            <Splash/>
+            <Splash height={hp(100)} width={wp(100)}/>
         </View>
     );
 };

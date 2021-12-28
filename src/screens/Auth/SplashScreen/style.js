@@ -5,7 +5,7 @@ import colors from '../../../assets/colors/colors';
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: colors.app_background,
+        backgroundColor: colors.image_background,
     },
 });
 

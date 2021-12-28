@@ -8,9 +8,8 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-nat
 
 import colors from "../../assets/colors/colors";
 import fonts from "../../assets/fonts/fonts";
-import LockIcon from "../../assets/images/lock_course.svg";
-import PlayIcon from "../../assets/images/play.svg";
-
+import LockIcon from "../../assets/images/lock_course_copy.svg";
+import PlayIcon from "../../assets/images/play_copy.svg";
 
 const LiveEvent = (props) => {
 
@@ -19,16 +18,17 @@ const LiveEvent = (props) => {
     const [isShowActivity,setIsShowActivity] = useState(true);
 
     return (
-        <TouchableOpacity activeOpacity={0.7} style={styles.container} onPress={() => props.onPressCourse()}>
+        <TouchableOpacity
+            activeOpacity={0.7} style={styles.container}
+            onPress={() => props.onPressCourse()}
+        >
             <ImageBackground
-                blurRadius={2}
                 imageStyle={styles.imageView}
                 style={styles.imageView}
                 source={{ uri: props.imgUri }}
                 onLoadEnd={() => setIsLoaded(true)}
                 onError={() => setIsError(true)}
             >
-                {props.isLock === true && isLoaded === false ? <LockIcon height={45} width={45}/> : <PlayIcon height={45} width={45}/>}
                 {
                     (isLoaded && !isError) ? null :
                         (isShowActivity && !isError) &&
@@ -39,11 +39,13 @@ const LiveEvent = (props) => {
                 }
             </ImageBackground>
 
-            <View style={{ justifyContent: "space-evenly", marginLeft: wp(3), width:wp(60),paddingVertical:wp(2)}}>
-                <Text style={styles.text} numberOfLines={2}>{props.title} </Text>
-                <Text style={{width:wp(50) ,color: colors.greyTxt }} numberOfLines={2}>{props.description}</Text>
-                <Text style={[styles.text, {fontWeight:'700',fontSize: wp(4) }]} numberOfLines={1}>{props.month}</Text>
-                {/*<Text style={[styles.text, { fontWeight: "700", fontSize: wp(5) }]} numberOfLines={1}>{props.price > 0 ? `$ ${props.price/100}` : 'Free' }</Text>*/}
+            <View style={{ justifyContent: "space-evenly",marginLeft: wp(3),width:wp(55),paddingVertical:wp(5)}}>
+                <View style={{justifyContent:'space-between',flexDirection:'row',alignItems:'center',paddingRight:wp(5)}}>
+                    <Text style={styles.text} numberOfLines={1}>{props.title.charAt(0).toUpperCase() + props.title.slice(1)}</Text>
+                    {props.isLock === true ? <LockIcon height={25} width={25}/> : <PlayIcon height={25} width={25}/>}
+                </View>
+                <Text style={[styles.text, {fontWeight:'700',fontSize: wp(4),color: 'rgb(178,176,188)'}]} numberOfLines={1}>{props.day}, {props.date} - {props.time}</Text>
+                <Text style={{width:wp(50) ,color: colors.greyTxt}} numberOfLines={2}>{props.description}</Text>
             </View>
 
         </TouchableOpacity>
@@ -68,11 +70,11 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
     text: {
-        width:wp(50),
+        width:wp(43),
         fontSize:wp(4),
         fontFamily:fonts.semi,
         color: colors.white,
-        fontWeight: "500",
+        fontWeight: "700",
     },
 });
 

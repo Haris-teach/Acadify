@@ -88,8 +88,13 @@ const EditProfileScreen = props => {
             } else if (res.errorMessage) {
                 console.log("ImagePicker Error: ", res.errorMessage);
             } else {
-                console.log("ImagePicker",res);
-                setImage(res.assets[0])
+                const image = {
+                    uri: res.assets[0].uri,
+                    type: res.assets[0].type,
+                    name: res.assets[0].fileName,
+                };
+                console.log("ImagePicker",image);
+                setImage(image)
                 setHasImage(true);
             }
         });
@@ -184,15 +189,23 @@ const EditProfileScreen = props => {
                         onLeftIconPress={() => props.navigation.goBack()}
                     />
                 </View>
+
+
                 <View style={styles.imageBackground}>
                     <View style={styles.imageStyle}>
-                        <Image source={hasImage ? {uri: image.uri} : images.placeHolder} style={styles.imageStyle} />
+                        <Image
+                            source={hasImage ? {uri: image.uri} : images.placeHolder}
+                            style={styles.imageStyle}
+                        />
                         {/*<Image source={hasImage ? {uri: image.uri} : (profileImage !== 'null' ? {uri:profileImage} : images.placeHolder)} style={styles.imageStyle} />*/}
                         <TouchableOpacity activeOpacity={0.7} style={styles.editView} onPress={() => ImagePickerFromGallery()}>
                             <Camera height={22} width={22}/>
                         </TouchableOpacity>
                     </View>
                 </View>
+
+
+
                 <View style={styles.inputView}>
                     <View style={styles.inputSection}>
                         <TextInput

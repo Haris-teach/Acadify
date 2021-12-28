@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
     },
     scrollSpace:{
         flex:0.9,
-        marginBottom:hp(2)
     },
     headerView:{
         height: hp(10),
@@ -38,7 +37,6 @@ const styles = StyleSheet.create({
     },
     titleText:{
         fontSize:wp(6),
-        width:wp(70),
         color:colors.white,
         fontWeight:'700',
         fontFamily:fonts.semi,
@@ -83,15 +81,44 @@ const styles = StyleSheet.create({
         height:hp(8),
         width:wp(100),
         paddingHorizontal:wp(5),
+        alignItems:'flex-end',
+        justifyContent:'space-between',
+        flexDirection:'row',
+    },
+    linkView:{
+        height:hp(37),
+        width:wp(100),
+        paddingTop:hp(5),
+        alignItems:'center',
+    },
+    linkTextView:{
+        maxHeight:hp(25),
+        minHeight:hp(8),
+        width:wp(90),
+        paddingHorizontal:wp(3),
+        borderRadius:wp(3),
         justifyContent:'center',
+        alignItems:'center',
+        borderColor:'rgb(169,145,70)',
+        borderWidth:1,
+    },
+    backView:{
+        height:hp(4),
+        width:hp(4),
+        borderRadius:wp(3),
+        justifyContent:'center',
+        alignItems:'center',
+        paddingTop:wp(2),
+        paddingLeft:wp(6),
+        backgroundColor:colors.image_background
     },
     btnView:{
         flex:0.1,
         alignItems:'center',
     },
     sectionView:{
+        height:hp(45),
         width:wp(100),
-        justifyContent:'center',
         alignItems:'center',
     },
     emptySection:{
@@ -100,7 +127,6 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         alignItems:'center',
     },
-
     cardImg: {
         marginTop: hp("3%"),
         width: wp("84%"),

@@ -4,12 +4,11 @@ import React,{useState,useEffect} from "react";
 import {
     View,
     Text,
-    TouchableOpacity,
     ScrollView,
     SectionList,
     StatusBar,
     ActivityIndicator,
-    ImageBackground,
+    ImageBackground
 } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import {useSelector} from "react-redux";
@@ -25,7 +24,6 @@ import fonts from "../../../assets/fonts/fonts";
 import ApiHelper from "../../../api/ApiHelper";
 import {COURSE_CONTENT_PLAY, CREDIT_CARD} from "../../../constants/navigators";
 import AppHeader from "../../../components/AppHeader";
-import Share from "../../../assets/images/share.svg";
 import Button from "../../../components/Button/Button";
 import AppLoading from "../../../components/AppLoading";
 import CourseContentView from "../../../components/CourseContentListComponent";
@@ -125,7 +123,8 @@ const CourseDetailScreen = (props) => {
         if(coursePrice > 0){
             props.navigation.navigate(CREDIT_CARD,{
                 fromCourse:true,
-                price:coursePrice
+                price:coursePrice,
+                courseId:courseDetails.id
             })
         } else {
             subscribeFreeCourse();
@@ -135,10 +134,11 @@ const CourseDetailScreen = (props) => {
 
     const subscribeFreeCourse = () => {
         setLoading(true)
+        let url = '/api/v1/courses/enroll';
         let object = JSON.stringify({
             "courseid": courseDetails.id
         });
-        ApiHelper.enrollCourse(token,object,(resp) => {
+        ApiHelper.enrollCourse(token,object,url,(resp) => {
             if(resp.isSuccess){
                 setLoading(false);
                 setTimeout(() => {

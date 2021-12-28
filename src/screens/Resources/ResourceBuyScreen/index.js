@@ -6,23 +6,28 @@ import {
     heightPercentageToDP as hp,
     widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+import Toast from "react-native-simple-toast";
+import {useSelector} from "react-redux";
 
 //================================ Local Imported Files ======================================//
 
 import styles from './style';
 import colors from '../../../assets/colors/colors';
 import fonts from '../../../assets/fonts/fonts';
-import {ADD_CARD} from '../../../constants/navigators';
 import images from "../../../assets/images/images";
+import ApiHelper from "../../../api/ApiHelper";
 import Button from '../../../components/Button/Button';
 import CreditCard from '../../../assets/images/credit_card.svg';
 import AppHeader from "../../../components/AppHeader";
+import AppLoading from "../../../components/AppLoading";
 
 
 const ResourceBuyScreen = props => {
 
+    const token = useSelector((state) => state.ApiData.token);
     const [planName,setPlanName] = useState('');
     const [title,setTitle] = useState('');
+    const [loading,setLoading] = useState(false);
 
     useEffect(() => {
         if(props.route.params.fromResource === true){
@@ -34,15 +39,38 @@ const ResourceBuyScreen = props => {
 
     const onPressYes = () => {
         if(props.route.params.fromResource === true) {
-            // props.navigation.navigate(ADD_CARD, {
-            //     planName: props.route.params.planName,
-            // });
+            subscribeFreeCourse();
         }
     };
 
 
+    const subscribeFreeCourse = () => {
+        setLoading(true)
+        let url = '/api/v1/resources/documentbuy';
+        let object = JSON.stringify({
+            "resource_id": props.route.params.resourceId
+        });
+        ApiHelper.enrollCourse(token,object,url,(resp) => {
+            if(resp.isSuccess){
+                setLoading(false);
+                setTimeout(() => {
+                    Toast.show('Successfully Subscribe',Toast.LONG);
+                },1000)
+                props.navigation.goBack();
+            }else{
+                setLoading(false);
+                console.log('Error',resp.response.response)
+                setTimeout(() => {
+                    Toast.show(resp.response.response.data.message,Toast.LONG)
+                },200)
+            }
+        })
+    }
+
+
     return (
         <View style={styles.mainContainer}>
+            {AppLoading.renderLoading(loading)}
             <StatusBar backgroundColor={colors.app_background} />
             <View style={styles.headerView}>
                 <AppHeader

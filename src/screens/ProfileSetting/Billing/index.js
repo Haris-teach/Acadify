@@ -58,9 +58,9 @@ class BillingListing extends React.Component {
     getUserToken = () => {
         this.setState({loading: true});
         try {
-             AsyncStorage.getItem('token').then((resp) => {
+             AsyncStorage.getItem('user').then((resp) => {
                  if(resp){
-                     this.setState({token:resp},() => {
+                     this.setState({token:JSON.parse(resp)},() => {
                          this.getTasks();
                      })
                  }
@@ -73,16 +73,15 @@ class BillingListing extends React.Component {
 
 
      getTasks = () => {
-         this.setState({loading: true});
-        ApiHelper.getTasks(this.state.token,this.state.start_date,this.state.end_date,(response) => {
+        ApiHelper.getTasks(this.state.token.token,this.state.start_date,this.state.end_date,(response) => {
             if(response.isSuccess){
-                console.log('Response',response.response.data)
+                console.log('Billing success ===>',response.response.data)
                 if(response.response.data.code === 201){
                     this.setState({loading: false,items: response.response.data.data.docs});
                 }
             }else {
                 this.setState({loading: false});
-                console.log('Response',response.response)
+                console.log('Billing Error ===>',response.response)
             }
         })
     }

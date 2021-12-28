@@ -12,17 +12,23 @@ import {
 import styles from './style';
 import colors from '../../../assets/colors/colors';
 import fonts from '../../../assets/fonts/fonts';
-import {ADD_CARD} from '../../../constants/navigators';
+import {ADD_CARD, DASHBOARD_SCREEN} from '../../../constants/navigators';
 import images from "../../../assets/images/images";
 import Button from '../../../components/Button/Button';
 import CreditCard from '../../../assets/images/credit_card.svg';
 import AppHeader from "../../../components/AppHeader";
+import ApiHelper from "../../../api/ApiHelper";
+import Toast from "react-native-simple-toast";
+import {useSelector} from "react-redux";
+import AppLoading from "../../../components/AppLoading";
 
 
 const CardScreen = props => {
 
+    const token = useSelector((state) => state.ApiData.token);
     const [planName,setPlanName] = useState('');
     const [title,setTitle] = useState('');
+    const [loading,setLoading] = useState(false);
 
     useEffect(() => {
        if(props.route.params.fromSignUp === true){
@@ -41,13 +47,38 @@ const CardScreen = props => {
                 planName: props.route.params.planName,
             });
         } else if(props.route.params.fromCourse === true){
-            console.log('Navigate');
+            subscribeFreeCourse()
         }
     };
 
 
+    const subscribeFreeCourse = () => {
+        setLoading(true)
+        let url = '/api/v1/courses/enroll';
+        let object = JSON.stringify({
+            "courseid": props.route.params.courseId
+        });
+        ApiHelper.enrollCourse(token,object,url,(resp) => {
+            if(resp.isSuccess){
+                setLoading(false);
+                setTimeout(() => {
+                    Toast.show('Successfully Subscribe',Toast.LONG);
+                },300)
+                props.navigation.navigate(DASHBOARD_SCREEN)
+            }else{
+                setLoading(false);
+                console.log('Error',resp.response.response)
+                setTimeout(() => {
+                    Toast.show(resp.response.response.data.message,Toast.LONG)
+                },200)
+            }
+        })
+    }
+
+
   return (
     <View style={styles.mainContainer}>
+        {AppLoading.renderLoading(loading)}
       <StatusBar backgroundColor={colors.app_background} />
         <View style={styles.headerView}>
             <AppHeader

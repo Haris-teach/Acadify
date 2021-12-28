@@ -47,7 +47,13 @@ import {
     SIGNUP_SCREEN,
     TASK_LISTING,
     VIDEO_SCREEN,
-    CALENDAR_TASK, MY_TAB, NOTIFICATION, LIVE_EVENTS, FORUM, SPLASH_SCREEN
+    CALENDAR_TASK,
+    MY_TAB,
+    NOTIFICATION,
+    LIVE_EVENTS,
+    FORUM,
+    SPLASH_SCREEN,
+    EVENTS_DETAILS
 } from "./constants/navigators";
 import PlanScreen from "./screens/Auth/PlanScreen";
 import CardScreen from "./screens/Auth/CardScreen";
@@ -58,6 +64,9 @@ import ProfileScreen from "./screens/ProfileSetting/ProfileScreen";
 import AddJourney from "./screens/Journey/AddJourney";
 import PasswordUpdate from "./screens/ProfileSetting/PasswordUpdate";
 import VideoScreen from "./screens/VideoScreen";
+import NotificationScreen from "./screens/Notification";
+import LiveEvents from "./screens/LiveEvents/EventListing";
+import ForumListing from "./screens/Forum/ForumListing";
 import CourseScreen from "./screens/DashboardScreen";
 import AddGoal from "./screens/Accountability/CreateGoal";
 import EditProfileScreen from "./screens/ProfileSetting/EditProfile";
@@ -71,10 +80,9 @@ import TaskListing from "./screens/ProfileSetting/Tasks/TaskListing";
 import CreateTask from "./screens/ProfileSetting/Tasks/CreateTask";
 import EditTask from "./screens/ProfileSetting/Tasks/EditTask";
 import CalendarTask from "./screens/ProfileSetting/Tasks/CalendarTask";
+import SplashScreen from "./screens/Auth/SplashScreen";
+import EventDetailScreen from "./screens/LiveEvents/EventDetails";
 import BillingListing from "./screens/ProfileSetting/Billing";
-import NotificationScreen from "./screens/Notification";
-import LiveEvents from "./screens/LiveEvents/EventListing";
-import ForumListing from "./screens/Forum/ForumListing";
 import MenuBar from "./components/MenuBar";
 
 //================================ Bottom Icons ======================================//
@@ -91,7 +99,6 @@ import ForumInActive from "./assets/dropIcon/forumIn.svg";
 import ForumActive from "./assets/dropIcon/forumA.svg";
 import ResourcesInActive from "./assets/dropIcon/resourceIn.svg";
 import ResourcesActive from "./assets/dropIcon/resourceA.svg";
-import SplashScreen from "./screens/Auth/SplashScreen";
 
 
 const RootStack = createNativeStackNavigator();
@@ -106,7 +113,6 @@ const MyNewStack = () => {
         >
             <RootStack.Screen name={SPLASH_SCREEN} component={SplashScreen} />
             <RootStack.Screen name={LANDING_SCREEN} component={LandingScreen} />
-            <RootStack.Screen name={DASHBOARD_SCREEN} component={DashboardScreen} />
             <RootStack.Screen name={LOGIN_SCREEN} component={LoginScreen} />
             <RootStack.Screen name={SIGNUP_SCREEN} component={SignUpScreen} />
             <RootStack.Screen name={PLAN_SCREEN} component={PlanScreen} />
@@ -129,7 +135,6 @@ const MyNewStack = () => {
             <RootStack.Screen name={ALL_RESOURCES} component={AllResourcesScreen}/>
             <RootStack.Screen name={BUY_RESOURCES} component={ResourceBuyScreen}/>
             <RootStack.Screen name={TASK_LISTING} component={TaskListing}/>
-            <RootStack.Screen name={BILLING_LISTING} component={BillingListing}/>
             <RootStack.Screen name={CREATE_TASK} component={CreateTask}/>
             <RootStack.Screen name={EDIT_TASK} component={EditTask}/>
             <RootStack.Screen name={CALENDAR_TASK} component={CalendarTask}/>
@@ -137,6 +142,8 @@ const MyNewStack = () => {
             <RootStack.Screen name={SETTINGS} component={SettingScreen} />
             <RootStack.Screen name={NOTIFICATION} component={NotificationScreen} />
             <RootStack.Screen name={LIVE_EVENTS} component={LiveEvents} />
+            <RootStack.Screen name={EVENTS_DETAILS} component={EventDetailScreen} />
+            <RootStack.Screen name={BILLING_LISTING} component={BillingListing}/>
         </RootStack.Navigator>
     );
 };
