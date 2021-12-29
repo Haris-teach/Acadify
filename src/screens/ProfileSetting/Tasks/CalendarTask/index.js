@@ -1,12 +1,11 @@
 //================================ React Native Imported Files ======================================//
 
 import React, { useEffect, useState } from "react";
-import { View, StatusBar, TouchableOpacity, FlatList } from "react-native";
-import { useSelector } from "react-redux";
+import { View, StatusBar, TouchableOpacity } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
-import { widthPercentageToDP as wp } from "react-native-responsive-screen";
-import moment from "moment";
+import { widthPercentageToDP as wp,heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { Calendar } from "react-native-calendars";
+import { useSelector } from "react-redux";
 
 //================================ Local Imported Files ======================================//
 
@@ -15,24 +14,28 @@ import colors from "../../../../assets/colors/colors";
 import ApiHelper from "../../../../api/ApiHelper";
 import images from "../../../../assets/images/images";
 import { CREATE_TASK, TASK_LISTING } from "../../../../constants/navigators";
+import fonts from "../../../../assets/fonts/fonts";
 import AppLoading from "../../../../components/AppLoading";
 import ListView from "../../../../assets/images/ListView.svg";
 import AppHeader from "../../../../components/AppHeader";
 import Add from "../../../../assets/images/addIcon.svg";
 import TasksComponent from "../../../../components/TasksComponent";
 import Arrow from "../../../../assets/images/Arrow.svg";
-import RidgtArrow from "../../../../assets/images/RidgtArrow.svg";
-import fonts from "../../../../assets/fonts/fonts";
+import RightArrow from "../../../../assets/images/RidgtArrow.svg";
+
 
 const CalendarTask = (props) => {
+
   const isFocused = useIsFocused();
   const token = useSelector((state) => state.ApiData.token);
   const [loading, setLoading] = useState(false);
   const [items, setItems] = useState([]);
 
+
   useEffect(() => {
     getTasks();
   }, [isFocused]);
+
 
   const getTasks = () => {
     setLoading(true);
@@ -79,22 +82,21 @@ const CalendarTask = (props) => {
       <View style={styles.inputView}>
         <Calendar
           style={styles.calendarView}
-          current={"2012-03-01"}
-          minDate={"2012-05-10"}
-          maxDate={"2012-05-30"}
+          current={new Date()}
           onDayPress={(day) => {
             console.log("selected day", day);
           }}
           onDayLongPress={(day) => {
             console.log("selected day", day);
           }}
-          monthFormat={"yyyy MM"}
+          monthFormat={"MMM yyyy"}
           onMonthChange={(month) => {
             console.log("month changed", month);
           }}
           hideArrows={false}
-          renderArrow={(direction) => direction === 'left' ? <RidgtArrow/> : <Arrow/>}
+          renderArrow={(direction) => direction === 'left' ? <RightArrow/> : <Arrow/>}
           hideExtraDays={true}
+          arrowWidth
           disableMonthChange={false}
           firstDay={1}
           hideDayNames={false}
@@ -104,37 +106,63 @@ const CalendarTask = (props) => {
           disableArrowLeft={false}
           disableArrowRight={false}
           disableAllTouchEventsForDisabledDays={false}
-          renderHeader={(date) => {
-          }}
-          enableSwipeMonths={true}
+          enableSwipeMonths={false}
+          headerStyle={{paddingHorizontal:wp(5),height:hp(15)}}
           theme={{
-              textMonthFontFamily:fonts.regular,
+            'stylesheet.calendar.main': {
+              week: {
+                marginBottom: hp(4),
+                flexDirection:'row',
+                justifyContent: 'space-around',
+                paddingHorizontal:wp(2),
+                borderRadius:wp(6),
+              },
+            },
+            'stylesheet.calendar.header': {
+              week: {
+                height:hp(5),
+                marginTop:hp(2),
+                flexDirection:'row',
+                justifyContent: 'space-around',
+                alignItems:"flex-end",
+              },
+            },
+            textMonthFontFamily:fonts.regular,
             backgroundColor: colors.app_background,
             calendarBackground: colors.calendar_view,
-            textSectionTitleColor: '#b6c1cd',
+            textSectionTitleColor: colors.white,
             textSectionTitleDisabledColor: '#d9e1e8',
             selectedDayBackgroundColor: '#00adf5',
-            selectedDayTextColor: '#ffffff',
-            todayTextColor: '#00adf5',
-            dayTextColor: '#2d4150',
-            textDisabledColor: '#d9e1e8',
+            selectedDayTextColor: colors.white,
+            todayTextColor: colors.white,
+            dayTextColor: '#9E9E9E',
+            textDisabledColor: '#9E9E9E',
             dotColor: '#00adf5',
-            selectedDotColor: '#ffffff',
+            selectedDotColor: colors.white,
             arrowColor: 'blue',
             disabledArrowColor: '#d9e1e8',
-            monthTextColor: 'blue',
+            monthTextColor: colors.white,
             indicatorColor: 'blue',
-            // textDayFontFamily: 'monospace',
-            // textMonthFontFamily: 'monospace',
-            // textDayHeaderFontFamily: 'monospace',
+            // textDayHeaderFontFamily: fonts.regular,
             textDayFontWeight: '300',
             textMonthFontWeight: 'bold',
             textDayHeaderFontWeight: '300',
-            textDayFontSize: 16,
-            textMonthFontSize: 16,
-            textDayHeaderFontSize: 16
+            textDayFontSize: wp(4),
+            textMonthFontSize: wp(4),
+            textDayHeaderFontSize: wp(4),
           }}
         />
+
+        {/*"stylesheet.calendar.header"*/}
+        {/*"stylesheet.calendar.main"*/}
+        {/*"stylesheet.calendar-list.main"*/}
+        {/*"stylesheet.agenda.main"*/}
+        {/*"stylesheet.agenda.list"*/}
+        {/*"stylesheet.day.basic"*/}
+        {/*"stylesheet.day.single"*/}
+        {/*"stylesheet.day.multiDot"*/}
+        {/*"stylesheet.day.period"*/}
+        {/*"stylesheet.dot"*/}
       </View>
     </View>
   );

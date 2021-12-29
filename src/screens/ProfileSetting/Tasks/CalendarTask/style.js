@@ -22,13 +22,14 @@ const styles = StyleSheet.create({
         flexDirection:'row',
     },
     inputView:{
-        flex:0.9,
+        flex:0.7,
+        justifyContent:'center',
         alignItems:'center',
     },
     calendarView:{
-        height:hp(70),
+        height:hp(65),
         width:wp(90),
-        borderRadius:wp(6)
+        borderRadius:wp(6),
     },
 });
 

@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     headingView: {
-        height: hp(10),
+        height: hp(8),
         width: wp(100),
         justifyContent:'center',
     },
