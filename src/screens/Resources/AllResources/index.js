@@ -12,7 +12,6 @@ import {
 } from "react-native";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import {useIsFocused} from "@react-navigation/native";
 import Toast from "react-native-simple-toast";
 import RNFetchBlob from 'rn-fetch-blob'
 import moment from "moment";
@@ -26,14 +25,13 @@ import Search from "../../../assets/images/searchBackground.svg";
 import Filter from "../../../assets/images/filterBackground.svg";
 import DropArrow from "../../../assets/images/dropdown.svg";
 import CourseDropdown from "../../../components/CourseDropDwon";
-import {BUY_RESOURCES, CREDIT_CARD} from "../../../constants/navigators";
+import {BUY_RESOURCES} from "../../../constants/navigators";
 import CategoryFilterModal from "../../../components/CategoryFilterModal";
 import ResourceCard from "../../../components/ResourcesCard";
 
 
-const AllResourcesScreen = (props) => {
+const AllResourcesScreen = ({navigation}) => {
 
-    const isFocused = useIsFocused();
     const token = useSelector((state) => state.ApiData.token);
     const [loading, setLoading] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
@@ -60,11 +58,13 @@ const AllResourcesScreen = (props) => {
 
 
     useEffect(() => {
-        setCatText('All Resources');
-        setPage(1);
-        getAllResources();
-        getCategories();
-    }, [isFocused]);
+        return navigation.addListener('focus', () => {
+            setCatText('All Resources');
+            setPage(1);
+            getAllResources();
+            getCategories();
+        });
+    }, [navigation]);
 
 
     const getAllResources = () => {
@@ -182,7 +182,7 @@ const AllResourcesScreen = (props) => {
         } else if (value === 'link'){
             Linking.openURL(items.url)
         } else if (value > 0){
-            props.navigation.navigate(BUY_RESOURCES,{
+            navigation.navigate(BUY_RESOURCES,{
                 fromResource: true,
                 price: value * 100,
                 resourceId: items.id,

@@ -8,7 +8,6 @@ import {
     StatusBar,
 } from 'react-native';
 import {useSelector} from "react-redux";
-import {widthPercentageToDP as wp} from "react-native-responsive-screen";
 import moment from "moment";
 
 //================================ Local Imported Files ======================================//

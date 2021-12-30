@@ -304,7 +304,7 @@ const EditTask = props => {
                         <Text style={styles.titleText}>Description</Text>
                         <TextInput
                             placeholder={'Enter your description here'}
-                            style={[styles.inputStyle,{height:hp(15),paddingTop:wp(5)}]}
+                            style={[styles.inputStyle,{height:hp(15),paddingTop:wp(5),paddingBottom:wp(5)}]}
                             placeholderTextColor={colors.inputColor}
                             multiline={true}
                             editable={!Data.isCreadtedByAdmin}

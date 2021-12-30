@@ -14,7 +14,8 @@ const styles = StyleSheet.create({
         paddingTop:Platform.OS === 'ios' ? hp(5) : null
     },
     container:{
-        flex:0.9,
+        flex:0.88,
+        paddingTop:hp(1),
     },
     emptySection:{
         height:hp(80),
@@ -32,21 +33,33 @@ const styles = StyleSheet.create({
         alignSelf:'center'
     },
     upperView:{
-        height:hp(10),
-        width:wp(100),
+        height:hp(6),
+        width:wp(95),
+        alignSelf:'center',
         flexDirection:'row',
-        justifyContent:'space-evenly',
+        justifyContent:'space-between',
         alignItems:'center',
+        backgroundColor:colors.image_background,
+        borderRadius:wp(9)
+    },
+    headingView:{
+        height:hp(8),
+        width:wp(100),
+        justifyContent:'center',
+    },
+    headingText: {
+        fontWeight:'700',
+        fontSize: wp(6.2),
+        color: colors.white,
+        fontFamily: fonts.regular,
+        paddingHorizontal: wp(5),
     },
     headerStyle:{
-        height:hp(5),
-        width:wp(27),
-        borderRadius:wp(4),
+        height:hp(6),
+        width:wp(30),
         justifyContent:'center',
         alignItems:"center",
-        backgroundColor:colors.app_background,
-        borderWidth:1,
-        borderColor:colors.button_text
+        borderRadius:wp(9),
     },
     filterIcons:{
         height:hp(10),
@@ -57,7 +70,7 @@ const styles = StyleSheet.create({
     },
     headerTextStyle:{
         fontFamily:fonts.semi,
-        fontWeight:'500',
+        fontWeight:'600',
         color:colors.white,
         fontSize:wp(4)
     },

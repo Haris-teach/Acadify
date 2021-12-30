@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { View, StatusBar, TouchableOpacity } from "react-native";
-import { useIsFocused } from "@react-navigation/native";
 import { widthPercentageToDP as wp,heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { useIsFocused } from "@react-navigation/native";
 import { Calendar } from "react-native-calendars";
 import { useSelector } from "react-redux";
 
@@ -41,7 +41,7 @@ const CalendarTask = (props) => {
     setLoading(true);
     ApiHelper.getUserTasks(token, (response) => {
       if (response.isSuccess) {
-        console.log("data", response.response);
+        console.log("Task Calendar ==>", response.response);
         if (response.response.data.code === 200) {
           setItems(response.response.data.data);
           setLoading(false);
@@ -52,6 +52,7 @@ const CalendarTask = (props) => {
       }
     });
   };
+
 
   return (
     <View style={styles.mainContainer}>
@@ -83,30 +84,23 @@ const CalendarTask = (props) => {
         <Calendar
           style={styles.calendarView}
           current={new Date()}
-          onDayPress={(day) => {
-            console.log("selected day", day);
-          }}
-          onDayLongPress={(day) => {
-            console.log("selected day", day);
-          }}
-          monthFormat={"MMM yyyy"}
-          onMonthChange={(month) => {
-            console.log("month changed", month);
-          }}
-          hideArrows={false}
-          renderArrow={(direction) => direction === 'left' ? <RightArrow/> : <Arrow/>}
-          hideExtraDays={true}
-          arrowWidth
-          disableMonthChange={false}
           firstDay={1}
-          hideDayNames={false}
-          showWeekNumbers={false}
-          onPressArrowLeft={(subtractMonth) => subtractMonth()}
-          onPressArrowRight={(addMonth) => addMonth()}
-          disableArrowLeft={false}
-          disableArrowRight={false}
+          onMonthChange={(month) => console.log("month changed", month)}
+          onDayLongPress={(day) => console.log("selected day", day)}
+          onDayPress={(day) => console.log("selected day", day)}
+          renderArrow={(direction) => direction === 'left' ? <RightArrow/> : <Arrow/>}
           disableAllTouchEventsForDisabledDays={false}
+          disableMonthChange={false}
+          disableArrowRight={false}
           enableSwipeMonths={false}
+          disableArrowLeft={false}
+          showWeekNumbers={false}
+          hideExtraDays={false}
+          hideDayNames={false}
+          hideArrows={false}
+          monthFormat={"MMM yyyy"}
+          onPressArrowRight={(addMonth) => addMonth()}
+          onPressArrowLeft={(subtractMonth) => subtractMonth()}
           headerStyle={{paddingHorizontal:wp(5),height:hp(15)}}
           theme={{
             'stylesheet.calendar.main': {
@@ -133,21 +127,20 @@ const CalendarTask = (props) => {
             textSectionTitleColor: colors.white,
             textSectionTitleDisabledColor: '#d9e1e8',
             selectedDayBackgroundColor: '#00adf5',
-            selectedDayTextColor: colors.white,
+            selectedDayTextColor: colors.image_background,
             todayTextColor: colors.white,
-            dayTextColor: '#9E9E9E',
-            textDisabledColor: '#9E9E9E',
+            dayTextColor: '#6A6A6A',
+            textDisabledColor: '#3C3844',
             dotColor: '#00adf5',
             selectedDotColor: colors.white,
-            arrowColor: 'blue',
             disabledArrowColor: '#d9e1e8',
             monthTextColor: colors.white,
-            indicatorColor: 'blue',
             // textDayHeaderFontFamily: fonts.regular,
-            textDayFontWeight: '300',
+            textDayFontWeight: '500',
             textMonthFontWeight: 'bold',
             textDayHeaderFontWeight: '300',
             textDayFontSize: wp(4),
+            textDayFontFamily:fonts.semi,
             textMonthFontSize: wp(4),
             textDayHeaderFontSize: wp(4),
           }}

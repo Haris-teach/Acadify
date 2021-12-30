@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
         width:wp(90),
         borderRadius:wp(5),
         backgroundColor:colors.image_background,
-        paddingLeft:wp(5),
+        paddingHorizontal:wp(5),
         fontFamily:fonts.regular,
         fontWeight:'500',
         color:colors.white

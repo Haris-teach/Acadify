@@ -3,9 +3,10 @@
 import React, {useEffect, useState} from 'react';
 import {
     View,
+    Text,
+    FlatList,
     StatusBar,
     TouchableOpacity,
-    FlatList, Text,
 } from 'react-native';
 import {useSelector} from "react-redux";
 import {useIsFocused} from "@react-navigation/native";
@@ -43,7 +44,7 @@ const TaskListing = props => {
         setLoading(true);
         ApiHelper.getUserTasks(token,(response) => {
             if(response.isSuccess){
-                console.log('data',response.response);
+                console.log('Tasks Data ===>',response.response);
                 if(response.response.data.code === 200){
                     setItems(response.response.data.data);
                     setLoading(false);

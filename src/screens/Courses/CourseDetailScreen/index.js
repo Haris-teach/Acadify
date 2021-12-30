@@ -13,7 +13,6 @@ import {
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import {useSelector} from "react-redux";
 import Toast from "react-native-simple-toast";
-import Clipboard from '@react-native-clipboard/clipboard';
 
 //================================ Local Imported Files ======================================//
 
@@ -28,7 +27,7 @@ import Button from "../../../components/Button/Button";
 import AppLoading from "../../../components/AppLoading";
 import CourseContentView from "../../../components/CourseContentListComponent";
 
-const CourseDetailScreen = (props) => {
+const CourseDetailScreen = ({navigation,route}) => {
 
     const token = useSelector((state) => state.ApiData.token);
     const [loading,setLoading] = useState(false);
@@ -45,8 +44,10 @@ const CourseDetailScreen = (props) => {
 
 
     useEffect(() => {
-        getSingleCourse();
-    },[])
+        return navigation.addListener('focus', () => {
+            getSingleCourse();
+        });
+    },[navigation])
 
 
     const _renderContent = (item,section) => {
@@ -57,7 +58,7 @@ const CourseDetailScreen = (props) => {
                 title={item.title}
                 description={item.description}
                 onPressContent={() => console.log('Section Data',section)}
-                // onPressContent={() => props.navigation.navigate(COURSE_CONTENT_PLAY,{courseDetails:courseDetails,section})}
+                // onPressContent={() => navigation.navigate(COURSE_CONTENT_PLAY,{courseDetails:courseDetails,section})}
             />
         )
     }
@@ -66,7 +67,7 @@ const CourseDetailScreen = (props) => {
     const getSingleCourse = () => {
         setLoading(true);
         let tempArray = [];
-        ApiHelper.getSingleCourse(token,props.route.params.courseId,(response) => {
+        ApiHelper.getSingleCourse(token,route.params.courseId,(response) => {
             if (response.isSuccess) {
                 if(response.response.data.code === 200){
                     console.log('SingleCourse ===>',response.response.data.data)
@@ -121,7 +122,7 @@ const CourseDetailScreen = (props) => {
 
     const _onPressButton = () => {
         if(coursePrice > 0){
-            props.navigation.navigate(CREDIT_CARD,{
+            navigation.navigate(CREDIT_CARD,{
                 fromCourse:true,
                 price:coursePrice,
                 courseId:courseDetails.id
@@ -154,12 +155,6 @@ const CourseDetailScreen = (props) => {
     }
 
 
-    const copyToClipboard = () => {
-        // Clipboard.setString(`${code}`);
-        Toast.show("Link Copied", Toast.LONG);
-    };
-
-
     return (
         <View style={styles.mainContainer}>
             <StatusBar backgroundColor={colors.image_background} />
@@ -174,7 +169,7 @@ const CourseDetailScreen = (props) => {
                             <AppHeader
                                 leftIconPath={images.back_icon}
                                 backgroundColor={colors.image_background}
-                                onLeftIconPress={() => props.navigation.goBack()}
+                                onLeftIconPress={() => navigation.goBack()}
                             />
                         </View>
 
