@@ -31,6 +31,7 @@ import DateImage from "../../../../assets/images/date.svg";
 import AppHeader from "../../../../components/AppHeader";
 import EditIcon from "../../../../assets/images/delete-Icon.svg";
 
+
 const EditTask = props => {
 
     let Data = props.route.params.item;

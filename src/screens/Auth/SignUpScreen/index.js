@@ -88,7 +88,7 @@ const SignUpScreen = props => {
         phoneNumber: phoneNumber,
       };
       dispatch(ApiDataActions.SetSignUpData(data));
-      props.navigation.navigate(PLAN_SCREEN);
+      props.navigation.navigate(PLAN_SCREEN,{fromChange:false});
     }
   };
 

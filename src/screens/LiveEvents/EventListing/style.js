@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     containerStyle: {
     },
     upgradePlan:{
-        height:hp(90),
+        height:hp(70),
         width:wp(100),
         justifyContent:"center",
         alignItems:'center',

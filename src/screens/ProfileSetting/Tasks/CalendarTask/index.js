@@ -2,10 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import { View, StatusBar, TouchableOpacity } from "react-native";
-import { widthPercentageToDP as wp,heightPercentageToDP as hp } from "react-native-responsive-screen";
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+} from "react-native-responsive-screen";
 import { useIsFocused } from "@react-navigation/native";
 import { Calendar } from "react-native-calendars";
 import { useSelector } from "react-redux";
+import moment from "moment";
 
 //================================ Local Imported Files ======================================//
 
@@ -19,7 +23,6 @@ import AppLoading from "../../../../components/AppLoading";
 import ListView from "../../../../assets/images/ListView.svg";
 import AppHeader from "../../../../components/AppHeader";
 import Add from "../../../../assets/images/addIcon.svg";
-import TasksComponent from "../../../../components/TasksComponent";
 import Arrow from "../../../../assets/images/Arrow.svg";
 import RightArrow from "../../../../assets/images/RidgtArrow.svg";
 
@@ -29,7 +32,7 @@ const CalendarTask = (props) => {
   const isFocused = useIsFocused();
   const token = useSelector((state) => state.ApiData.token);
   const [loading, setLoading] = useState(false);
-  const [items, setItems] = useState([]);
+  const [tempObj, setTempObj] = useState();
 
 
   useEffect(() => {
@@ -39,12 +42,33 @@ const CalendarTask = (props) => {
 
   const getTasks = () => {
     setLoading(true);
+    let temp = {};
     ApiHelper.getUserTasks(token, (response) => {
       if (response.isSuccess) {
         console.log("Task Calendar ==>", response.response);
         if (response.response.data.code === 200) {
-          setItems(response.response.data.data);
-          setLoading(false);
+            response.response.data.data.map((val) => {
+                let date = moment(val.startDate).format('YYYY-MM-DD');
+                console.log('Date',date)
+                // if(val.status === 'COMPLETED'){
+                //     Object.assign(temp, {
+                //         [date]: {
+                //             selected: true,
+                //             selectedColor: 'green',
+                //         },
+                //     });
+                // } else {
+                    Object.assign(temp, {
+                        [date]: {
+                            selected: true,
+                            selectedColor: colors.button_text,
+                        },
+                    });
+                // }
+            })
+            console.log('Data ===>',temp)
+            setTempObj(temp)
+            setLoading(false)
         }
       } else {
         setLoading(false);
@@ -52,6 +76,7 @@ const CalendarTask = (props) => {
       }
     });
   };
+
 
 
   return (
@@ -84,6 +109,7 @@ const CalendarTask = (props) => {
         <Calendar
           style={styles.calendarView}
           current={new Date()}
+          markedDates={tempObj}
           firstDay={1}
           onMonthChange={(month) => console.log("month changed", month)}
           onDayLongPress={(day) => console.log("selected day", day)}
@@ -127,7 +153,7 @@ const CalendarTask = (props) => {
             textSectionTitleColor: colors.white,
             textSectionTitleDisabledColor: '#d9e1e8',
             selectedDayBackgroundColor: '#00adf5',
-            selectedDayTextColor: colors.image_background,
+            selectedDayTextColor: colors.white,
             todayTextColor: colors.white,
             dayTextColor: '#6A6A6A',
             textDisabledColor: '#3C3844',

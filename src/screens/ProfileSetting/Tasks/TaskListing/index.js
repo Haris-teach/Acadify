@@ -97,13 +97,13 @@ const TaskListing = props => {
                     showsVerticalScrollIndicator={false}
                     keyExtractor={(item) => item.id}
                     renderItem={({item}) => _renderTasksItems(item)}
-                    ListEmptyComponent={() => {
-                        return (
-                            <View style={styles.emptySection}>
-                                <Text style={[styles.headerTextStyle, {fontSize: wp(5)}]}>No Task Found</Text>
-                            </View>
-                        )
-                    }}
+                    // ListEmptyComponent={() => {
+                    //     return (
+                    //         <View style={styles.emptySection}>
+                    //             <Text style={[styles.headerTextStyle, {fontSize: wp(5)}]}>No Task Found</Text>
+                    //         </View>
+                    //     )
+                    // }}
                 />
             </View>
         </View>

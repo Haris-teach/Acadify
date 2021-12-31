@@ -34,4 +34,5 @@ export const NOTIFICATION = 'NOTIFICATION';
 export const LIVE_EVENTS = 'LIVE_EVENTS';
 export const EVENTS_DETAILS = 'EVENTS_DETAILS';
 export const FORUM = 'FORUM';
+export const PAYMENT_SCREEN = 'PAYMENT_SCREEN';
 

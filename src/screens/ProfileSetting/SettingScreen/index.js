@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 import {CommonActions} from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //================================ Local Imported Files ======================================//
 
@@ -18,7 +19,8 @@ import SettingTabComponent from "../../../components/SettingTabComponent";
 import {
     BILLING_LISTING,
     LOGIN_SCREEN,
-    PASSWORD_UPDATE,
+    PASSWORD_UPDATE, PAYMENT_SCREEN,
+    PLAN_SCREEN,
     PROFILE_SCREEN,
     TASK_LISTING
 } from "../../../constants/navigators";
@@ -26,7 +28,6 @@ import colors from "../../../assets/colors/colors";
 import images from "../../../assets/images/images";
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
 import AppHeader from "../../../components/AppHeader";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const SettingScreen = (props) => {
@@ -86,9 +87,9 @@ const SettingScreen = (props) => {
         } else if(item.id === 1){
             props.navigation.navigate(BILLING_LISTING)
         } else if(item.id === 2){
-
+            props.navigation.navigate(PLAN_SCREEN,{fromChange:true})
         } else if(item.id === 3){
-
+            props.navigation.navigate(PAYMENT_SCREEN)
         } else if(item.id === 4){
             props.navigation.navigate(TASK_LISTING)
         } else if(item.id === 5){
@@ -134,6 +135,7 @@ const SettingScreen = (props) => {
             ]
         );
     }
+
 
 
     return (

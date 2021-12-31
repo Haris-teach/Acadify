@@ -4,11 +4,11 @@ import React, { useEffect } from "react";
 import {
     View,
     Text,
-    TouchableOpacity,
-    FlatList,
     Modal,
+    Linking,
     Platform,
-    Linking
+    FlatList,
+    TouchableOpacity,
 } from "react-native";
 import { useState } from "react";
 import { useSelector } from "react-redux";
@@ -20,12 +20,12 @@ import moment from "moment";
 
 import styles from "./style";
 import ApiHelper from "../../../api/ApiHelper";
+import {BUY_RESOURCES} from "../../../constants/navigators";
 import AppLoading from "../../../components/AppLoading";
 import Search from "../../../assets/images/searchBackground.svg";
 import Filter from "../../../assets/images/filterBackground.svg";
 import DropArrow from "../../../assets/images/dropdown.svg";
 import CourseDropdown from "../../../components/CourseDropDwon";
-import {BUY_RESOURCES} from "../../../constants/navigators";
 import CategoryFilterModal from "../../../components/CategoryFilterModal";
 import ResourceCard from "../../../components/ResourcesCard";
 
@@ -72,7 +72,7 @@ const AllResourcesScreen = ({navigation}) => {
         ApiHelper.getResourceData(token, (response) => {
             if (response.isSuccess) {
                 if (response.response.data.code === 200) {
-                    console.log("Success ==>", response.response.data);
+                    console.log("Success of Resources ==>", response.response.data);
                     setCoursesData(response.response.data.data.docs);
                     pagePageLength(response.response.data.data.pages);
                     setLoading(false);
@@ -106,7 +106,6 @@ const AllResourcesScreen = ({navigation}) => {
 
     const downloadDocument = (items,value) => {
         if(value === 'download'){
-            console.log('Data ===>',items)
             Toast.show('Downloading ...',Toast.LONG);
             var date = new Date();
             let linking = items.url.split(' ');
@@ -130,7 +129,7 @@ const AllResourcesScreen = ({navigation}) => {
                         notification: true,
                         path: fPath,
                         title: linking[0],
-                        description: 'Downloading docs...',
+                        description: 'Downloading file...',
                     }
                 },
             });
@@ -148,6 +147,7 @@ const AllResourcesScreen = ({navigation}) => {
                     .catch((errorMessage) => {
                         Toast.show(errorMessage,Toast.LONG);
                     });
+            } else {
                 // const { fs } = RNFetchBlob;
                 // RNFetchBlob
                 //     .config({
@@ -168,7 +168,6 @@ const AllResourcesScreen = ({navigation}) => {
                 //     .catch((error) => {
                 //         console.log('error', error)
                 //     })
-            } else {
                 config(configOptions)
                     .fetch('GET', linking[0])
                     .then((res) => {
@@ -176,6 +175,7 @@ const AllResourcesScreen = ({navigation}) => {
                         Toast.show('File download successfully',Toast.LONG);
                     })
                     .catch((errorMessage, statusCode) => {
+                        console.log('Error',errorMessage.response)
                         Toast.show(errorMessage,Toast.LONG);
                     });
             }

@@ -8,7 +8,8 @@ import {
     StatusBar,
     ActivityIndicator,
     ImageBackground,
-    TouchableOpacity, Linking, LogBox,
+    TouchableOpacity,
+    Linking,
 } from "react-native";
 import {
     widthPercentageToDP as wp,
@@ -26,11 +27,12 @@ import images from "../../../assets/images/images";
 import colors from "../../../assets/colors/colors";
 import fonts from "../../../assets/fonts/fonts";
 import ApiHelper from "../../../api/ApiHelper";
-import {CREDIT_CARD} from "../../../constants/navigators";
+import {BUY_RESOURCES} from "../../../constants/navigators";
 import AppHeader from "../../../components/AppHeader";
 import Share from "../../../assets/images/copyLink.svg";
 import Button from "../../../components/Button/Button";
 import AppLoading from "../../../components/AppLoading";
+
 
 const EventDetailScreen = (props) => {
 
@@ -59,15 +61,16 @@ const EventDetailScreen = (props) => {
                 setShowBtn(false)
             }
         }
-    }, [isFocused]);
+    }, []);
 
 
     const _onPressButton = () => {
         setIsDisabled(true)
         if(coursePrice > 0){
-            props.navigation.navigate(CREDIT_CARD,{
-                fromCourse:true,
-                price:coursePrice
+            props.navigation.navigate(BUY_RESOURCES,{
+                fromEvent: true,
+                price: coursePrice,
+                eventId: courseDetails.id,
             })
         } else {
             subscribeFreeCourse();
@@ -77,10 +80,11 @@ const EventDetailScreen = (props) => {
 
     const subscribeFreeCourse = () => {
         setLoading(true)
+        let url = '/api/v1/zoom/join';
         let object = JSON.stringify({
-            "courseid": courseDetails.id
+            "id": courseDetails.id
         });
-        ApiHelper.enrollCourse(token,object,(resp) => {
+        ApiHelper.enrollCourse(token,object,url,(resp) => {
             if(resp.isSuccess){
                 setLoading(false);
                 setTimeout(() => {
@@ -186,7 +190,7 @@ const EventDetailScreen = (props) => {
 
             {showBtn === true && loading !== true ? <View style={styles.btnView}>
                 <Button
-                    disabled={isDisabled}
+                    // disabled={isDisabled}
                     buttonText={btnTitle}
                     onPress={() => _onPressButton()}
                 />

@@ -47,7 +47,7 @@ const NotificationScreen = (props) => {
                 }
             }else {
                 setLoading(false);
-                console.log('Response',response.response.data)
+                console.log('Error Response',response.response.response.data.message)
             }
         })
     }

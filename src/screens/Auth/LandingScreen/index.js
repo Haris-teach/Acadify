@@ -7,10 +7,10 @@ import {View, Text, ImageBackground, StatusBar} from 'react-native';
 
 import styles from './style';
 import images from '../../../assets/images/images';
-import Button from '../../../components/Button/Button';
 import colors from '../../../assets/colors/colors';
-import Logo from '../../../assets/images/logo.svg';
 import {LOGIN_SCREEN} from '../../../constants/navigators';
+import Logo from '../../../assets/images/logo.svg';
+import Button from '../../../components/Button/Button';
 
 const LandingScreen = props => {
   return (

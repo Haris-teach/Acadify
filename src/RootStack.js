@@ -4,10 +4,11 @@ import * as React from "react";
 import "react-native-gesture-handler";
 import { Platform } from "react-native";
 import { NavigationContainer, useNavigationContainerRef } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createNativeStackNavigator, } from "@react-navigation/native-stack";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
+import * as CardStyleInterpolators from "@react-navigation/native-stack/src/navigators/TransitionConfigs/CardStyleInterpolators";
 
 //================================ Local Imported Files ======================================//
 
@@ -53,7 +54,7 @@ import {
     LIVE_EVENTS,
     FORUM,
     SPLASH_SCREEN,
-    EVENTS_DETAILS
+    EVENTS_DETAILS, PAYMENT_SCREEN
 } from "./constants/navigators";
 import PlanScreen from "./screens/Auth/PlanScreen";
 import CardScreen from "./screens/Auth/CardScreen";
@@ -82,6 +83,7 @@ import EditTask from "./screens/ProfileSetting/Tasks/EditTask";
 import CalendarTask from "./screens/ProfileSetting/Tasks/CalendarTask";
 import SplashScreen from "./screens/Auth/SplashScreen";
 import EventDetailScreen from "./screens/LiveEvents/EventDetails";
+import PaymentScreen from "./screens/ProfileSetting/PaymentMethod";
 import BillingListing from "./screens/ProfileSetting/Billing";
 import MenuBar from "./components/MenuBar";
 
@@ -109,6 +111,7 @@ const MyNewStack = () => {
             initialRouteName={SPLASH_SCREEN}
             screenOptions={{
                 headerShown: false,
+                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
             }}
         >
             <RootStack.Screen name={SPLASH_SCREEN} component={SplashScreen} />
@@ -141,9 +144,9 @@ const MyNewStack = () => {
             <RootStack.Screen name={MY_TAB} component={MyTabs}/>
             <RootStack.Screen name={SETTINGS} component={SettingScreen} />
             <RootStack.Screen name={NOTIFICATION} component={NotificationScreen} />
-            <RootStack.Screen name={LIVE_EVENTS} component={LiveEvents} />
             <RootStack.Screen name={EVENTS_DETAILS} component={EventDetailScreen} />
             <RootStack.Screen name={BILLING_LISTING} component={BillingListing}/>
+            <RootStack.Screen name={PAYMENT_SCREEN} component={PaymentScreen}/>
         </RootStack.Navigator>
     );
 };
@@ -204,6 +207,7 @@ const MyTabs = () => {
         <Tab.Navigator
             initialRouteName={COURSE_SCREEN}
             screenOptions={{
+                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
                 headerShown:false,
                 tabBarShowLabel:true,
                 tabBarActiveTintColor:colors.button_text,

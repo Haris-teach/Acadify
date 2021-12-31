@@ -156,26 +156,29 @@ const LiveEvents = ({navigation}) => {
             <View style={styles.headingView}>
                 <Text style={styles.headingText}>Live Events</Text>
             </View>
-            <View style={styles.upperView}>
+            {lockModal === false ? <View style={styles.upperView}>
                 <TouchableOpacity
-                    style={catText === 'Live'? [styles.headerStyle,{backgroundColor:colors.button_text}] : styles.headerStyle}
+                    style={catText === 'Live' ? [styles.headerStyle, {backgroundColor: colors.button_text}] : styles.headerStyle}
                     onPress={() => onSelectType('Live')}
                 >
-                    <Text style={catText === 'Live' ? [styles.headerTextStyle,{color:colors.white}] : styles.headerTextStyle}>Live</Text>
+                    <Text
+                        style={catText === 'Live' ? [styles.headerTextStyle, {color: colors.white}] : styles.headerTextStyle}>Live</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    style={catText === 'Past'? [styles.headerStyle,{backgroundColor:colors.button_text}] : styles.headerStyle}
+                    style={catText === 'Past' ? [styles.headerStyle, {backgroundColor: colors.button_text}] : styles.headerStyle}
                     onPress={() => onSelectType('Past')}
                 >
-                    <Text style={catText === 'Past'? [styles.headerTextStyle,{color:colors.white}] : styles.headerTextStyle}>Past</Text>
+                    <Text
+                        style={catText === 'Past' ? [styles.headerTextStyle, {color: colors.white}] : styles.headerTextStyle}>Past</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    style={catText === 'Upcoming'? [styles.headerStyle,{backgroundColor:colors.button_text}] : styles.headerStyle}
+                    style={catText === 'Upcoming' ? [styles.headerStyle, {backgroundColor: colors.button_text}] : styles.headerStyle}
                     onPress={() => onSelectType('Upcoming')}
                 >
-                    <Text style={catText === 'Upcoming'? [styles.headerTextStyle,{color:colors.white}] : styles.headerTextStyle}>Upcoming</Text>
+                    <Text
+                        style={catText === 'Upcoming' ? [styles.headerTextStyle, {color: colors.white}] : styles.headerTextStyle}>Upcoming</Text>
                 </TouchableOpacity>
-            </View>
+            </View> : null}
             <View style={styles.container}>
                 {lockModal === false ?
                     <FlatList

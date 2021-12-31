@@ -20,6 +20,7 @@ import Button from '../../../components/Button/Button';
 import CreditCard from '../../../assets/images/credit_card.svg';
 import AppHeader from "../../../components/AppHeader";
 import AppLoading from "../../../components/AppLoading";
+import {LIVE_EVENTS} from "../../../constants/navigators";
 
 
 const ResourceBuyScreen = props => {
@@ -33,30 +34,39 @@ const ResourceBuyScreen = props => {
         if(props.route.params.fromResource === true){
             setPlanName(props.route.params.price)
             setTitle('document');
+        } else if(props.route.params.fromEvent === true){
+            setPlanName(props.route.params.price)
+            setTitle('event');
         }
     }, []);
 
 
     const onPressYes = () => {
         if(props.route.params.fromResource === true) {
-            subscribeFreeCourse();
+            let url = '/api/v1/resources/documentbuy';
+            let object = JSON.stringify({
+                "resource_id": props.route.params.resourceId
+            });
+            subscribeFreeCourse(url,object);
+        } else if(props.route.params.fromEvent === true){
+            let url = '/api/v1/zoom/join';
+            let object = JSON.stringify({
+                "id": props.route.params.eventId
+            });
+            subscribeFreeCourse(url,object);
         }
     };
 
 
-    const subscribeFreeCourse = () => {
+    const subscribeFreeCourse = (url,object) => {
         setLoading(true)
-        let url = '/api/v1/resources/documentbuy';
-        let object = JSON.stringify({
-            "resource_id": props.route.params.resourceId
-        });
         ApiHelper.enrollCourse(token,object,url,(resp) => {
             if(resp.isSuccess){
                 setLoading(false);
                 setTimeout(() => {
                     Toast.show('Successfully Subscribe',Toast.LONG);
                 },1000)
-                props.navigation.goBack();
+                {props.route.params.fromEvent ? props.navigation.navigate(LIVE_EVENTS) : props.navigation.goBack()}
             }else{
                 setLoading(false);
                 console.log('Error',resp.response.response)
@@ -86,7 +96,7 @@ const ResourceBuyScreen = props => {
             </View>
             <View style={styles.subHeadingView}>
                 <Text style={styles.subHeadingText}>
-                    Are you sure you want to purchase this {title}?
+                    {title === 'document' ? `Are you sure you want to purchase this ${title}?` : `Are you sure you want to buy this ${title}?`}
                 </Text>
             </View>
             <View style={[styles.subHeadingView, {height: hp(5)}]}>

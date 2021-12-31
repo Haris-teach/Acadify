@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
         maxHeight:hp(25),
         minHeight:hp(8),
         width:wp(90),
-        paddingHorizontal:wp(3),
+        padding:wp(2),
         borderRadius:wp(3),
         justifyContent:'center',
         alignItems:'center',
