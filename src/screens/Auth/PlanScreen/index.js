@@ -2,18 +2,18 @@
 
 import React, {useEffect, useState} from 'react';
 import {
-  View,
-  Text,
-  ScrollView,
-  StatusBar,
-  FlatList,
-  TouchableOpacity,
+    View,
+    Text,
+    FlatList,
+    StatusBar,
+    ScrollView,
+    TouchableOpacity,
 } from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {widthPercentageToDP} from 'react-native-responsive-screen';
-import Toast from 'react-native-simple-toast';
 import {CommonActions} from '@react-navigation/native';
 import {useDispatch, useSelector} from "react-redux";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from 'react-native-simple-toast';
 
 //================================ Local Imported Files ======================================//
 
@@ -59,7 +59,7 @@ const PlanScreen = props => {
       if (response.isSuccess) {
         setLoading(false);
         if (response.response.data.code === 200) {
-          console.log('Response', response.response.data);
+          console.log('Response ===>', response.response.data);
           setIndexValue(0);
           setPackages(response.response.data.result[0].Stripes);
           setIndexFeature(response.response.data.result[0].Stripes[0].Rights);
@@ -205,8 +205,8 @@ const PlanScreen = props => {
             <TouchableOpacity
                 style={
                     setIndex !== index
-                        ? styles.container
-                        : [
+                        ? styles.container :
+                        [
                             styles.container,
                             {borderWidth: 2, borderColor: colors.button_text},
                         ]
@@ -246,14 +246,14 @@ const PlanScreen = props => {
     <ScrollView
       style={styles.mainContainer}
       showsVerticalScrollIndicator={false}>
-      {AppLoading.renderLoading(loading)}
+        {AppLoading.renderLoading(loading)}
       <StatusBar backgroundColor={colors.app_background} />
-      <View style={styles.headerView}>
-        <AppHeader
-            title={props.route.params.fromChange ? 'Change Plan' : 'Payment Plan'}
-            leftIconPath={images.back_icon}
-            onLeftIconPress={() => props.navigation.goBack()}
-        />
+        <View style={styles.headerView}>
+            <AppHeader
+                title={props.route.params.fromChange ? 'Change Plan' : 'Payment Plan'}
+                leftIconPath={images.back_icon}
+                onLeftIconPress={() => props.navigation.goBack()}
+            />
       </View>
       <View style={styles.headingView}>
         <Text style={styles.headingText}>
@@ -278,23 +278,23 @@ const PlanScreen = props => {
         </View>
       ) : null}
       <View style={styles.featureView}>
-        <FlatList
-          data={indexFeature}
-          extraData={indexFeature}
-          keyExtractor={item => item.id}
-          showsVerticalScrollIndicator={false}
-          renderItem={({item, index}) => renderItemsFeature(item, index)}
-        />
+          <FlatList
+            data={indexFeature}
+            extraData={indexFeature}
+            keyExtractor={item => item.id}
+            showsVerticalScrollIndicator={false}
+            renderItem={({item, index}) => renderItemsFeature(item, index)}
+          />
       </View>
       {isVisible ? (
         <View style={styles.buttonView}>
-          <View style={styles.btnView}>
-            <Button
-              width={widthPercentageToDP(40)}
-              buttonText={'Cancel'}
-              onPress={() => props.navigation.goBack()}
-            />
-          </View>
+            <View style={styles.btnView}>
+                <Button
+                    width={widthPercentageToDP(40)}
+                    buttonText={'Cancel'}
+                    onPress={() => props.navigation.goBack()}
+                />
+            </View>
 
           <View style={styles.btnView}>
             <Button

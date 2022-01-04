@@ -1,8 +1,10 @@
 import axios from "axios";
 const BASE_URL = "https://api.stagingaia.com";
-// const BASE_URL = "http://192.168.0.21:5001";
+// const BASE_URL = "http://192.168.0.21:5001"; //Fatima
+// const BASE_URL = "http://192.168.0.21:5001"; //Usama
 const BASE_URL_STRIPE = "https://api.stripe.com/v1";
 const STRIPE_PUBLISHABLE_KEY = "pk_test_p70ntuGAVS0fwxQrqHagViMn00ndsuW2zD";
+
 
 class ApiServices {
   constructor(props) {}
@@ -36,6 +38,42 @@ class ApiServices {
         });
       });
   };
+
+
+  addCard = (token, id,name, callback) => {
+    var data = JSON.stringify({
+      "source": id,
+      "name": name,
+      "address_line1": "Pakistan LHR"
+    });
+
+    var config = {
+      method: 'post',
+      url: 'https://api.stagingaia.com/api/v1/users/addcard',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+
+    console.log('Config',config)
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  };
+
 
   onGetPlan = (callback) => {
     let config = {
@@ -766,15 +804,18 @@ class ApiServices {
         });
   };
 
+
   getTasks = (token,start_date,end_date, callback) => {
     var config = {
       method: "get",
-      url: BASE_URL + `/api/v1/payment?start_date=${start_date}&end_date=${end_date}&size=30`,
+      url: BASE_URL + `/api/v1/payment?start_date=${start_date}&end_date=${end_date}&size=10`,
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     };
+
+    console.log('config',config)
 
     axios(config)
         .then((response) => {

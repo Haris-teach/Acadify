@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     },
     numberView:{
         height:hp(6),
-        width:hp(6),
+        width:hp(5.5),
         borderRadius:hp(2),
         backgroundColor:colors.image_background,
         justifyContent:"center",

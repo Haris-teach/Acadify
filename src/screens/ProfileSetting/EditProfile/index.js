@@ -30,7 +30,6 @@ import Button from "../../../components/Button/Button";
 import AppHeader from '../../../components/AppHeader';
 import * as ApiDataActions from '../../../../redux/store/actions/ApiData';
 
-
 const EditProfileScreen = props => {
 
     let user  = props.route.params;

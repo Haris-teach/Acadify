@@ -3,10 +3,10 @@
 import React from 'react';
 import {
     View,
-    StatusBar,
-    TouchableOpacity,
-    FlatList,
     Text,
+    StatusBar,
+    FlatList,
+    TouchableOpacity, RefreshControl,
 } from 'react-native';
 import {widthPercentageToDP as wp} from "react-native-responsive-screen";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -24,7 +24,6 @@ import AppHeader from "../../../components/AppHeader";
 import DateImage from "../../../assets/images/date.svg";
 import BillComponent from "../../../components/BillingComponent";
 
-
 class BillingListing extends React.Component {
 
     constructor(props) {
@@ -38,7 +37,8 @@ class BillingListing extends React.Component {
             endDate:'MM/DD/YYYY',
             start_date:'',
             end_date:'',
-            items:[]
+            items:[],
+            page:1
         }
     }
 
@@ -73,6 +73,7 @@ class BillingListing extends React.Component {
 
 
      getTasks = () => {
+        this.setState({loading:true})
         ApiHelper.getTasks(this.state.token.token,this.state.start_date,this.state.end_date,(response) => {
             if(response.isSuccess){
                 console.log('Billing success ===>',response.response.data)
@@ -146,6 +147,13 @@ class BillingListing extends React.Component {
     }
 
 
+     LoadMoreRandomData = () => {
+        // this.setState({page: this.state.page + 1},() => {
+        //     this.getTasks()
+        // });
+    }
+
+
     render() {
         return (
             <View style={styles.mainContainer}>
@@ -199,7 +207,29 @@ class BillingListing extends React.Component {
                     <FlatList
                         data={this.state.items}
                         extraData={this.state.items}
+                        onEndReachedThreshold={0}
+                        onEndReached={() => this.LoadMoreRandomData()}
                         showsVerticalScrollIndicator={false}
+                        refreshControl={
+                            <RefreshControl
+                                colors={['transparent']}
+                                style={{backgroundColor: 'transparent'}}
+                                progressBackgroundColor='transparent'
+                                refreshing={this.state.loading}
+                                onRefresh={() => {
+                                    this.setState({
+                                        page:1,
+                                        start_date:'',
+                                        end_date:'',
+                                        date:'MM/DD/YYYY',
+                                        endDate:'MM/DD/YYYY'
+                                    },() => {
+                                        this.getTasks()
+                                    })
+                                }}
+                                tintColor={'transparent'}
+                            />
+                        }
                         keyExtractor={(item) => item.id}
                         renderItem={({item, index}) => this._renderTasksItems(item, index)}
                         ListEmptyComponent={() => {

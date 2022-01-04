@@ -16,11 +16,11 @@ import colors from '../../../assets/colors/colors';
 import fonts from '../../../assets/fonts/fonts';
 import images from "../../../assets/images/images";
 import ApiHelper from "../../../api/ApiHelper";
+import {LIVE_EVENTS} from "../../../constants/navigators";
 import Button from '../../../components/Button/Button';
 import CreditCard from '../../../assets/images/credit_card.svg';
 import AppHeader from "../../../components/AppHeader";
 import AppLoading from "../../../components/AppLoading";
-import {LIVE_EVENTS} from "../../../constants/navigators";
 
 
 const ResourceBuyScreen = props => {

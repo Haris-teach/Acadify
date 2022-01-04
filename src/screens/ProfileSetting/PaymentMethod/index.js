@@ -10,17 +10,17 @@ import {
     StatusBar,
     ScrollView,
     ImageBackground,
-    KeyboardAvoidingView,
     TouchableOpacity,
+    KeyboardAvoidingView,
 } from 'react-native';
 import {
     heightPercentageToDP as hp,
     widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import {useSelector} from 'react-redux';
-import Toast from 'react-native-simple-toast';
 import {useIsFocused} from "@react-navigation/native";
 import {Swipeable} from "react-native-gesture-handler";
+import Toast from 'react-native-simple-toast';
 
 //================================ Local Imported Files ======================================//
 
@@ -35,16 +35,16 @@ import AppLoading from '../../../components/AppLoading';
 import Check from '../../../assets/images/check.svg';
 import UnCheck from '../../../assets/images/uncheck.svg';
 import DeleteWhite from "../../../assets/images/binwhite.svg";
-
+import {ADD_NEW_CARD_SCREEN} from "../../../constants/navigators";
 
 const PaymentScreen = props => {
 
     const isFocused = useIsFocused();
     const token = useSelector(state => state.ApiData.token);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading]   = useState(false);
     const [cardData, setCardData] = useState([]);
-    const [selectedIndex, setSelectedIndex] = useState(0);
     const [selectedItemData, setSelectedItemData] = useState('');
+    const [selectedIndex, setSelectedIndex] = useState(0);
 
 
     useEffect(() => {
@@ -91,7 +91,7 @@ const PaymentScreen = props => {
                 if (response.response.data.code === 200) {
                     setLoading(false);
                     setTimeout(() => {
-                        Toast.show('Card successfully Deleted...', Toast.LONG);
+                        Toast.show('Card Successfully Deleted...', Toast.LONG);
                     },200)
                 } else {
                     console.log('Error inner ==>', response.response.data);
@@ -124,7 +124,6 @@ const PaymentScreen = props => {
                 setLoading(false);
                 if (response.response.data.code === 200) {
                     setLoading(false);
-                    props.navigation.goBack()
                     setTimeout(() => {
                         Toast.show('Default card successfully updated...', Toast.LONG);
                     },200)
@@ -144,7 +143,7 @@ const PaymentScreen = props => {
        return(
            <Swipeable
                key={item.id}
-               renderRightActions = {() => leftAction(item,index)}
+               renderRightActions = {() => selectedIndex === index ? null : leftAction(item,index)}
                onSwipeableRightOpen = {() => console.log('Open')}
            >
           <TouchableOpacity
@@ -198,7 +197,7 @@ const PaymentScreen = props => {
                                         styles.nameText,
                                         {
                                             marginTop: wp(1),
-                                            fontSize: 18,
+                                            fontSize: wp(4.4),
                                             fontWeight: '600',
                                             width: wp(40),
                                         },
@@ -242,12 +241,12 @@ const PaymentScreen = props => {
                         />
                     </View>
                 </View>
-                <View style={styles.buttonView}>
+                {!loading && <View style={styles.buttonView}>
                     <Button
                         buttonText={'Add new card'}
-                        onPress={() => props.navigation.goBack()}
+                        onPress={() => props.navigation.navigate(ADD_NEW_CARD_SCREEN)}
                     />
-                </View>
+                </View>}
             </ScrollView>
         </KeyboardAvoidingView>
     );

@@ -35,4 +35,5 @@ export const LIVE_EVENTS = 'LIVE_EVENTS';
 export const EVENTS_DETAILS = 'EVENTS_DETAILS';
 export const FORUM = 'FORUM';
 export const PAYMENT_SCREEN = 'PAYMENT_SCREEN';
+export const ADD_NEW_CARD_SCREEN = 'ADD_NEW_CARD_SCREEN';
 

@@ -36,7 +36,6 @@ import AppLoading from "../../../components/AppLoading";
 
 const EventDetailScreen = (props) => {
 
-    const isFocused = useIsFocused();
     const token = useSelector((state) => state.ApiData.token);
     const [loading,setLoading] = useState(false);
     const [courseDetails,setCourseDetails] = useState('');

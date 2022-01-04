@@ -27,25 +27,67 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     inputView: {
-        maxHeight: hp(500),
+        height: hp(45),
         width: wp(100),
+        borderTopRightRadius:wp(12),
+        borderTopLeftRadius:wp(12),
+        backgroundColor:colors.card_background
     },
     cardTextView:{
-        height: hp(8),
+        height: hp(10),
         width: wp(100),
         justifyContent: 'center',
     },
     inputSection: {
-        maxHeight: hp(500),
+        marginTop:hp(1),
+        height: hp(8),
         width: wp(100),
-        justifyContent:'center',
-        alignItems:'center',
+        backgroundColor:colors.card_background
+    },
+    inputText: {
+        width: wp(85),
+        backgroundColor: colors.card_background,
+        borderWidth: 0,
+        borderColor: colors.app_background,
+        color: colors.white,
+        borderRadius: wp(2),
+    },
+    forgotPassword: {
+        height: hp(5),
+        width: wp(70),
+        marginHorizontal: wp(7),
+        alignSelf: 'flex-end',
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+    },
+    forgotPasswordText: {
+        fontSize: wp(3.8),
+        fontWeight: '700',
+        fontFamily: fonts.regular,
+        color: colors.white,
     },
     bottomView: {
         height: hp(13),
         width: wp(100),
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    noAccountView: {
+        height: hp(10),
+        width: wp(100),
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    noAccountText: {
+        color: colors.no_account,
+        fontSize: wp(4),
+        fontFamily: fonts.regular,
+    },
+    signUpText: {
+        color: colors.white,
+        fontSize: wp(4),
+        fontFamily: fonts.semi,
     },
     nameView: {
         height: hp(12),
@@ -72,8 +114,15 @@ const styles = StyleSheet.create({
     buttonView: {
         height: hp(10),
         width: wp(100),
-        justifyContent:'center',
-        alignItems:'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        backgroundColor:colors.card_background
+    },
+    btnView: {
+        height: hp(10),
+        width: wp(45),
+        alignItems: 'center',
     },
     cardNumberView: {
         height: hp(8),
@@ -96,36 +145,10 @@ const styles = StyleSheet.create({
         paddingLeft: wp(10),
     },
     cardText:{
-        fontSize: wp(6),
+        fontSize: 24,
         paddingLeft:wp(10),
         color:colors.white,
         fontFamily:fonts.semi
-    },
-    leftActionView: {
-        height:hp(4.5),
-        width:wp(25),
-        borderRadius:wp(3),
-        marginLeft:wp(2),
-        justifyContent:'center',
-        alignItems:'center',
-        alignSelf:'center',
-        flexDirection:'row',
-        backgroundColor:'red'
-    },
-    deleteButton:{
-        fontWeight:'700',
-        fontSize:wp(4),
-        color:colors.white,
-        paddingLeft:wp(2)
-    },
-    cardView:{
-        height:hp(8),
-        width:wp(90),
-        backgroundColor:colors.image_background,
-        marginVertical:wp(1),
-        borderRadius:wp(4),
-        alignItems:'center',
-        flexDirection:'row',
     }
 });
 

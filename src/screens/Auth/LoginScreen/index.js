@@ -4,15 +4,15 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  ScrollView,
-  KeyboardAvoidingView,
   Platform,
   StatusBar,
+  ScrollView,
+  KeyboardAvoidingView,
 } from "react-native";
-import { TextInput } from "react-native-paper";
-import { CommonActions } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import Toast from "react-native-simple-toast";
+import { TextInput } from "react-native-paper";
+import { CommonActions } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //================================ Local Imported Files ======================================//
@@ -23,14 +23,15 @@ import fonts from "../../../assets/fonts/fonts";
 import Button from "../../../components/Button/Button";
 import LoginLogo from "../../../assets/images/login_screen.svg";
 import {
-  FORGOT_PASSWORD,
   MY_TAB,
   SIGNUP_SCREEN,
+  FORGOT_PASSWORD,
 } from "../../../constants/navigators";
 import AppLoading from "../../../components/AppLoading";
 import ApiHelper from "../../../api/ApiHelper";
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
 import {SET_USER_RESOURCE} from "../../../../redux/store/actions/ApiData";
+
 
 const LoginScreen = (props) => {
   const dispatch = useDispatch();
@@ -39,6 +40,7 @@ const LoginScreen = (props) => {
   const [email, setEmail] = useState("user1@mailinator.com");
   const [password, setPassword] = useState("Dvorak123!");
   const [loading, setLoading]   = useState(false);
+
 
   const onPressLogin = () => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -52,6 +54,7 @@ const LoginScreen = (props) => {
       onLoginApi();
     }
   };
+
 
   const onLoginApi = () => {
     setLoading(true);
@@ -86,7 +89,10 @@ const LoginScreen = (props) => {
         }
       } else {
         setLoading(false);
-        console.log("Error ==>", response.response);
+        console.log("Error ==>", response.response.response.data);
+        setTimeout(() => {
+          Toast.show('502 Bad Gateway', Toast.LONG);
+        }, 200);
       }
     });
   };

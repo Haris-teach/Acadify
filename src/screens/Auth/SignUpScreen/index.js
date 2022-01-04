@@ -1,6 +1,6 @@
 //================================ React Native Imported Files ======================================//
 
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -18,10 +18,10 @@ import PhoneInput from "react-native-phone-number-input";
 
 import Button from '../../../components/Button/Button';
 import SignUpLogo from '../../../assets/images/Signup.svg';
-import styles from './style';
 import colors from '../../../assets/colors/colors';
 import fonts from '../../../assets/fonts/fonts';
 import Toast from 'react-native-simple-toast';
+import styles from './style';
 import AppHeader from '../../../components/AppHeader';
 import {LOGIN_SCREEN, PLAN_SCREEN} from '../../../constants/navigators';
 import * as ApiDataActions from '../../../../redux/store/actions/ApiData';

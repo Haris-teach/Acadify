@@ -11,7 +11,8 @@ import {
     ScrollView,
     KeyboardAvoidingView,
     TouchableOpacity,
-    FlatList, Alert,
+    FlatList,
+    Alert,
 } from 'react-native';
 import {useSelector} from "react-redux";
 import Toast from "react-native-simple-toast";
@@ -36,6 +37,7 @@ import AddSign from "../../../assets/images/addIcon.svg";
 import DeleteSign from "../../../assets/images/delete.svg";
 import EditIcon from "../../../assets/images/delete-Icon.svg";
 import AppHeader from "../../../components/AppHeader";
+
 
 const EditAccountability = props => {
 
@@ -353,6 +355,7 @@ const EditAccountability = props => {
                             </TouchableOpacity>
                         </TouchableOpacity>
                     </View>
+
                     <View style={styles.inputBox}>
                         <Text style={styles.titleText}>Category</Text>
                         <DropDownPicker

@@ -3,31 +3,33 @@
 import React, {useEffect, useState} from 'react';
 import {
     View,
+    Image,
+    Platform,
+    StatusBar,
     TextInput,
     ScrollView,
     KeyboardAvoidingView,
-    Platform,
-    StatusBar, Image,
 } from 'react-native';
 import {TextInput as Input} from 'react-native-paper';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
+import {useIsFocused} from "@react-navigation/native";
 import {heightPercentageToDP as hp, widthPercentageToDP} from "react-native-responsive-screen";
 import Toast from 'react-native-simple-toast';
 
 //================================ Local Imported Files ======================================//
 
 import Button from "../../../components/Button/Button";
+import AppHeader from '../../../components/AppHeader';
+import AppLoading from "../../../components/AppLoading";
 import styles from './style';
 import colors from '../../../assets/colors/colors';
 import fonts from '../../../assets/fonts/fonts';
-import AppHeader from '../../../components/AppHeader';
 import images from '../../../assets/images/images';
 import {EDIT_PROFILE_SCREEN} from '../../../constants/navigators';
 import ApiHelper from "../../../api/ApiHelper";
-import AppLoading from "../../../components/AppLoading";
-import {useIsFocused} from "@react-navigation/native";
 
-const ProfileScreen = props => {
+
+const ProfileScreen = ({navigation}) => {
 
     const isFocused = useIsFocused();
     const token = useSelector(state => state.ApiData.token);
@@ -42,8 +44,10 @@ const ProfileScreen = props => {
 
 
     useEffect(() => {
-        getUserProfile()
-    },[isFocused])
+        return navigation.addListener('focus', () => {
+            getUserProfile()
+        });
+    },[navigation,isFocused])
 
 
     const getUserProfile = () => {
@@ -72,7 +76,7 @@ const ProfileScreen = props => {
 
 
     const onPressEdit = () => {
-        props.navigation.navigate(EDIT_PROFILE_SCREEN,{
+        navigation.navigate(EDIT_PROFILE_SCREEN,{
             userResponse
         });
     };
@@ -91,7 +95,7 @@ const ProfileScreen = props => {
                   <AppHeader
                       title={'Profile'}
                       leftIconPath={images.back_icon}
-                      onLeftIconPress={() => props.navigation.goBack()}
+                      onLeftIconPress={() => navigation.goBack()}
                   />
                 </View>
                 <View style={styles.imageBackground}>

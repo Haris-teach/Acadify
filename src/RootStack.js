@@ -54,7 +54,9 @@ import {
     LIVE_EVENTS,
     FORUM,
     SPLASH_SCREEN,
-    EVENTS_DETAILS, PAYMENT_SCREEN
+    EVENTS_DETAILS,
+    PAYMENT_SCREEN,
+    ADD_NEW_CARD_SCREEN
 } from "./constants/navigators";
 import PlanScreen from "./screens/Auth/PlanScreen";
 import CardScreen from "./screens/Auth/CardScreen";
@@ -101,10 +103,12 @@ import ForumInActive from "./assets/dropIcon/forumIn.svg";
 import ForumActive from "./assets/dropIcon/forumA.svg";
 import ResourcesInActive from "./assets/dropIcon/resourceIn.svg";
 import ResourcesActive from "./assets/dropIcon/resourceA.svg";
+import AddNewCardScreen from "./screens/ProfileSetting/AddNewCard";
 
 
 const RootStack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
+
 const MyNewStack = () => {
     return (
         <RootStack.Navigator
@@ -147,6 +151,7 @@ const MyNewStack = () => {
             <RootStack.Screen name={EVENTS_DETAILS} component={EventDetailScreen} />
             <RootStack.Screen name={BILLING_LISTING} component={BillingListing}/>
             <RootStack.Screen name={PAYMENT_SCREEN} component={PaymentScreen}/>
+            <RootStack.Screen name={ADD_NEW_CARD_SCREEN} component={AddNewCardScreen}/>
         </RootStack.Navigator>
     );
 };
