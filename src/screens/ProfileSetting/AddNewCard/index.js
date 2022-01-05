@@ -41,7 +41,7 @@ const AddNewCardScreen = props => {
 
 
     const onPay = () => {
-        if (cardNumber.length < 18) {
+        if (cardNumber.length < 14) {
             Toast.show('Invalid card number', Toast.LONG);
         } else if (expiryDate.length < 5) {
             Toast.show('Invalid expiry date', Toast.LONG);

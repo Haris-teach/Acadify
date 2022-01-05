@@ -159,7 +159,9 @@ const PaymentScreen = props => {
                   {selectedIndex === index ? <Check height={15} width={15}/> : <UnCheck height={15} width={15}/>}
               </View>
               <View style={{height:hp(10),width:wp(60),justifyContent:"center",paddingLeft:wp(5)}}>
-                  <Text style={{fontWeight:'400',fontSize:wp(4),fontFamily:fonts.regular,color:colors.white}} numberOfLines={1}>{item.name}</Text>
+                  {item.name !== null &&
+                    <Text style={{fontWeight: '400', fontSize: wp(4), fontFamily: fonts.regular, color: colors.white}} numberOfLines={1}>{item.name}</Text>
+                  }
                   <Text style={{fontWeight:'400',fontSize:wp(4),fontFamily:fonts.regular,color:colors.white,marginTop:wp(2)}} numberOfLines={1}>**** **** **** {item.last4}</Text>
               </View>
               <View style={{height:hp(10),width:wp(20),justifyContent:"center",alignItems:'center'}}>

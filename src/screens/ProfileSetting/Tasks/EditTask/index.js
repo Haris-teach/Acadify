@@ -4,13 +4,14 @@ import React, {useState} from 'react';
 import {
     View,
     Text,
+    Alert,
     StatusBar,
     TextInput,
     ScrollView,
-    KeyboardAvoidingView,
-    TouchableOpacity,
     Platform,
-    Keyboard, Alert,
+    Keyboard,
+    TouchableOpacity,
+    KeyboardAvoidingView,
 } from 'react-native';
 import {useSelector} from "react-redux";
 import Toast from "react-native-simple-toast";
@@ -30,7 +31,6 @@ import AppLoading from "../../../../components/AppLoading";
 import DateImage from "../../../../assets/images/date.svg";
 import AppHeader from "../../../../components/AppHeader";
 import EditIcon from "../../../../assets/images/delete-Icon.svg";
-
 
 const EditTask = props => {
 
@@ -132,7 +132,6 @@ const EditTask = props => {
         ApiHelper.updateUserTask(Data.id,token,title,status,priority,description,date,endDate,(response) => {
             if(response.isSuccess){
                 setLoading(false);
-                // console.log('Response ==>',response.response.data)
                 if(response.response.data.code === 200){
                     setLoading(false);
                     Keyboard.dismiss();
@@ -197,7 +196,6 @@ const EditTask = props => {
         ApiHelper.deleteUserTask(token,Data.id,(response) => {
             if(response.isSuccess){
                 setLoading(false);
-                // console.log('Response of Delete ==>',response.response.data)
                 if(response.response.data.code === 200){
                     setLoading(false);
                     Keyboard.dismiss();

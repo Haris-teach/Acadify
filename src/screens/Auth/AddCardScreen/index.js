@@ -18,6 +18,7 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import Toast from 'react-native-simple-toast';
 import {CommonActions} from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //================================ Local Imported Files ======================================//
 
@@ -30,8 +31,8 @@ import Button from '../../../components/Button/Button';
 import AppHeader from '../../../components/AppHeader';
 import AppLoading from '../../../components/AppLoading';
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
-import {LOGIN_SCREEN, MY_TAB, MY_TABS} from "../../../constants/navigators";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import {MY_TAB} from "../../../constants/navigators";
+
 
 const AddCardScreen = props => {
 
@@ -40,12 +41,12 @@ const AddCardScreen = props => {
   const [cardNumber, setCardNumber] = useState('');
   const [cvc, setCvc] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
-  const [cvcLength, setCvcLength] = useState(3);
+  const [cvcLength, setCvcLength] = useState(4);
   const [loading, setLoading] = useState(false);
 
 
   const onPay = () => {
-    if (cardNumber.length < 18) {
+    if (cardNumber.length < 14) {
       Toast.show('Invalid card number', Toast.LONG);
     } else if (expiryDate.length < 5) {
       Toast.show('Invalid expiry date', Toast.LONG);
@@ -336,7 +337,6 @@ const AddCardScreen = props => {
               borderColor={colors.white}
               textColor={colors.black}
               onPress={() => onPay()}
-              // onPress={() => props.navigation.navigate(LOGIN_SCREEN)}
             />
           </View>
         </View>

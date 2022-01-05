@@ -63,6 +63,7 @@ const LoginScreen = (props) => {
         dispatch(ApiDataActions.SetLoginData(response.response.data.data));
         setLoading(false);
         if (response.response.data.status === 200) {
+          console.log("Login Response ==>", response.response);
           setRights(response.response.data.data)
           if(response.response.data.data.user.userType === 2){
             console.log("Login Response ==>", response.response.data.data);

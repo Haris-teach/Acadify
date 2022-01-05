@@ -1,7 +1,7 @@
 //================================ React Native Imported Files ======================================//
 
 import React, { useEffect, useState } from "react";
-import { View, StatusBar, TouchableOpacity } from "react-native";
+import {View, StatusBar, TouchableOpacity, Modal} from "react-native";
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
@@ -17,7 +17,7 @@ import styles from "./style";
 import colors from "../../../../assets/colors/colors";
 import ApiHelper from "../../../../api/ApiHelper";
 import images from "../../../../assets/images/images";
-import { CREATE_TASK, TASK_LISTING } from "../../../../constants/navigators";
+import {CREATE_TASK, EDIT_TASK, TASK_LISTING} from "../../../../constants/navigators";
 import fonts from "../../../../assets/fonts/fonts";
 import AppLoading from "../../../../components/AppLoading";
 import ListView from "../../../../assets/images/ListView.svg";
@@ -25,6 +25,7 @@ import AppHeader from "../../../../components/AppHeader";
 import Add from "../../../../assets/images/addIcon.svg";
 import Arrow from "../../../../assets/images/Arrow.svg";
 import RightArrow from "../../../../assets/images/RidgtArrow.svg";
+import TaskComponent from "../../../../components/TaskComponent";
 
 
 const CalendarTask = (props) => {
@@ -32,7 +33,10 @@ const CalendarTask = (props) => {
   const isFocused = useIsFocused();
   const token = useSelector((state) => state.ApiData.token);
   const [loading, setLoading] = useState(false);
+  const [taskModal, setTaskModal] = useState(false);
   const [tempObj, setTempObj] = useState();
+  const [tasks, setTasks] = useState([]);
+  const [taskData, setTaskData] = useState([]);
 
 
   useEffect(() => {
@@ -45,11 +49,12 @@ const CalendarTask = (props) => {
     let temp = {};
     ApiHelper.getUserTasks(token, (response) => {
       if (response.isSuccess) {
-        console.log("Task Calendar ==>", response.response);
+        console.log("Task Calendar ==>", response.response.data.data);
         if (response.response.data.code === 200) {
+            setTasks(response.response.data.data)
             response.response.data.data.map((val) => {
                 let date = moment(val.startDate).format('YYYY-MM-DD');
-                console.log('Date',date)
+                // console.log('Date',date)
                 // if(val.status === 'COMPLETED'){
                 //     Object.assign(temp, {
                 //         [date]: {
@@ -66,17 +71,36 @@ const CalendarTask = (props) => {
                     });
                 // }
             })
-            console.log('Data ===>',temp)
+            console.log('Task Calendar Data ===>',temp)
             setTempObj(temp)
             setLoading(false)
         }
       } else {
         setLoading(false);
-        console.log("Response", response.response);
+        console.log("Task Calendar Data Error ===>", response.response);
       }
     });
   };
 
+
+  const _onDayPress = (value) => {
+      let taskArray = [];
+      tasks.map((val) => {
+          console.log('val',val)
+          let date = moment(val.startDate).format('YYYY-MM-DD');
+          if(value.dateString === date){
+             taskArray.push(val)
+          }
+      })
+      if(taskArray.length === 1){
+          props.navigation.navigate(EDIT_TASK,{
+              item:taskArray[0]
+          })
+      }else if(taskArray.length > 1) {
+          setTaskData(taskArray)
+          setTaskModal(true)
+      }
+  }
 
 
   return (
@@ -113,7 +137,7 @@ const CalendarTask = (props) => {
           firstDay={1}
           onMonthChange={(month) => console.log("month changed", month)}
           onDayLongPress={(day) => console.log("selected day", day)}
-          onDayPress={(day) => console.log("selected day", day)}
+          onDayPress={(day) => _onDayPress(day)}
           renderArrow={(direction) => direction === 'left' ? <RightArrow/> : <Arrow/>}
           disableAllTouchEventsForDisabledDays={false}
           disableMonthChange={false}
@@ -171,18 +195,23 @@ const CalendarTask = (props) => {
             textDayHeaderFontSize: wp(4),
           }}
         />
-
-        {/*"stylesheet.calendar.header"*/}
-        {/*"stylesheet.calendar.main"*/}
-        {/*"stylesheet.calendar-list.main"*/}
-        {/*"stylesheet.agenda.main"*/}
-        {/*"stylesheet.agenda.list"*/}
-        {/*"stylesheet.day.basic"*/}
-        {/*"stylesheet.day.single"*/}
-        {/*"stylesheet.day.multiDot"*/}
-        {/*"stylesheet.day.period"*/}
-        {/*"stylesheet.dot"*/}
       </View>
+        <Modal
+            animationType={'none'}
+            transparent={true}
+            visible={taskModal}
+            onRequestClose={() => setTaskModal(!taskModal)}
+        >
+            <TaskComponent
+                onPressClose={() => setTaskModal(!taskModal)}
+                data={taskData}
+                onSelect={(item) => {
+                    setTaskModal(!taskModal)
+                    props.navigation.navigate(EDIT_TASK,{item})
+                }}
+            />
+        </Modal>
+
     </View>
   );
 };

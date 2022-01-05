@@ -729,6 +729,32 @@ class ApiServices {
       });
   };
 
+  getAllForum = (token, callback) => {
+    var config = {
+      method: "get",
+      // url: BASE_URL + `/api/v1/resources/?size=15&page=${page}`,
+      url: BASE_URL + '/api/v1/forum/getall',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    axios(config)
+      .then((response) => {
+        callback({
+          isSuccess: true,
+          response: response,
+        });
+      })
+      .catch((error) => {
+        callback({
+          isSuccess: false,
+          response: error,
+        });
+      });
+  };
+
   getDashboardData = (token, callback) => {
     var config = {
       method: "get",
@@ -805,10 +831,10 @@ class ApiServices {
   };
 
 
-  getTasks = (token,start_date,end_date, callback) => {
+  getTasks = (token,start_date,end_date,page ,callback) => {
     var config = {
       method: "get",
-      url: BASE_URL + `/api/v1/payment?start_date=${start_date}&end_date=${end_date}&size=10`,
+      url: BASE_URL + `/api/v1/payment?start_date=${start_date}&end_date=${end_date}&size=50&page=${page}`,
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
