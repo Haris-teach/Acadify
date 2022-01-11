@@ -20,7 +20,7 @@ const JourneyComponent = (props) => {
     }
 
     return (
-        <View style={index !== props.index ? styles.container : [styles.container,{backgroundColor:'#1F1F1F',borderRadius:wp(6)}]}>
+        <View style={index !== props.index ? [styles.container,{borderBottomWidth:props.index === props.length - 1 ? 0 : 0.25}] : [styles.container,{backgroundColor:'#1F1F1F',borderRadius:wp(6)}]}>
             <View style={styles.headingView}>
                 <Text style={styles.titleText} numberOfLines={1}>{props.title}</Text>
                 <View style={styles.dateView}>

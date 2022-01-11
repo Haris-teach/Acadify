@@ -17,7 +17,7 @@ import moment from "moment";
 //================================ Local Imported Files ======================================//
 
 import styles from './style';
-import {ADD_GOAL, EDIT_ACCOUNTABILITY} from "../../../constants/navigators";
+import {ADD_GOAL, EDIT_ACCOUNTABILITY, PLAN_SCREEN} from "../../../constants/navigators";
 import ApiHelper from "../../../api/ApiHelper";
 import colors from "../../../assets/colors/colors";
 import Add from "../../../assets/images/addIcon.svg";
@@ -47,6 +47,7 @@ const GetAccountability = (props) => {
 
     useEffect(() => {
         if(goal){
+            setLockModal(false)
             setSelectedIndex('')
             getGoals();
         } else {
@@ -213,7 +214,7 @@ const GetAccountability = (props) => {
                         <Button
                             buttonText={'UPGRADE PLAN'}
                             width={wp(50)}
-                            onPress={() => console.log('Plan Upgrade')}
+                            onPress={() => props.navigation.navigate(PLAN_SCREEN,{fromChange:true})}
                         />
                     </View>
                 </View>}

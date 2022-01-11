@@ -7,7 +7,9 @@ import {
     FlatList,
     StatusBar,
     RefreshControl,
-    TouchableOpacity, ScrollView,
+    TouchableOpacity,
+    ScrollView,
+    Appearance
 } from 'react-native';
 import moment from "moment";
 import {widthPercentageToDP, widthPercentageToDP as wp} from "react-native-responsive-screen";
@@ -43,6 +45,7 @@ const BillingListing = (props) => {
     const [loading,setLoading] = useState(false);
     const [dateModal,setDateModal] = useState(false);
     const [endDateModal,setEndDateModal] = useState(false);
+    const [darkMode,setDarkMode] = useState(false);
     const [date,setDate] = useState('MM/DD/YYYY');
     const [endDate,setEndDate] = useState('MM/DD/YYYY');
     const [start_date,setStart_Date] = useState('');
@@ -63,6 +66,9 @@ const BillingListing = (props) => {
 
 
     useEffect(() => {
+        // Appearance.addChangeListener((value) => {
+        //     console.log('value',value)
+        // })
         setDate('MM/DD/YYYY')
         setEndDate('MM/DD/YYYY')
         setStart_Date('')
@@ -134,14 +140,14 @@ const BillingListing = (props) => {
             if (response.isSuccess) {
                 if (response.response.data.code === 200) {
                     setLoading(false);
-                    console.log('Success of Change Plan ==>', response.response.data.data);
-                    dispatch(ApiDataActions.SetUserToken(response.response.data.token));
+                    console.log('Success of Change Plan ==>', response.response.data.data.token);
+                    dispatch(ApiDataActions.SetUserToken(response.response.data.data.token));
                     dispatch(ApiDataActions.SetLoginData(response.response.data.data));
                     setRights(response.response.data.data);
                     setTimeout(() => {
                         Toast.show('Plan Successfully Updated...', Toast.LONG);
+                        props.navigation.goBack();
                     },200)
-                    props.navigation.goBack();
                 } else {
                     setLoading(false);
                     console.log('Error ==>', response.response);
@@ -183,6 +189,7 @@ const BillingListing = (props) => {
             </View>
         );
     };
+
 
     const setRights = (data) => {
         if(data.user.UserRights.length > 0){
@@ -481,8 +488,8 @@ const BillingListing = (props) => {
                                     bgColor={colors.white}
                                     borderColor={colors.white}
                                     textColor={colors.black}
-                                    // onPress={() =>updatePlan()}
-                                    onPress={() => props.navigation.goBack()}
+                                    onPress={() => updatePlan()}
+                                    // onPress={() => props.navigation.goBack()}
                                 />
                             </View>
                         </View>
@@ -494,7 +501,7 @@ const BillingListing = (props) => {
                     mode={"date"}
                     timePickerModeAndroid={"clock"}
                     maximumDate={new Date()}
-                    // isDarkModeEnabled={true}
+                    // isDarkModeEnabled={darkMode}
                     onConfirm={(value) => onConfirmDate(value)}
                     onCancel={() => onCancelDate()}
                 />

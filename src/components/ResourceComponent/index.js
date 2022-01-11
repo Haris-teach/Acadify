@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
         height:'100%',
         width: '100%',
         borderRadius:wp(7),
-        resizeMode:'cover',
+        resizeMode:'contain',
         justifyContent:'center',
         alignItems:'center'
     },

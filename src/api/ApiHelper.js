@@ -711,6 +711,8 @@ class ApiServices {
       },
     };
 
+    console.log('Config',config)
+
     axios(config)
       .then((response) => {
         callback({

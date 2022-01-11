@@ -11,6 +11,7 @@ import {
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import Toast from "react-native-simple-toast";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import moment from "moment";
 
 //================================ Local Imported Files ======================================//
@@ -24,13 +25,17 @@ import Add from "../../../assets/images/addIcon.svg";
 import Refresh from "../../../assets/images/refresh.svg";
 import CourseDropdown from "../../../components/CourseDropDwon";
 import ForumMainComponent from "../../../components/ForumMainComponent";
+import Button from "../../../components/Button/Button";
+import {PLAN_SCREEN} from "../../../constants/navigators";
 
 
 const ForumListing = ({navigation}) => {
 
     const token = useSelector((state) => state.ApiData.token);
+    let forum = useSelector(state => state.ApiData.forum);
     const [loading, setLoading] = useState(false);
     const [dropModal, setDropModal] = useState(false);
+    const [lockModal, setLockModal] = useState(false);
     let [page, setPage] = useState(1);
     let [pageLength, pagePageLength] = useState(1);
     let [coursesData, setCoursesData]   = useState([]);
@@ -53,9 +58,14 @@ const ForumListing = ({navigation}) => {
 
     useEffect(() => {
         return navigation.addListener('focus', () => {
-            setCatText('All Forum');
-            setPage(1);
-            getAllResources();
+            if(forum){
+                setLockModal(false)
+                setCatText('All Forum');
+                setPage(1);
+                getAllResources();
+            } else {
+                setLockModal(true)
+            }
         });
     }, [navigation]);
 
@@ -155,7 +165,8 @@ const ForumListing = ({navigation}) => {
             {AppLoading.renderLoading(loading)}
 
             <View style={styles.container}>
-                <FlatList
+                {lockModal === false ?
+                    <FlatList
                     data={coursesData}
                     extraData={coursesData}
                     onEndReachedThreshold={0}
@@ -185,7 +196,17 @@ const ForumListing = ({navigation}) => {
                         )
                     }}
                     renderItem={({item,index}) => renderResourceItems(item,index)}
-                />
+                />:
+                    <View style={styles.upgradePlan}>
+                        <Text style={[styles.headerTextStyle,{fontSize:wp(6),fontWeight:'500',textAlign:'center'}]}>Upgrade Your Plan To Get Access</Text>
+                        <View style={{marginTop:hp(2)}}>
+                            <Button
+                                buttonText={'UPGRADE PLAN'}
+                                width={wp(50)}
+                                onPress={() => navigation.navigate(PLAN_SCREEN,{fromChange:true})}
+                            />
+                        </View>
+                    </View>}
             </View>
 
             <Modal

@@ -10,6 +10,7 @@ import colors from "../../assets/colors/colors";
 import fonts from "../../assets/fonts/fonts";
 import LiveIcon from "../../assets/images/Live_btn.svg";
 
+
 const LiveComponent = (props) => {
 
     const [isLoaded,setIsLoaded] = useState(false);
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius:wp(6),
         borderTopRightRadius:wp(6),
         alignItems:'center',
-        justifyContent:'center',
+        // justifyContent:'center',
     },
     liveView:{
         height:hp(6),

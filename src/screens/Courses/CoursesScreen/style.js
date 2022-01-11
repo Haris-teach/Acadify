@@ -89,7 +89,8 @@ const styles = StyleSheet.create({
     width:wp(100),
     justifyContent:"center",
     alignItems:'center',
-  }
+  },
+
 });
 
 export default styles;

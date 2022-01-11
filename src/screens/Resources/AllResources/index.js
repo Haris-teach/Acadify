@@ -20,7 +20,7 @@ import RNFetchBlob from 'rn-fetch-blob'
 
 import styles from "./style";
 import ApiHelper from "../../../api/ApiHelper";
-import {BUY_RESOURCES} from "../../../constants/navigators";
+import {BUY_RESOURCES, LOGIN_SCREEN, PLAN_SCREEN} from "../../../constants/navigators";
 import AppLoading from "../../../components/AppLoading";
 import Search from "../../../assets/images/searchBackground.svg";
 import Filter from "../../../assets/images/filterBackground.svg";
@@ -30,6 +30,7 @@ import CategoryFilterModal from "../../../components/CategoryFilterModal";
 import ResourceCard from "../../../components/ResourcesCard";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import Button from "../../../components/Button/Button";
+import {CommonActions} from "@react-navigation/native";
 
 
 const AllResourcesScreen = ({navigation}) => {
@@ -64,6 +65,7 @@ const AllResourcesScreen = ({navigation}) => {
     useEffect(() => {
         return navigation.addListener('focus', () => {
             if(resource) {
+                setLockModal(false);
                 setCatText('All Resources');
                 setPage(1);
                 getAllResources();
@@ -89,7 +91,16 @@ const AllResourcesScreen = ({navigation}) => {
                 }
             } else {
                 setLoading(false);
-                console.log("Error ==>", response.response);
+                console.log("Error ==>", response.response.response);
+                if(response.response.response.status === 401){
+                    // navigation.dispatch(
+                    //     CommonActions.reset({
+                    //         index: 0,
+                    //         routes: [{name: LOGIN_SCREEN}],
+                    //     }),
+                    // );
+                    Toast.show('Session Expired',Toast.LONG);
+                }
             }
         });
     };
@@ -315,7 +326,7 @@ const AllResourcesScreen = ({navigation}) => {
                             <Button
                                 buttonText={'UPGRADE PLAN'}
                                 width={wp(50)}
-                                onPress={() => console.log('Plan Upgrade')}
+                                onPress={() => navigation.navigate(PLAN_SCREEN,{fromChange:true})}
                             />
                         </View>
                     </View>

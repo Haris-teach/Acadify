@@ -64,6 +64,7 @@ const DashboardScreen = (props) => {
 
   useEffect(() => {
     if(course){
+      setLockModal(false)
       setCatText('All Courses');
       setPage(1);
       getUserProfile();

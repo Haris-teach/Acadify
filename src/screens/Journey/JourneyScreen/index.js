@@ -10,11 +10,12 @@ import {
 import {useSelector} from "react-redux";
 import {useIsFocused} from "@react-navigation/native";
 import moment from "moment";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 
 //================================ Local Imported Files ======================================//
 
 import styles from './style';
-import {ADD_JOURNEY} from "../../../constants/navigators";
+import {ADD_JOURNEY, PLAN_SCREEN} from "../../../constants/navigators";
 import ApiHelper from "../../../api/ApiHelper";
 import Add from "../../../assets/images/addIcon.svg";
 import AppHeaderNative from "../../../components/AppHeaderNative";
@@ -22,18 +23,26 @@ import AppLoading from "../../../components/AppLoading";
 import JourneyComponent from "../../../components/JourneyComponent";
 import AppHeader from "../../../components/AppHeader";
 import images from "../../../assets/images/images";
-import {widthPercentageToDP as wp} from "react-native-responsive-screen";
+import Button from "../../../components/Button/Button";
 
 const JourneyScreen = (props) => {
 
     const isFocused = useIsFocused();
     const token = useSelector(state => state.ApiData.token);
+    console.log('Token',token)
+    let journey = useSelector(state => state.ApiData.journey);
+    const [lockModal, setLockModal] = useState(false);
     const [loading,setLoading] = useState(false);
     const [data,setData] = useState([]);
 
 
     useEffect(() => {
-       getJourney();
+        if(journey){
+            setLockModal(false)
+            getJourney();
+        } else {
+            setLockModal(true)
+        }
     }, [isFocused]);
 
 
@@ -48,7 +57,7 @@ const JourneyScreen = (props) => {
                 }
             }else {
                 setLoading(false);
-                console.log('Response',response.response)
+                console.log('journey error',response.response.response)
             }
         })
     }
@@ -63,6 +72,7 @@ const JourneyScreen = (props) => {
                 index={index}
                 title={item.title}
                 time={time}
+                length={data.length}
                 date={date}
                 description={item.description}
             />
@@ -80,6 +90,7 @@ const JourneyScreen = (props) => {
                 />
             </View>
             <View style={styles.listView}>
+                {lockModal === false ?
                 <FlatList
                     data={data}
                     extraData={data}
@@ -107,7 +118,18 @@ const JourneyScreen = (props) => {
                     }}
                     keyExtractor={(item) => item.id}
                     renderItem={({item,index}) => renderItems(item,index)}
-                />
+                /> :
+                    <View style={styles.upgradePlan}>
+                        <Text style={[styles.headerTextStyle,{fontSize:wp(6),fontWeight:'500',textAlign:'center'}]}>Upgrade Your Plan To Get Access</Text>
+                        <View style={{marginTop:hp(2)}}>
+                            <Button
+                                buttonText={'UPGRADE PLAN'}
+                                width={wp(50)}
+                                onPress={() => props.navigation.navigate(PLAN_SCREEN,{fromChange:true})}
+                            />
+                        </View>
+                    </View>
+                }
             </View>
         </View>
     );

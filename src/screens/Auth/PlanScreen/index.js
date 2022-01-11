@@ -105,7 +105,7 @@ const PlanScreen = props => {
             ApiHelper.onSignUpApi(stripeId, data, response => {
                 if (response.isSuccess) {
                     if (response.response.data.code === 200) {
-                        dispatch(ApiDataActions.SetUserToken(response.response.data.token));
+                        dispatch(ApiDataActions.SetUserToken(response.response.data.data.token));
                         dispatch(ApiDataActions.SetLoginData(response.response.data.data));
                         setData(JSON.stringify(response.response.data.data));
                         setLoading(false);
@@ -143,7 +143,7 @@ const PlanScreen = props => {
                 if (response.response.data.code === 200) {
                     setLoading(false);
                     console.log('Success of Change Plan ==>', response.response.data.data);
-                    dispatch(ApiDataActions.SetUserToken(response.response.data.token));
+                    dispatch(ApiDataActions.SetUserToken(response.response.data.data.token));
                     dispatch(ApiDataActions.SetLoginData(response.response.data.data));
                     setRights(response.response.data.data);
                     setTimeout(() => {
@@ -185,8 +185,6 @@ const PlanScreen = props => {
                     dispatch(ApiDataActions.SetUserForum(true));
                 }
             })
-        } else {
-            clearData();
         }
     }
 

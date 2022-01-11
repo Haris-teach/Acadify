@@ -11,7 +11,7 @@ import moment from "moment";
 import styles from "./style";
 import ApiHelper from "../../../api/ApiHelper";
 import colors from "../../../assets/colors/colors";
-import {EVENTS_DETAILS} from "../../../constants/navigators";
+import {EVENTS_DETAILS, PLAN_SCREEN} from "../../../constants/navigators";
 import AppLoading from "../../../components/AppLoading";
 import Button from "../../../components/Button/Button";
 import LiveEvent from "../../../components/LiveEvent";
@@ -30,6 +30,7 @@ const LiveEvents = ({navigation}) => {
     useEffect(() => {
         return navigation.addListener('focus', () => {
             if (zoom) {
+                setLockModal(false);
                 setCatText('Live');
                 setPage(1);
                 getLiveEvents('live');
@@ -195,7 +196,7 @@ const LiveEvents = ({navigation}) => {
                             <Button
                                 buttonText={'UPGRADE PLAN'}
                                 width={wp(50)}
-                                onPress={() => console.log('Plan Upgrade')}
+                                onPress={() => navigation.navigate(PLAN_SCREEN,{fromChange:true})}
                             />
                         </View>
                     </View>

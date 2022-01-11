@@ -53,8 +53,13 @@ const styles = StyleSheet.create({
         fontWeight:'700',
         color:colors.white,
         fontSize:24
-    }
-
+    },
+    upgradePlan:{
+        height:hp(90),
+        width:wp(100),
+        justifyContent:"center",
+        alignItems:'center',
+    },
 });
 
 export default styles;
