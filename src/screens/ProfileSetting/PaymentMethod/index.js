@@ -45,11 +45,14 @@ const PaymentScreen = props => {
     const [cardData, setCardData] = useState([]);
     const [selectedItemData, setSelectedItemData] = useState('');
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const [value, setValue] = useState(false);
 
 
     useEffect(() => {
+        setCardData([])
+        setSelectedIndex(0)
         getCards();
-    },[isFocused])
+    },[value,isFocused])
 
 
     const getCards = () => {
@@ -90,6 +93,7 @@ const PaymentScreen = props => {
                 setLoading(false);
                 if (response.response.data.code === 200) {
                     setLoading(false);
+                    setValue(!value)
                     setTimeout(() => {
                         Toast.show('Card Successfully Deleted...', Toast.LONG);
                     },200)
@@ -146,28 +150,29 @@ const PaymentScreen = props => {
                renderRightActions = {() => selectedIndex === index ? null : leftAction(item,index)}
                onSwipeableRightOpen = {() => console.log('Open')}
            >
-          <TouchableOpacity
-              style={styles.cardView}
-              activeOpacity={0.8}
-              onPress={() => {
-                  setSelectedIndex(index)
-                  setSelectedItemData(item)
-                  onMakeDefault(item)
-              }}
-          >
-              <View style={{height:hp(10),width:wp(10),justifyContent:"center",alignItems:'center'}}>
-                  {selectedIndex === index ? <Check height={15} width={15}/> : <UnCheck height={15} width={15}/>}
-              </View>
-              <View style={{height:hp(10),width:wp(60),justifyContent:"center",paddingLeft:wp(5)}}>
-                  {item.name !== null &&
-                    <Text style={{fontWeight: '400', fontSize: wp(4), fontFamily: fonts.regular, color: colors.white}} numberOfLines={1}>{item.name}</Text>
-                  }
-                  <Text style={{fontWeight:'400',fontSize:wp(4),fontFamily:fonts.regular,color:colors.white,marginTop:wp(2)}} numberOfLines={1}>**** **** **** {item.last4}</Text>
-              </View>
-              <View style={{height:hp(10),width:wp(20),justifyContent:"center",alignItems:'center'}}>
-                  <Image source={item.brand === 'Visa' && images.visa || item.brand === 'MasterCard' && images.master || item.brand === 'American Express' && images.american || images.dummy} style={{height:'40%',width:'70%',resizeMode:'cover'}}/>
-              </View>
-          </TouchableOpacity>
+               <View style={styles.mainTabView}>
+
+               <TouchableOpacity
+                   style={styles.cardView}
+                   activeOpacity={0.8}
+                   onPress={() => {
+                       setSelectedIndex(index)
+                       setSelectedItemData(item)
+                       onMakeDefault(item)
+                   }}
+               >
+                   <View style={{height:hp(10),width:wp(10),justifyContent:"center",alignItems:'center'}}>
+                       {selectedIndex === index ? <Check height={15} width={15}/> : <UnCheck height={15} width={15}/>}
+                   </View>
+                   <View style={{height:hp(10),width:wp(60),justifyContent:"center",paddingLeft:wp(5)}}>
+                       {item.name !== null && <Text style={{fontWeight: '400', fontSize: wp(4), fontFamily: fonts.regular, color: colors.white}} numberOfLines={1}>{item.name}</Text>}
+                       <Text style={{fontWeight:'400',fontSize:wp(4),fontFamily:fonts.regular,color:colors.white,marginTop:wp(2)}} numberOfLines={1}>**** **** **** {item.last4}</Text>
+                   </View>
+                   <View style={{height:hp(10),width:wp(20),justifyContent:"center",alignItems:'center'}}>
+                       <Image source={item.brand === 'Visa' && images.visa || item.brand === 'MasterCard' && images.master || item.brand === 'American Express' && images.american || images.dummy} style={{height:'40%',width:'70%',resizeMode:'cover'}}/>
+                   </View>
+               </TouchableOpacity>
+               </View>
            </Swipeable>
        )
     }
@@ -243,7 +248,8 @@ const PaymentScreen = props => {
                         />
                     </View>
                 </View>
-                {!loading && <View style={styles.buttonView}>
+                {!loading &&
+                <View style={styles.buttonView}>
                     <Button
                         buttonText={'Add new card'}
                         onPress={() => props.navigation.navigate(ADD_NEW_CARD_SCREEN)}

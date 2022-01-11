@@ -48,7 +48,9 @@ const styles = StyleSheet.create({
         height:hp(11),
         width:hp(11),
         borderRadius:hp(2),
-        resizeMode:'cover'
+        resizeMode:'cover',
+        justifyContent:'center',
+        alignItems:'center'
     },
     announcementView:{
         maxHeight:hp(220),

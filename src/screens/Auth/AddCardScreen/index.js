@@ -33,7 +33,6 @@ import AppLoading from '../../../components/AppLoading';
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
 import {MY_TAB} from "../../../constants/navigators";
 
-
 const AddCardScreen = props => {
 
   const data = useSelector(state => state.ApiData.signUpData);
@@ -51,7 +50,7 @@ const AddCardScreen = props => {
     } else if (expiryDate.length < 5) {
       Toast.show('Invalid expiry date', Toast.LONG);
     } else if (cvc < cvcLength) {
-      Toast.show('Invalid expiry date', Toast.LONG);
+      Toast.show('Invalid cvc', Toast.LONG);
     } else {
       onPayApi();
     }
@@ -97,7 +96,11 @@ const AddCardScreen = props => {
           );
         } else {
           console.log('Error inner ==>', response.response);
-          Toast.show(response.response.data.error.email, Toast.LONG);
+          if(response.response.data.status === 400){
+            Toast.show(response.response.data.message, Toast.LONG);
+          } else {
+            Toast.show(response.response.data.error.email, Toast.LONG);
+          }
         }
       } else {
         setLoading(false);

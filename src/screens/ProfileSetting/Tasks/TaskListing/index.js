@@ -58,7 +58,7 @@ const TaskListing = props => {
 
 
     const _renderTasksItems = (item) => {
-        let date = moment(item.dueDate).format('MM/DD/YYYY');
+        let date = moment(item.startDate).format('MM/DD/YYYY');
         return(
             <TasksComponent
                 title={item.title}

@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     inputView:{
         flex:0.9,
         alignItems:'center',
+        paddingBottom:hp(2),
     },
     emptySection:{
         height:hp(70),

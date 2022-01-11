@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {widthPercentageToDP} from 'react-native-responsive-screen';
-import {CommonActions} from '@react-navigation/native';
+import {CommonActions, useIsFocused} from '@react-navigation/native';
 import {useDispatch, useSelector} from "react-redux";
 import Toast from 'react-native-simple-toast';
 
@@ -32,13 +32,12 @@ import Monthly from '../../../assets/images/monthly.svg';
 import LIFETIME from '../../../assets/images/LIFETIME.svg';
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
 
-
 const PlanScreen = props => {
 
     const dispatch = useDispatch();
+    const isFocused = useIsFocused();
     const data = useSelector(state => state.ApiData.signUpData);
     const token = useSelector(state => state.ApiData.token);
-    const loginToken = useSelector(state => state.ApiData.loginData);
     const [loading, setLoading] = useState(false);
     const [packages, setPackages] = useState('');
     const [indexFeature, setIndexFeature] = useState('');
@@ -46,11 +45,12 @@ const PlanScreen = props => {
     const [planName, setPlaneName] = useState('');
     const [setIndex, setIndexValue] = useState(0);
     const [isVisible, setVisible] = useState(false);
+    const [packageData,setPackageData] = useState('');
 
 
     useEffect(() => {
         getPlans();
-    }, []);
+    }, [isFocused]);
 
 
     const getPlans = () => {
@@ -61,8 +61,9 @@ const PlanScreen = props => {
         if (response.response.data.code === 200) {
           console.log('Response ===>', response.response.data);
           setIndexValue(0);
-          setPackages(response.response.data.result[0].Stripes);
-          setIndexFeature(response.response.data.result[0].Stripes[0].Rights);
+            setPackageData(response.response.data.result[0].name)
+            setPackages(response.response.data.result[0].Stripes);
+            setIndexFeature(response.response.data.result[0].Stripes[0].Rights);
           setPlaneName(response.response.data.result[0].Stripes[0]);
           setStripeId(
             response.response.data.result[0].Stripes[0].id,
@@ -137,7 +138,7 @@ const PlanScreen = props => {
         let data = JSON.stringify({
             'StripeId':stripeId
         })
-        ApiHelper.onChangePlan(loginToken.token,data,url,response => {
+        ApiHelper.onChangePlan(token,data,url,response => {
             if (response.isSuccess) {
                 if (response.response.data.code === 200) {
                     setLoading(false);
@@ -259,7 +260,7 @@ const PlanScreen = props => {
         <Text style={styles.headingText}>
           The Place You can learn Every Thing
         </Text>
-        <Text style={styles.subHeadingText}>Gold Pricing Plan</Text>
+        <Text style={styles.subHeadingText}>{packageData} Pricing Plan</Text>
       </View>
       <View style={styles.planView}>
         <FlatList

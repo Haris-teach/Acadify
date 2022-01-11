@@ -1,6 +1,6 @@
 import axios from "axios";
 const BASE_URL = "https://api.stagingaia.com";
-// const BASE_URL = "http://192.168.0.21:5001"; //Fatima
+// const BASE_URL = "http://192.168.0.36:5001"; //Fatima
 // const BASE_URL = "http://192.168.0.21:5001"; //Usama
 const BASE_URL_STRIPE = "https://api.stripe.com/v1";
 const STRIPE_PUBLISHABLE_KEY = "pk_test_p70ntuGAVS0fwxQrqHagViMn00ndsuW2zD";
@@ -135,16 +135,13 @@ class ApiServices {
       });
   };
 
-  createImageUrl = (token, type,name, callback) => {
-    var data = JSON.stringify({
-      "ContentType": type,
-      "Key": name,
-      "title": ''
-    });
+  createImageUrl = (token, image, callback) => {
+    let data = new FormData();
+    data.append('profileImage',image)
 
     var config = {
       method: 'post',
-      url: BASE_URL + '/api/v1/media/signed/url',
+      url: BASE_URL + '/api/v1/media/signed/url/mob',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -834,7 +831,35 @@ class ApiServices {
   getTasks = (token,start_date,end_date,page ,callback) => {
     var config = {
       method: "get",
-      url: BASE_URL + `/api/v1/payment?start_date=${start_date}&end_date=${end_date}&size=50&page=${page}`,
+      url: BASE_URL + `/api/v1/payment?start_date=${start_date}&end_date=${end_date}&size=300&page=${page}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    console.log('config',config)
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  };
+
+
+  getRefreshTasks = (token,start_date,end_date,page ,callback) => {
+    var config = {
+      method: "get",
+      url: BASE_URL + '/api/v1/payment?start_date=&end_date=&size=300&page=1',
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -997,6 +1022,30 @@ class ApiServices {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
+      },
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  }
+
+  sendForgotEmail = (email,callback) => {
+    var config = {
+      method: 'get',
+      url: BASE_URL + `/api/v1/auth/sendemail/${email}`,
+      headers: {
+        'Content-Type': 'application/json',
       },
     };
 

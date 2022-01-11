@@ -28,14 +28,18 @@ import DropArrow from "../../../assets/images/dropdown.svg";
 import CourseDropdown from "../../../components/CourseDropDwon";
 import CategoryFilterModal from "../../../components/CategoryFilterModal";
 import ResourceCard from "../../../components/ResourcesCard";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
+import Button from "../../../components/Button/Button";
 
 
 const AllResourcesScreen = ({navigation}) => {
 
     const token = useSelector((state) => state.ApiData.token);
+    let resource = useSelector(state => state.ApiData.resource);
     const [loading, setLoading] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [dropModal, setDropModal] = useState(false);
+    const [lockModal, setLockModal] = useState(false);
     let [page, setPage] = useState(1);
     let [pageLength, pagePageLength] = useState(1);
     let [categoryData, setCategoryData] = useState([]);
@@ -59,10 +63,14 @@ const AllResourcesScreen = ({navigation}) => {
 
     useEffect(() => {
         return navigation.addListener('focus', () => {
-            setCatText('All Resources');
-            setPage(1);
-            getAllResources();
-            getCategories();
+            if(resource) {
+                setCatText('All Resources');
+                setPage(1);
+                getAllResources();
+                getCategories();
+            } else {
+                setLockModal(true);
+            }
         });
     }, [navigation]);
 
@@ -123,18 +131,21 @@ const AllResourcesScreen = ({navigation}) => {
                 },
 
                 android: {
-                    fileCache: false,
                     addAndroidDownloads: {
+                        fileCache: true,
                         useDownloadManager: true,
                         notification: true,
                         path: fPath,
                         title: linking[0],
                         description: 'Downloading file...',
+                        overwrite : true,
+                        indicator:true
                     }
                 },
             });
 
             if (isIOS) {
+                console.log('Config',configOptions)
                 config(configOptions)
                     .fetch('GET', linking[0])
                     .then((res) => {
@@ -145,7 +156,7 @@ const AllResourcesScreen = ({navigation}) => {
 
                     })
                     .catch((errorMessage) => {
-                        Toast.show(errorMessage,Toast.LONG);
+                        Toast.show('Download Failed',Toast.LONG);
                     });
             } else {
                 // const { fs } = RNFetchBlob;
@@ -167,16 +178,19 @@ const AllResourcesScreen = ({navigation}) => {
                 //     })
                 //     .catch((error) => {
                 //         console.log('error', error)
+                //
                 //     })
                 config(configOptions)
+
                     .fetch('GET', linking[0])
                     .then((res) => {
                         // RNFetchBlob.android.actionViewIntent(res.path());
                         Toast.show('File download successfully',Toast.LONG);
                     })
                     .catch((errorMessage, statusCode) => {
-                        console.log('Error',errorMessage.response)
-                        Toast.show(errorMessage,Toast.LONG);
+                        console.log('Error',errorMessage)
+                        Toast.show('Download Failed',Toast.LONG);
+                        // Toast.show(errorMessage,Toast.LONG);
                     });
             }
         } else if (value === 'link'){
@@ -204,6 +218,7 @@ const AllResourcesScreen = ({navigation}) => {
         ApiHelper.getResourceTypes(token,url, (response) => {
             if (response.isSuccess) {
                 if (response.response.data.code === 200) {
+                    console.log("Success ==>", response.response.data);
                     setCoursesData(response.response.data.data.docs);
                     setLoading(false);
                 } else {
@@ -265,7 +280,8 @@ const AllResourcesScreen = ({navigation}) => {
             {AppLoading.renderLoading(loading)}
 
             <View style={styles.container}>
-                <FlatList
+                {lockModal === false ?
+                    <FlatList
                     data={coursesData}
                     extraData={coursesData}
                     onEndReachedThreshold={0}
@@ -292,7 +308,18 @@ const AllResourcesScreen = ({navigation}) => {
                         )
                     }}
                     renderItem={({item,index}) => renderResourceItems(item,index)}
-                />
+                /> :
+                    <View style={styles.upgradePlan}>
+                        <Text style={[styles.headerTextStyle,{fontSize:wp(6),fontWeight:'500',textAlign:'center'}]}>Upgrade Your Plan To Get Access</Text>
+                        <View style={{marginTop:hp(2)}}>
+                            <Button
+                                buttonText={'UPGRADE PLAN'}
+                                width={wp(50)}
+                                onPress={() => console.log('Plan Upgrade')}
+                            />
+                        </View>
+                    </View>
+                }
             </View>
 
             {/*<Model*/}

@@ -8,7 +8,6 @@ import {
     ScrollView,
     StatusBar,
     Platform,
-    Image,
     LogBox,
     Text,
     View
@@ -35,7 +34,7 @@ import {
     LIVE_EVENTS,
     FORUM,
     JOURNEY,
-    SETTINGS,
+    SETTINGS, TASK_LISTING,
 } from "../../constants/navigators";
 import AppHeaderNative from "../../components/AppHeaderNative";
 import AppLoading from "../../components/AppLoading";
@@ -46,7 +45,6 @@ import ForumComponent from "../../components/ForumCardDesign";
 import LiveComponent from "../../components/LiveComponent";
 import FeatureComponent from "../../components/FeaturedView";
 import * as ApiDataActions from "../../../redux/store/actions/ApiData";
-
 
 LogBox.ignoreAllLogs(true);
 const CourseScreen = ({navigation}) => {
@@ -72,13 +70,16 @@ const CourseScreen = ({navigation}) => {
     const [isError,setIsError] = useState(false);
     const [isShowActivity,setIsShowActivity] = useState(true);
 
+    const [isLoadeds,setIsLoadeds] = useState(false);
+    const [isErrors,setIsErrors] = useState(false);
+
 
     useEffect(() => {
-        return navigation.addListener('focus', () => {
+        // return navigation.addListener('focus', () => {
             getAnnouncements();
             getDashboardData();
-        });
-    }, [navigation]);
+        // });
+    }, []);
 
 
     const onRefresh = () => {
@@ -88,12 +89,12 @@ const CourseScreen = ({navigation}) => {
 
 
     const getAnnouncements = () => {
-        // setLoading(!dashboard);
+        setLoading(!dashboard);
         setLoading(true);
         ApiHelper.getAnnouncements(token,(resp) => {
             if(resp.isSuccess){
                 if(resp.response.data.code === 200){
-                    VideoCheck(resp.response.data.data)
+                    videoCheck(resp.response.data.data)
                 }
             }else{
                 console.log('Error',resp.response)
@@ -123,7 +124,7 @@ const CourseScreen = ({navigation}) => {
     }
 
 
-    const VideoCheck = (url) => {
+    const videoCheck = (url) => {
         if (!url.contentUrl) {
            setNoUrl(true);
         }
@@ -238,6 +239,7 @@ const CourseScreen = ({navigation}) => {
             {AppLoading.renderLoading(loading)}
             <View style={styles.headerView}>
                 <AppHeaderNative
+                    onPressTask={() => navigation.navigate(TASK_LISTING)}
                     onPressSetting={() => navigation.navigate(SETTINGS)}
                     onPressJourney={() => navigation.navigate(JOURNEY)}
                     onPressChat={() => console.log('Chat Pressed')}
@@ -261,12 +263,27 @@ const CourseScreen = ({navigation}) => {
                 >
                     <View style={styles.userDetailView}>
                         <View style={styles.nameView}>
-                            <Text style={styles.userNameText} numberOfLines={1}>{userData.user.username}</Text>
+                            <Text style={styles.userNameText} numberOfLines={1}>{userData.user.firstName} {userData.user.lastName}</Text>
                             <Text style={[styles.userNameText,{fontSize:wp(4),marginTop:wp(2),fontFamily:fonts.regular,fontWeight:'400',width:wp(40),color:colors.sub_heading}]}>What would you like to learn today?</Text>
                         </View>
                         <View style={styles.imageView}>
-                            {/*<Image source={userData.user.profilePictureURL === 'null' ? images.placeHolder : {uri: userData.user.profilePictureURL}} style={styles.imageStyle}/>*/}
-                            <Image source={images.profile_placeHolder} style={styles.imageStyle}/>
+                            <ImageBackground
+                                source={userData.user.profilePictureURL === 'null' ? images.placeHolder : {uri: userData.user.profilePictureURL}}
+                                style={styles.imageStyle}
+                                imageStyle={styles.imageStyle}
+                                onLoadEnd={() => setIsLoadeds(true)}
+                                onError={() => setIsErrors(true)}
+                            >
+                                {
+                                    (isLoadeds && !isErrors) ? null :
+                                        !isError &&
+                                        <ActivityIndicator
+                                            size={'small'}
+                                            color={colors.button_text}
+                                        />
+                                }
+                            </ImageBackground>
+                            {/*<Image source={images.profile_placeHolder} style={styles.imageStyle}/>*/}
                         </View>
                     </View>
 

@@ -88,10 +88,11 @@ const CreateTask = props => {
 
     const onPressSave = () => {
         let testAddress = /^[^-\s][a-zA-Z_\s-]+$/;
+        let testOnlyAddress = /^[^-\s][a-zA-Z0-9,_\s-]+$/;
         if(title === '' || title === ' '){
             setIsDisable(false);
             Toast.show('Please Enter Task Name',Toast.LONG)
-        } else if (testAddress.test(title) !== true) {
+        } else if (testOnlyAddress.test(title) !== true) {
             Toast.show('Please Enter Valid Task Name', Toast.LONG);
         } else if(status === 'Select status'){
             setIsDisable(false);
@@ -102,7 +103,7 @@ const CreateTask = props => {
         } else if (description === '' || description === ' '){
             setIsDisable(false);
             Toast.show('Please Enter Description',Toast.LONG)
-        } else if (testAddress.test(description) !== true) {
+        } else if (testOnlyAddress.test(description) !== true) {
             Toast.show('Please Enter Valid Description', Toast.LONG);
         } else if(date === 'MM/DD/YYYY'){
             setIsDisable(false);
@@ -207,7 +208,11 @@ const CreateTask = props => {
                             style={styles.dateViewStyle}
                             open={open}
                             items={items}
-                            setOpen={setOpen}
+                            setOpen={(value) => {
+                                Keyboard.dismiss();
+                                setOpen(value)
+                                setOpenPriority(false)
+                            }}
                             placeholder={status}
                             value={status}
                             placeholderStyle={{color:colors.inputColor}}
@@ -215,7 +220,7 @@ const CreateTask = props => {
                             closeAfterSelecting={true}
                             showTickIcon={false}
                             zIndex={9999}
-                            dropDownContainerStyle={{backgroundColor:colors.image_background,marginTop:hp(2),borderColor:'transparent',borderTopStartRadius:hp(1),borderTopEndRadius:hp(1),zIndex:1}}
+                            dropDownContainerStyle={{backgroundColor:colors.image_background,marginTop:hp(2),borderWidth:0.3,borderColor:colors.button_text,borderTopStartRadius:hp(1),borderTopEndRadius:hp(1),zIndex:1}}
                             arrowIconStyle={{tintColor:colors.white,height:25,width:25}}
                             listItemLabelStyle={{color:colors.white}}
                             containerStyle={styles.containerStyle}
@@ -230,7 +235,11 @@ const CreateTask = props => {
                             style={styles.dateViewStyle}
                             open={openPriority}
                             items={priorityItems}
-                            setOpen={setOpenPriority}
+                            setOpen={(value) => {
+                                Keyboard.dismiss();
+                                setOpenPriority(value)
+                                setOpen(false)
+                            }}
                             placeholder={priority}
                             value={priority}
                             placeholderStyle={{color:colors.inputColor}}
@@ -238,7 +247,7 @@ const CreateTask = props => {
                             closeAfterSelecting={true}
                             showTickIcon={false}
                             zIndex={8888}
-                            dropDownContainerStyle={{backgroundColor:colors.image_background,marginTop:hp(2),borderColor:'transparent',borderTopStartRadius:hp(1),borderTopEndRadius:hp(1),zIndex:0}}
+                            dropDownContainerStyle={{backgroundColor:colors.image_background,borderWidth:0.3,marginTop:hp(2),borderColor:colors.button_text,borderTopStartRadius:hp(1),borderTopEndRadius:hp(1),zIndex:0}}
                             arrowIconStyle={{tintColor:colors.white,height:25,width:25}}
                             listItemLabelStyle={{color:colors.white}}
                             containerStyle={styles.containerStyle}

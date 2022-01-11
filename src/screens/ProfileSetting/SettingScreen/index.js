@@ -40,30 +40,22 @@ const SettingScreen = (props) => {
         },
         {
             id:1,
-            title:'Billing'
+            title:'Payment & Subscription'
         },
         {
             id:2,
-            title:'Change Plan'
-        },
-        {
-            id:3,
             title:'Payment Methods'
         },
         {
-            id:4,
-            title:'Task'
-        },
-        {
-            id:5,
+            id:3,
             title:'Password Update'
         },
         {
-            id:6,
+            id:4,
             title:'Help'
         },
         {
-            id:7,
+            id:5,
             title:'Sign out'
         },
     ])
@@ -87,16 +79,12 @@ const SettingScreen = (props) => {
         } else if(item.id === 1){
             props.navigation.navigate(BILLING_LISTING)
         } else if(item.id === 2){
-            props.navigation.navigate(PLAN_SCREEN,{fromChange:true})
-        } else if(item.id === 3){
             props.navigation.navigate(PAYMENT_SCREEN)
-        } else if(item.id === 4){
-            props.navigation.navigate(TASK_LISTING)
-        } else if(item.id === 5){
+        } else if(item.id === 3){
             props.navigation.navigate(PASSWORD_UPDATE)
-        } else if(item.id === 6){
+        } else if(item.id === 4){
 
-        } else if(item.id === 7){
+        } else if(item.id === 5){
             onSignOut();
         }
     }

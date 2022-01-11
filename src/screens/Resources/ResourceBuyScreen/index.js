@@ -62,17 +62,30 @@ const ResourceBuyScreen = props => {
         setLoading(true)
         ApiHelper.enrollCourse(token,object,url,(resp) => {
             if(resp.isSuccess){
+                console.log('response',resp.response)
                 setLoading(false);
-                setTimeout(() => {
-                    Toast.show('Successfully Subscribe',Toast.LONG);
-                },1000)
-                {props.route.params.fromEvent ? props.navigation.navigate(LIVE_EVENTS) : props.navigation.goBack()}
+                if(resp.response.data.code === 200 || resp.response.data.code === 201){
+                    setTimeout(() => {
+                        Toast.show('Successfully Subscribe',Toast.LONG);
+                    },1000)
+                    {props.route.params.fromEvent ? props.navigation.navigate(LIVE_EVENTS) : props.navigation.goBack()}
+                } else if(resp.response.data.code === 400) {
+                    setTimeout(() => {
+                        Toast.show(resp.response.data.error, Toast.LONG);
+                    },200)
+                }
             }else{
                 setLoading(false);
                 console.log('Error',resp.response.response)
-                setTimeout(() => {
-                    Toast.show(resp.response.response.data.message,Toast.LONG)
-                },200)
+                if(resp.response.response.data.code === 400) {
+                    setTimeout(() => {
+                        Toast.show(resp.response.response.data.error, Toast.LONG);
+                    },200)
+                } else {
+                    setTimeout(() => {
+                        Toast.show(resp.response.response.data.message,Toast.LONG)
+                    },200)
+                }
             }
         })
     }

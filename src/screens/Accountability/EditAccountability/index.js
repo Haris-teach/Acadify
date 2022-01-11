@@ -221,7 +221,7 @@ const EditAccountability = props => {
         return(
             <Swipeable
                 key={item.id}
-                enabled={!data.isCreatedByAdmin}
+                // enabled={!data.isCreatedByAdmin}
                 renderRightActions = {() => leftAction(item,index)}
                 onSwipeableRightOpen = {() => console.log('Open')}
             >
@@ -371,7 +371,7 @@ const EditAccountability = props => {
                             closeAfterSelecting={true}
                             showTickIcon={false}
                             zIndex={9999}
-                            dropDownContainerStyle={{backgroundColor:colors.image_background,marginTop:hp(2),borderColor:'transparent',borderTopStartRadius:hp(1),borderTopEndRadius:hp(1),zIndex:0}}
+                            dropDownContainerStyle={{backgroundColor:colors.image_background,marginTop:hp(2),borderWidth:0.3,borderColor:colors.button_text,borderTopStartRadius:hp(1),borderTopEndRadius:hp(1),zIndex:0}}
                             arrowIconStyle={{tintColor:colors.white,height:25,width:25}}
                             listItemLabelStyle={{color:colors.white}}
                             containerStyle={styles.containerStyle}
@@ -416,13 +416,14 @@ const EditAccountability = props => {
                     <View style={[styles.inputBox,{height:hp(5),zIndex:-1}]}>
                         <View style={styles.checkListView}>
                             <Text style={styles.titleText}>Checklist</Text>
-                            {data.isCreatedByAdmin !== true ?  <TouchableOpacity
-                                activeOpacity={0.7}
-                                disabled={data.isCreatedByAdmin}
-                                onPress={() => onAddNewList()}
-                            >
-                                <AddSign height={25} width={25}/>
-                            </TouchableOpacity> : null}
+                            {data.isCreatedByAdmin !== true ?
+                                <TouchableOpacity
+                                    activeOpacity={0.7}
+                                    disabled={data.isCreatedByAdmin}
+                                    onPress={() => onAddNewList()}
+                                >
+                                    <AddSign height={25} width={25}/>
+                                </TouchableOpacity> : null}
                         </View>
                     </View>
                 </View>

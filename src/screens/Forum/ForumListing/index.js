@@ -23,7 +23,7 @@ import DropArrow from "../../../assets/images/dropdown.svg";
 import Add from "../../../assets/images/addIcon.svg";
 import Refresh from "../../../assets/images/refresh.svg";
 import CourseDropdown from "../../../components/CourseDropDwon";
-import ResourceCard from "../../../components/ResourcesCard";
+import ForumMainComponent from "../../../components/ForumMainComponent";
 
 
 const ForumListing = ({navigation}) => {
@@ -93,7 +93,7 @@ const ForumListing = ({navigation}) => {
         ApiHelper.getResourceTypes(token,url, (response) => {
             if (response.isSuccess) {
                 if (response.response.data.code === 200) {
-                    console.log("Error inner ==>", response.response.data);
+                    console.log("Success ==>", response.response.data);
                     setCoursesData(response.response.data.data.docs);
                     setLoading(false);
                 } else {
@@ -109,19 +109,19 @@ const ForumListing = ({navigation}) => {
 
     const renderResourceItems = (item,index) => {
         let date = moment(item.createdAt).format('DD/MM/YYYY');
+        let time = moment(item.createdAt).format('hh:mm');
         return (
-            <ResourceCard
+            <ForumMainComponent
                 id={item.id}
                 title={item.title}
-                imgUri={item.imageUrl}
+                image={item.User.profilePictureURL}
                 url={item.contentUrl}
-                type={item.resourceType}
-                price={item.Documentprices}
-                pay={item.DocumentPayeds}
-                length={coursesData.length}
-                createdAt={date}
+                date={date}
+                time={time}
                 index={index}
-                contentType={item.contentType}
+                likes={item.ForumLikes}
+                reply={item.Replies}
+                question={item.question}
                 onPressContent={(title,value) => console.log(title,value)}
             />
         );

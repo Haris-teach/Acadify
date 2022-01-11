@@ -2,10 +2,10 @@
 
 import React, {Component} from 'react';
 import {
-    TouchableOpacity,
     View,
     Text,
-    StyleSheet
+    StyleSheet,
+    TouchableOpacity,
 } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
@@ -16,7 +16,7 @@ import Journey from "../assets/dropIcon/journey.svg";
 import Ring from "../assets/images/bell.svg";
 import Chat from "../assets/dropIcon/chat.svg";
 import Gear from "../assets/dropIcon/gear.svg";
-
+import Calendar from "../assets/images/calendarGroup.svg";
 
 export default class AppHeaderNative extends Component {
     constructor(props) {
@@ -48,6 +48,14 @@ export default class AppHeaderNative extends Component {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.rightView}>
+                    <TouchableOpacity
+                        style={styles.iconStyle}
+                        activeOpacity={0.7}
+                        onPress={() => this.props.onPressTask()}
+                    >
+                        <Calendar height={20} width={20}/>
+                        <Text style={{fontSize:wp(2.5),marginTop:wp(1),color:colors.white}}>Task</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.iconStyle}
                         activeOpacity={0.7}
@@ -88,14 +96,14 @@ const styles = StyleSheet.create({
     },
     leftView:{
         height:hp(5),
-        width:wp(55),
+        width:wp(45),
         paddingLeft:wp(5),
         justifyContent:'center',
         alignItems:'flex-start'
     },
     rightView:{
         height:hp(5),
-        width:wp(45),
+        width:wp(55),
         flexDirection:'row',
         paddingRight:wp(5),
         justifyContent:'space-between',

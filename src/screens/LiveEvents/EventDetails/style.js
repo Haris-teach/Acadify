@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
     sectionView:{
-        height:hp(45),
+        height:hp(40),
         width:wp(100),
         alignItems:'center',
     },

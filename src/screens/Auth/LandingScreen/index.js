@@ -20,7 +20,7 @@ const LandingScreen = props => {
       <ImageBackground source={images.landing_image} style={styles.imageStyle}>
         <View style={styles.logoView}>
           <Logo />
-          <Text style={styles.logoText}>All In Academy</Text>
+          <Text style={styles.logoText}>Acadify</Text>
         </View>
         <View style={styles.bottomView}>
           <Button

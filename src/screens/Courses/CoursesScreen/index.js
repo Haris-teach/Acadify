@@ -4,21 +4,21 @@ import React, { useEffect } from "react";
 import {
   View,
   Text,
-  TouchableOpacity,
-  FlatList,
   Modal,
+  FlatList,
+  TouchableOpacity,
 } from "react-native";
 import { useState } from "react";
+import Model from "react-native-modal";
 import { useSelector } from "react-redux";
 import {useIsFocused} from "@react-navigation/native";
-import Model from "react-native-modal";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 //================================ Local Imported Files ======================================//
 
 import styles from "./style";
 import ApiHelper from "../../../api/ApiHelper";
-import {COURSE_DETAILS} from "../../../constants/navigators";
+import {COURSE_DETAILS, PLAN_SCREEN} from "../../../constants/navigators";
 import AppLoading from "../../../components/AppLoading";
 import Search from "../../../assets/images/searchBackground.svg";
 import Filter from "../../../assets/images/filterBackground.svg";
@@ -33,11 +33,11 @@ const DashboardScreen = (props) => {
 
   const isFocused = useIsFocused();
   const token = useSelector((state) => state.ApiData.token);
-  let course = useSelector(state => state.ApiData.course);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [dropModal, setDropModal] = useState(false);
   const [lockModal, setLockModal] = useState(false);
+  let course = useSelector(state => state.ApiData.course);
   let [coursesData, setCoursesData] = useState([]);
   let [page, setPage] = useState(1);
   let [categoryData, setCategoryData] = useState([]);
@@ -281,8 +281,9 @@ const DashboardScreen = (props) => {
     <View style={styles.mainContainer}>
       {AppLoading.renderLoading(loading)}
         <View style={styles.container}>
-          {lockModal === false ? <FlatList
-              data={coursesData}
+          {lockModal === false ?
+              <FlatList
+                  data={coursesData}
               extraData={coursesData}
               onEndReachedThreshold={0}
               onEndReached={() => LoadMoreRandomData()}
@@ -325,7 +326,7 @@ const DashboardScreen = (props) => {
                   <Button
                       buttonText={'UPGRADE PLAN'}
                       width={wp(50)}
-                      onPress={() => console.log('Plan Upgrade')}
+                      onPress={() => props.navigation.navigate(PLAN_SCREEN,{fromChange:true})}
                   />
                 </View>
               </View>

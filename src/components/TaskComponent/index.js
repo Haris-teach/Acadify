@@ -11,14 +11,12 @@ import moment from "moment";
 //================================ Local Imported Files ======================================//
 
 import colors from "../../assets/colors/colors";
-import {EDIT_TASK} from "../../constants/navigators";
 import TasksComponent from "../TasksComponent";
-
 
 const TaskComponent = (props) => {
 
     const _renderItems = (item) => {
-        let date = moment(item.dueDate).format('MM/DD/YYYY');
+        let date = moment(item.startDate).format('MM/DD/YYYY');
         return(
             <TasksComponent
                 title={item.title}

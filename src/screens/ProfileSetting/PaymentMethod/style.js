@@ -118,6 +118,11 @@ const styles = StyleSheet.create({
         color:colors.white,
         paddingLeft:wp(2)
     },
+    mainTabView:{
+        width:wp(100),
+        justifyContent:'center',
+        alignItems:'center',
+    },
     cardView:{
         height:hp(8),
         width:wp(90),

@@ -16,6 +16,8 @@ target 'Acadify' do
       :path => '../node_modules/rn-fetch-blob'
 
 
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
   target 'AcadifyTests' do
     inherit! :complete
     # Pods for testing

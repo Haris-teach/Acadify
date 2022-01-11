@@ -16,7 +16,6 @@ import AppLoading from "../../../components/AppLoading";
 import Button from "../../../components/Button/Button";
 import LiveEvent from "../../../components/LiveEvent";
 
-
 const LiveEvents = ({navigation}) => {
 
     const token = useSelector((state) => state.ApiData.token);
@@ -156,7 +155,8 @@ const LiveEvents = ({navigation}) => {
             <View style={styles.headingView}>
                 <Text style={styles.headingText}>Live Events</Text>
             </View>
-            {lockModal === false ? <View style={styles.upperView}>
+            {lockModal === false ?
+                <View style={styles.upperView}>
                 <TouchableOpacity
                     style={catText === 'Live' ? [styles.headerStyle, {backgroundColor: colors.button_text}] : styles.headerStyle}
                     onPress={() => onSelectType('Live')}

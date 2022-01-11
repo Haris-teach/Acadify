@@ -6,12 +6,12 @@ import {
     Text,
     StatusBar,
     TextInput,
-    ScrollView,
     Platform,
     Keyboard,
-    KeyboardAvoidingView,
-    TouchableOpacity,
     FlatList,
+    ScrollView,
+    TouchableOpacity,
+    KeyboardAvoidingView,
 } from 'react-native';
 import {useSelector} from "react-redux";
 import Toast from "react-native-simple-toast";
@@ -35,7 +35,6 @@ import DateImage from "../../../assets/images/date.svg";
 import AddSign from "../../../assets/images/addIcon.svg";
 import DeleteSign from "../../../assets/images/delete.svg";
 import AppHeader from "../../../components/AppHeader";
-
 
 const AddGoal = props => {
 
@@ -313,7 +312,7 @@ const AddGoal = props => {
                                 closeAfterSelecting={true}
                                 showTickIcon={false}
                                 zIndex={9999}
-                                dropDownContainerStyle={{backgroundColor:colors.image_background,marginTop:hp(2),borderColor:'transparent',borderTopStartRadius:hp(1),borderTopEndRadius:hp(1),zIndex:0}}
+                                dropDownContainerStyle={{backgroundColor:colors.image_background,marginTop:hp(2),borderWidth:0.3,borderColor:colors.button_text,borderTopStartRadius:hp(1),borderTopEndRadius:hp(1),zIndex:0}}
                                 arrowIconStyle={{tintColor:colors.white,height:25,width:25}}
                                 listItemLabelStyle={{color:colors.white}}
                                 containerStyle={styles.containerStyle}

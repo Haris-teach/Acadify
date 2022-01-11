@@ -46,7 +46,7 @@ const AddNewCardScreen = props => {
         } else if (expiryDate.length < 5) {
             Toast.show('Invalid expiry date', Toast.LONG);
         } else if (cvc < cvcLength) {
-            Toast.show('Invalid expiry date', Toast.LONG);
+            Toast.show('Invalid cvc', Toast.LONG);
         } else {
             onPayApi();
         }

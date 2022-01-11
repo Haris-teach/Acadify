@@ -1,18 +1,20 @@
 //================================ React Native Imported Files ======================================//
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     View,
     Text,
     FlatList,
     StatusBar,
     RefreshControl,
-    TouchableOpacity,
+    TouchableOpacity, ScrollView,
 } from 'react-native';
-import {widthPercentageToDP as wp} from "react-native-responsive-screen";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import moment from "moment";
+import {widthPercentageToDP, widthPercentageToDP as wp} from "react-native-responsive-screen";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import {useIsFocused} from "@react-navigation/native";
+import {useDispatch, useSelector} from "react-redux";
+import Toast from "react-native-simple-toast";
 
 //================================ Local Imported Files ======================================//
 
@@ -23,73 +25,142 @@ import images from "../../../assets/images/images";
 import AppLoading from "../../../components/AppLoading";
 import AppHeader from "../../../components/AppHeader";
 import DateImage from "../../../assets/images/date.svg";
+import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
+import Yearly from "../../../assets/images/yearly.svg";
+import Monthly from "../../../assets/images/monthly.svg";
+import LIFETIME from "../../../assets/images/LIFETIME.svg";
+import Free from "../../../assets/images/free.svg";
+import Button from "../../../components/Button/Button";
+import Tick from "../../../assets/images/tick.svg";
 import BillComponent from "../../../components/BillingComponent";
 
-class BillingListing extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            token:'',
-            loading:false,
-            dateModal:false,
-            endDateModal:false,
-            date:'MM/DD/YYYY',
-            endDate:'MM/DD/YYYY',
-            start_date:'',
-            end_date:'',
-            items:[],
-            page:1
-        }
-    }
+const BillingListing = (props) => {
 
+    const isFocused = useIsFocused();
+    const dispatch = useDispatch();
+    const token = useSelector(state => state.ApiData.token);
+    const [loading,setLoading] = useState(false);
+    const [dateModal,setDateModal] = useState(false);
+    const [endDateModal,setEndDateModal] = useState(false);
+    const [date,setDate] = useState('MM/DD/YYYY');
+    const [endDate,setEndDate] = useState('MM/DD/YYYY');
+    const [start_date,setStart_Date] = useState('');
+    const [end_date,setEnd_Date] = useState('');
+    const [title,setTitle] = useState('Billing');
+    const [items,setItems] = useState([]);
+    const [packageData,setPackageData] = useState('');
+    const [page,setPage] = useState(1);
 
-    componentDidMount() {
-        this.focusListner = this.props.navigation.addListener("focus", () => {
-            this.getUserToken();
-        })
-    }
+    const [catText,setCatText] = useState('bill');
 
-
-    componentWillUnmount() {
-        this.focusListner();
-    }
+    const [packages, setPackages] = useState('');
+    const [indexFeature, setIndexFeature] = useState('');
+    const [stripeId, setStripeId] = useState('');
+    const [planName, setPlaneName] = useState('');
+    const [setIndex, setIndexValue] = useState(0);
+    const [isVisible, setVisible] = useState(false);
 
 
-    getUserToken = () => {
-        this.setState({loading: true});
-        try {
-             AsyncStorage.getItem('user').then((resp) => {
-                 if(resp){
-                     this.setState({token:JSON.parse(resp),page:1},() => {
-                         this.getTasks();
-                     })
-                 }
-             })
-        }catch (e) {
-            this.setState({loading: false});
-            console.log('Error',error)
-        }
-    }
+    useEffect(() => {
+        setDate('MM/DD/YYYY')
+        setEndDate('MM/DD/YYYY')
+        setStart_Date('')
+        setEnd_Date('')
+        setPage(1)
+        setCatText('bill')
+        getTasks();
+    },[isFocused])
 
 
-     getTasks = () => {
-        this.setState({loading:true})
-        ApiHelper.getTasks(this.state.token.token,this.state.start_date,this.state.end_date,this.state.page,(response) => {
+
+     const getTasks = () => {
+       setLoading(true)
+        ApiHelper.getTasks(token,start_date,end_date,page,(response) => {
             if(response.isSuccess){
                 console.log('Billing success ===>',response.response.data)
                 if(response.response.data.code === 201){
-                    this.setState({ loading:false,items: response.response.data.data.docs})
+                    setLoading(false)
+                    setItems(response.response.data.data.docs)
                 }
             }else {
-                this.setState({loading: false});
+                setLoading(false)
                 console.log('Billing Error ===>',response.response)
             }
         })
     }
 
 
-     _renderTasksItems = (item,index) => {
+    const getPlans = () => {
+        setLoading(true);
+        ApiHelper.onGetPlan(response => {
+            if (response.isSuccess) {
+                setLoading(false);
+                if (response.response.data.code === 200) {
+                    console.log('Response ===>', response.response.data);
+                    setIndexValue(0);
+                    setPackageData(response.response.data.result[0].name)
+                    setPackages(response.response.data.result[0].Stripes);
+                    setIndexFeature(response.response.data.result[0].Stripes[0].Rights);
+                    setPlaneName(response.response.data.result[0].Stripes[0]);
+                    setStripeId(
+                        response.response.data.result[0].Stripes[0].id,
+                    );
+                    setVisible(true);
+                }
+            } else {
+                setLoading(false);
+            }
+        });
+    };
+
+
+    const onPressPlan = (item, index) => {
+        setIndexValue(index);
+        setIndexFeature(item.Rights);
+        setStripeId(item.id);
+        setPlaneName(item);
+    };
+
+
+    const updatePlan = () => {
+        setLoading(true);
+        clearData();
+        let url='/api/v1/stripe/change_plan';
+        let data = JSON.stringify({
+            'StripeId':stripeId
+        })
+        ApiHelper.onChangePlan(token,data,url,response => {
+            if (response.isSuccess) {
+                if (response.response.data.code === 200) {
+                    setLoading(false);
+                    console.log('Success of Change Plan ==>', response.response.data.data);
+                    dispatch(ApiDataActions.SetUserToken(response.response.data.token));
+                    dispatch(ApiDataActions.SetLoginData(response.response.data.data));
+                    setRights(response.response.data.data);
+                    setTimeout(() => {
+                        Toast.show('Plan Successfully Updated...', Toast.LONG);
+                    },200)
+                    props.navigation.goBack();
+                } else {
+                    setLoading(false);
+                    console.log('Error ==>', response.response);
+                    setTimeout(() => {
+                        Toast.show(response.response.data.error.email, Toast.LONG);
+                    },200)
+                }
+            } else {
+                setLoading(false);
+                setTimeout(() => {
+                    Toast.show(response.response.response.data.message, Toast.LONG);
+                },200)
+                console.log('Error ===>', response.response.response.data.message);
+            }
+        });
+    }
+
+
+     const _renderTasksItems = (item,index) => {
         let date = moment(item.createdAt).format("MM/DD/YYYY");
         return(
             <BillComponent
@@ -98,88 +169,213 @@ class BillingListing extends React.Component {
                 pType={item.paymentType}
                 charges={item.amount}
                 date={date}
-                length={this.state.items.length}
+                length={items.length}
                 index={index}
             />
         )
     }
 
+    const renderItemsFeature = (item, index) => {
+        return (
+            <View style={styles.miniContainer}>
+                <Tick height={25} width={25} />
+                <Text style={styles.featureInnerText}>{item.access}</Text>
+            </View>
+        );
+    };
 
-     onConfirmDate = (value) => {
+    const setRights = (data) => {
+        if(data.user.UserRights.length > 0){
+            data.user.UserRights.map((value) => {
+                if(value.access === 'resources'){
+                    dispatch(ApiDataActions.SetUserResource(true));
+                } else if(value.access === 'goals'){
+                    dispatch(ApiDataActions.SetUserGoal(true));
+                } else if(value.access === 'journey'){
+                    dispatch(ApiDataActions.SetUserJourney(true));
+                } else if(value.access === 'courses'){
+                    dispatch(ApiDataActions.SetUserCourse(true));
+                } else if(value.access === 'zoom'){
+                    dispatch(ApiDataActions.SetUserZoom(true));
+                } else if(value.access === 'forum'){
+                    dispatch(ApiDataActions.SetUserForum(true));
+                }
+            })
+        } else {
+            clearData();
+        }
+    }
+
+
+    const clearData = () => {
+        dispatch(ApiDataActions.SetUserResource(false));
+        dispatch(ApiDataActions.SetUserGoal(false));
+        dispatch(ApiDataActions.SetUserJourney(false));
+        dispatch(ApiDataActions.SetUserCourse(false));
+        dispatch(ApiDataActions.SetUserZoom(false));
+        dispatch(ApiDataActions.SetUserForum(false));
+    }
+
+
+    const getRefreshTasks = () => {
+        setLoading(true)
+        ApiHelper.getRefreshTasks(token,start_date,end_date,page,(response) => {
+            if(response.isSuccess){
+                console.log('Billing success ===>',response.response.data)
+                if(response.response.data.code === 201){
+                    setLoading(false)
+                    setItems(response.response.data.data.docs)
+                    setPage(1)
+                    setStart_Date('')
+                    setEnd_Date('')
+                    setDate('MM/DD/YYYY')
+                    setEndDate('MM/DD/YYYY')
+                }
+            }else {
+                setLoading(false)
+                console.log('Billing Error ===>',response.response)
+            }
+        })
+    }
+
+
+    const renderItems = (item, index) => {
+        return (
+            <TouchableOpacity
+                style={
+                    setIndex !== index
+                        ? styles.container :
+                        [
+                            styles.container,
+                            {borderWidth: 2, borderColor: colors.button_text},
+                        ]
+                }
+                activeOpacity={0.7}
+                onPress={() => onPressPlan(item, index)}>
+                <View style={styles.imageView}>
+                    {item.interval === 'year' ? <Yearly height={45} width={45} /> : null}
+                    {item.interval === 'month' ? <Monthly /> : null}
+                    {item.interval === 'lifetime' ? (
+                        <LIFETIME height={45} width={45} />
+                    ) : null}
+                    {item.interval === 'free' ? <Free height={45} width={45} /> : null}
+                </View>
+                <View style={styles.nameView}>
+                    <Text style={styles.nameText}>{item.interval}</Text>
+                </View>
+                <View style={styles.priceView}>
+                    <Text style={styles.dollarSign}>$</Text>
+                    <Text style={styles.priceValue}>{item.amount / 100}</Text>
+                </View>
+            </TouchableOpacity>
+        );
+    };
+
+
+
+    const onConfirmDate = (value) => {
         let finalDateNew = moment(value).format("YYYY-MM-DD h:mm:ss");
         let finalDate = moment(value).format("MM/DD/YYYY");
-        this.setState({date: finalDate,start_date: finalDateNew,dateModal: false},() => {
-            this.checkDate();
-        });
+         setDate(finalDate)
+         setStart_Date(finalDateNew)
+         setDateModal(false)
     };
 
 
-     onCancelDate = () => {
-        this.setState({dateModal: false})
+     const onCancelDate = () => {
+        setDateModal(false)
     };
 
 
-     onConfirmEndDate = (value) => {
+    useEffect(() => {
+        checkDate();
+    },[start_date,end_date])
+
+
+    const onConfirmEndDate = (value) => {
         let finalDateNew = moment(value).format("YYYY-MM-DD h:mm:ss");
         let finalDate = moment(value).format("MM/DD/YYYY");
-         this.setState({endDate: finalDate,end_date: finalDateNew,endDateModal: false},() =>{
-             this.checkDate();
-         });
+         setEndDate(finalDate)
+         setEnd_Date(finalDateNew)
+         setEndDateModal(false)
     };
 
 
-     onCancelEndDate = () => {
-       this.setState({endDateModal: false})
+     const onCancelEndDate = () => {
+         setEndDateModal(false)
     };
 
 
-     checkDate = () => {
-        let start = moment(this.state.start_date).format('YYYY-MM-DD')
-        let end = moment(this.state.endDate).format('YYYY-MM-DD');
-        if(this.state.start_date !== '' && this.state.end_date !== ''){
+     const checkDate = () => {
+        let start = moment(start_date).format('YYYY-MM-DD')
+        let end = moment(end_date).format('YYYY-MM-DD');
+        if(start_date !== '' && end_date !== ''){
             if (start > end) {
                 alert('End Date must be greater or Equal to Start Date!')
             } else if (start === end) {
-                this.getTasks();
+                getTasks();
             } else if (end >= end) {
-                this.getTasks();
+                getTasks();
             }
         }
     }
 
 
-     LoadMoreRandomData = () => {
-        // this.setState({page: this.state.page + 1},() => {
-        //     this.getTasks()
-        // });
-    }
+    const LoadMoreRandomData = () => {
+         // setPage({page: page + 1})
+        // getTasks()
+     }
 
 
-    render() {
         return (
             <View style={styles.mainContainer}>
                 <StatusBar backgroundColor={colors.app_background}/>
-                {AppLoading.renderLoading(this.state.loading)}
+                {AppLoading.renderLoading(loading)}
                 <View style={styles.headerView}>
                     <AppHeader
-                        title={'Billing'}
+                        // title={title}
                         leftIconPath={images.back_icon}
-                        onLeftIconPress={() => this.props.navigation.goBack()}
+                        onLeftIconPress={() => props.navigation.goBack()}
                     />
                 </View>
-                <View style={styles.headingView}>
+                <View style={styles.upperView}>
+                    <TouchableOpacity
+                        style={catText === 'bill' ? [styles.headerStyle, {backgroundColor: colors.button_text}] : styles.headerStyle}
+                        onPress={() => {
+                            setTitle('Billing')
+                            setCatText('bill')
+                            getTasks();
+                        }}
+                    >
+                        <Text
+                            style={catText === 'bill' ? [styles.headerTextStyle, {color: colors.white}] : styles.headerTextStyle}>Billing</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={catText === 'plan' ? [styles.headerStyle, {backgroundColor: colors.button_text}] : styles.headerStyle}
+                        onPress={() => {
+                            setTitle('Change Plan')
+                            setCatText('plan')
+                            getPlans();
+                        }}
+                    >
+                        <Text
+                            style={catText === 'plan' ? [styles.headerTextStyle, {color: colors.white}] : styles.headerTextStyle}>Change Plan</Text>
+                    </TouchableOpacity>
+                </View>
+                {catText === 'bill' &&<View style={styles.headingView}>
                     <View style={styles.inputBox}>
                         <Text style={styles.titleText}>Start Date</Text>
                         <TouchableOpacity
                             style={styles.dateViewStyle}
                             activeOpacity={0.7}
-                            onPress={() => this.setState({dateModal: !this.state.dateModal})}
+                            onPress={() => setDateModal(!dateModal)}
                         >
-                            <Text style={this.state.date === 'MM/DD/YYYY' ? styles.placeHolderText : [styles.placeHolderText, {color: colors.white}]}>{this.state.date}</Text>
+                            <Text
+                                style={date === 'MM/DD/YYYY' ? styles.placeHolderText : [styles.placeHolderText, {color: colors.white}]}>{date}</Text>
                             <TouchableOpacity
                                 style={styles.dateView}
                                 activeOpacity={0.7}
-                                onPress={() => this.setState({dateModal: !this.state.dateModal})}
+                                onPress={() => setDateModal(!dateModal)}
                             >
                                 <DateImage/>
                             </TouchableOpacity>
@@ -190,49 +386,43 @@ class BillingListing extends React.Component {
                         <TouchableOpacity
                             style={styles.dateViewStyle}
                             activeOpacity={0.7}
-                            onPress={() => this.setState({endDateModal: !this.state.endDateModal})}
+                            onPress={() => setEndDateModal(!endDateModal)}
                         >
-                            <Text style={this.state.endDate === 'MM/DD/YYYY' ? styles.placeHolderText : [styles.placeHolderText, {color: colors.white}]}>{this.state.endDate}</Text>
+                            <Text
+                                style={endDate === 'MM/DD/YYYY' ? styles.placeHolderText : [styles.placeHolderText, {color: colors.white}]}>{endDate}</Text>
                             <TouchableOpacity
                                 style={styles.dateView}
                                 activeOpacity={0.7}
-                                onPress={() => this.setState({endDateModal:true})}
+                                onPress={() => setEndDateModal(!endDateModal)}
                             >
                                 <DateImage/>
                             </TouchableOpacity>
                         </TouchableOpacity>
                     </View>
-                </View>
+                </View>}
 
-                <View style={styles.inputView}>
+                <View style={[styles.inputView,{flex:catText === 'bill' ? 0.59 : 0.84}]}>
+                    {catText === 'bill' &&
                     <FlatList
-                        data={this.state.items}
-                        extraData={this.state.items}
+                        data={items}
+                        extraData={items}
                         onEndReachedThreshold={0}
-                        onEndReached={() => this.LoadMoreRandomData()}
+                        onEndReached={() => LoadMoreRandomData()}
                         showsVerticalScrollIndicator={false}
                         refreshControl={
                             <RefreshControl
                                 colors={['transparent']}
                                 style={{backgroundColor: 'transparent'}}
                                 progressBackgroundColor='transparent'
-                                refreshing={this.state.loading}
+                                refreshing={loading}
                                 onRefresh={() => {
-                                    this.setState({
-                                        page:1,
-                                        start_date:'',
-                                        end_date:'',
-                                        date:'MM/DD/YYYY',
-                                        endDate:'MM/DD/YYYY'
-                                    },() => {
-                                        this.getTasks()
-                                    })
+                                    getRefreshTasks()
                                 }}
                                 tintColor={'transparent'}
                             />
                         }
                         keyExtractor={(item) => item.id}
-                        renderItem={({item, index}) => this._renderTasksItems(item, index)}
+                        renderItem={({item, index}) => _renderTasksItems(item, index)}
                         ListEmptyComponent={() => {
                             return (
                                 <View style={styles.emptySection}>
@@ -240,27 +430,85 @@ class BillingListing extends React.Component {
                                 </View>
                             )
                         }}
-                    />
+                    />}
+
+                    <ScrollView>
+                        {catText === 'plan' && <View style={styles.headingNewView}>
+                            <Text style={styles.headingText}>
+                                The Place You can learn Every Thing
+                            </Text>
+                            <Text style={styles.subHeadingText}>{packageData} Pricing Plan</Text>
+                        </View>}
+                        {catText === 'plan' &&<View style={styles.planView}>
+                        <FlatList
+                            data={packages}
+                            extraData={packages}
+                            horizontal={true}
+                            keyExtractor={item => item.id}
+                            showsHorizontalScrollIndicator={false}
+                            renderItem={({item, index}) => renderItems(item, index)}
+                            nestedScrollEnabled={true}
+                        />
+                    </View>}
+                    {isVisible === true && catText === 'plan' ? (
+                        <View style={styles.featureViewText}>
+                            <Text style={styles.headingFeatureText}>Featured</Text>
+                        </View>
+                    ) : null}
+                        {catText === 'plan' && <View style={styles.featureView}>
+                            <FlatList
+                                data={indexFeature}
+                                extraData={indexFeature}
+                                keyExtractor={item => item.id}
+                                showsVerticalScrollIndicator={false}
+                                renderItem={({item, index}) => renderItemsFeature(item, index)}
+                            />
+                        </View>}
+                    {isVisible === true && catText === 'plan' ? (
+                        <View style={styles.buttonView}>
+                            <View style={styles.btnView}>
+                                <Button
+                                    width={widthPercentageToDP(40)}
+                                    buttonText={'Cancel'}
+                                    onPress={() => props.navigation.goBack()}
+                                />
+                            </View>
+
+                            <View style={styles.btnView}>
+                                <Button
+                                    width={widthPercentageToDP(40)}
+                                    buttonText={'Update'}
+                                    bgColor={colors.white}
+                                    borderColor={colors.white}
+                                    textColor={colors.black}
+                                    // onPress={() =>updatePlan()}
+                                    onPress={() => props.navigation.goBack()}
+                                />
+                            </View>
+                        </View>
+                    ) : null}
+                    </ScrollView>
                 </View>
                 <DateTimePickerModal
-                    isVisible={this.state.dateModal}
+                    isVisible={dateModal}
                     mode={"date"}
                     timePickerModeAndroid={"clock"}
                     maximumDate={new Date()}
-                    onConfirm={(value) => this.onConfirmDate(value)}
-                    onCancel={() => this.onCancelDate()}
+                    // isDarkModeEnabled={true}
+                    onConfirm={(value) => onConfirmDate(value)}
+                    onCancel={() => onCancelDate()}
                 />
                 <DateTimePickerModal
-                    isVisible={this.state.endDateModal}
+                    isVisible={endDateModal}
                     mode={"date"}
                     maximumDate={new Date()}
                     timePickerModeAndroid={"clock"}
-                    onConfirm={(value) => this.onConfirmEndDate(value)}
-                    onCancel={() => this.onCancelEndDate()}
+                    onConfirm={(value) => onConfirmEndDate(value)}
+                    onCancel={() => onCancelEndDate()}
                 />
             </View>
         );
-    }
+
 };
 
 export default BillingListing;

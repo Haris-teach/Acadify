@@ -142,6 +142,8 @@ const CourseDetailScreen = ({navigation,route}) => {
         ApiHelper.enrollCourse(token,object,url,(resp) => {
             if(resp.isSuccess){
                 setLoading(false);
+                console.log('Success',resp.response.response)
+                setLoading(false);
                 setTimeout(() => {
                     Toast.show('Successfully Subscribe',Toast.LONG);
                 },200)

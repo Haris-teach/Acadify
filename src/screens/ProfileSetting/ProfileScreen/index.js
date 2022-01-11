@@ -11,7 +11,7 @@ import {
     KeyboardAvoidingView,
 } from 'react-native';
 import {TextInput as Input} from 'react-native-paper';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from "@react-navigation/native";
 import {heightPercentageToDP as hp, widthPercentageToDP} from "react-native-responsive-screen";
 import Toast from 'react-native-simple-toast';
@@ -27,11 +27,13 @@ import fonts from '../../../assets/fonts/fonts';
 import images from '../../../assets/images/images';
 import {EDIT_PROFILE_SCREEN} from '../../../constants/navigators';
 import ApiHelper from "../../../api/ApiHelper";
+import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
 
 
 const ProfileScreen = ({navigation}) => {
 
     const isFocused = useIsFocused();
+    const dispatch = useDispatch();
     const token = useSelector(state => state.ApiData.token);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -57,6 +59,7 @@ const ProfileScreen = ({navigation}) => {
                 setLoading(false);
                 if (response.response.data.code === 200) {
                     console.log('Success of user profile ===>', response.response.data);
+                    dispatch(ApiDataActions.SetLoginData(response.response.data));
                     setFirstName(response.response.data.user.firstName)
                     setLastName(response.response.data.user.lastName)
                     setEmail(response.response.data.user.email)
@@ -100,8 +103,8 @@ const ProfileScreen = ({navigation}) => {
                 </View>
                 <View style={styles.imageBackground}>
                     <View style={styles.imageStyle}>
-                        <Image source={images.placeHolder} style={styles.imageStyle} />
-                        {/*<Image source={profileImage !== '/' ? {uri:profileImage} : images.placeHolder} style={styles.imageStyle} />*/}
+                        {/*<Image source={images.placeHolder} style={styles.imageStyle} />*/}
+                        <Image source={profileImage !== '/' ? {uri:profileImage} : images.placeHolder} style={styles.imageStyle} />
                     </View>
                 </View>
                 <View style={styles.inputView}>

@@ -90,14 +90,13 @@ const styles = StyleSheet.create({
         height: hp(21),
         width: wp(100),
         justifyContent: 'center',
-        alignItems: 'center',
+        paddingTop:hp(3),
         flexDirection: 'row',
-        zIndex:-1
+        zIndex:-1,
     },
     btnView: {
         height: hp(20),
         width: wp(45),
-        justifyContent: 'center',
         alignItems: 'center',
     },
     containerStyle: {

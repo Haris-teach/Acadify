@@ -68,9 +68,15 @@ const CardScreen = props => {
             }else{
                 setLoading(false);
                 console.log('Error',resp.response.response)
-                setTimeout(() => {
-                    Toast.show(resp.response.response.data.message,Toast.LONG)
-                },200)
+                if(resp.response.response.data.code === 400){
+                    setTimeout(() => {
+                        Toast.show(resp.response.response.data.error,Toast.LONG)
+                    },200)
+                } else {
+                    setTimeout(() => {
+                        Toast.show(resp.response.response.data.message,Toast.LONG)
+                    },200)
+                }
             }
         })
     }

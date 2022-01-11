@@ -11,8 +11,9 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-nat
 
 import styles from './style';
 import Splash from "../../../assets/images/splash.svg";
-import {LANDING_SCREEN, MY_TAB} from "../../../constants/navigators";
+import {LANDING_SCREEN, LOGIN_SCREEN, MY_TAB} from "../../../constants/navigators";
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
+
 
 const SplashScreen = props => {
 
@@ -23,7 +24,7 @@ const SplashScreen = props => {
             props.navigation.dispatch(
                 CommonActions.reset({
                     index: 0,
-                    routes: [{ name: LANDING_SCREEN }],
+                    routes: [{ name: LOGIN_SCREEN }],
                 })
             );
             // getUser();
@@ -47,7 +48,7 @@ const SplashScreen = props => {
                 props.navigation.dispatch(
                     CommonActions.reset({
                         index: 0,
-                        routes: [{ name: LANDING_SCREEN }],
+                        routes: [{ name: LOGIN_SCREEN }],
                     })
                 );
             }
@@ -61,6 +62,7 @@ const SplashScreen = props => {
             <Splash height={hp(100)} width={wp(100)}/>
         </View>
     );
+
 };
 
 export default SplashScreen;

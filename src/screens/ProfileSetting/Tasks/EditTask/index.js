@@ -91,10 +91,11 @@ const EditTask = props => {
 
     const onPressSave = () => {
         let testAddress = /^[^-\s][a-zA-Z_\s-]+$/;
+        let testOnlyAddress = /^[^-\s][a-zA-Z0-9,_\s-]+$/;
         if(title === '' || title === ' '){
             setIsDisable(false);
             Toast.show('Please Enter Task Name',Toast.LONG)
-        } else if (testAddress.test(title) !== true) {
+        } else if (testOnlyAddress.test(title) !== true) {
             Toast.show('Please Enter Valid Task Name', Toast.LONG);
         } else if(status === 'Select status'){
             setIsDisable(false);
@@ -105,7 +106,7 @@ const EditTask = props => {
         } else if (description === '' || description === ' '){
             setIsDisable(false);
             Toast.show('Please Enter Description',Toast.LONG)
-        } else if (testAddress.test(description) !== true) {
+        } else if (testOnlyAddress.test(description) !== true) {
             Toast.show('Please Enter Valid Description', Toast.LONG);
         } else if(date === 'MM/DD/YYYY'){
             setIsDisable(false);
@@ -124,6 +125,30 @@ const EditTask = props => {
                 onSaveApi();
             }
         }
+    }
+
+
+    const onAdminSave = () => {
+        setLoading(true);
+        ApiHelper.updateUserTask(Data.id,token,title,status,priority,description,date,endDate,(response) => {
+            if(response.isSuccess){
+                setLoading(false);
+                if(response.response.data.code === 200){
+                    setLoading(false);
+                    Keyboard.dismiss();
+                    setTitle('');
+                    setDescription('');
+                    setTimeout(() => {
+                        Toast.show('Task Successfully Updated',Toast.LONG)
+                    },200)
+                    props.navigation.goBack();
+                }
+            }else {
+                setLoading(false);
+                setIsDisable(false);
+                console.log('Error Response ==>',response.response.response.data)
+            }
+        })
     }
 
 
@@ -257,16 +282,19 @@ const EditTask = props => {
                             style={styles.dateViewStyle}
                             open={open}
                             items={items}
-                            setOpen={setOpen}
+                            setOpen={(value) => {
+                                Keyboard.dismiss();
+                                setOpen(value)
+                                setOpenPriority(false)
+                            }}
                             placeholder={status}
                             value={status}
-                            disabled={Data.isCreadtedByAdmin}
                             placeholderStyle={{color:colors.inputColor}}
                             showArrowIcon={true}
                             closeAfterSelecting={true}
                             showTickIcon={false}
                             zIndex={9999}
-                            dropDownContainerStyle={{backgroundColor:colors.image_background,marginTop:hp(2),borderColor:'transparent',borderTopStartRadius:hp(1),borderTopEndRadius:hp(1),zIndex:1}}
+                            dropDownContainerStyle={{backgroundColor:colors.image_background,marginTop:hp(2),borderWidth:0.3,borderColor:colors.button_text,borderTopStartRadius:hp(1),borderTopEndRadius:hp(1),zIndex:1}}
                             arrowIconStyle={{tintColor:colors.white,height:25,width:25}}
                             listItemLabelStyle={{color:colors.white}}
                             containerStyle={styles.containerStyle}
@@ -281,7 +309,11 @@ const EditTask = props => {
                             style={styles.dateViewStyle}
                             open={openPriority}
                             items={priorityItems}
-                            setOpen={setOpenPriority}
+                            setOpen={(value) => {
+                                Keyboard.dismiss();
+                                setOpenPriority(value)
+                                setOpen(false)
+                            }}
                             placeholder={priority}
                             value={priority}
                             disabled={Data.isCreadtedByAdmin}
@@ -290,7 +322,7 @@ const EditTask = props => {
                             closeAfterSelecting={true}
                             showTickIcon={false}
                             zIndex={8888}
-                            dropDownContainerStyle={{backgroundColor:colors.image_background,marginTop:hp(2),borderColor:'transparent',borderTopStartRadius:hp(1),borderTopEndRadius:hp(1),zIndex:0}}
+                            dropDownContainerStyle={{backgroundColor:colors.image_background,marginTop:hp(2),borderWidth:0.3,borderColor:colors.button_text,borderTopStartRadius:hp(1),borderTopEndRadius:hp(1),zIndex:0}}
                             arrowIconStyle={{tintColor:colors.white,height:25,width:25}}
                             listItemLabelStyle={{color:colors.white}}
                             containerStyle={styles.containerStyle}
@@ -335,13 +367,13 @@ const EditTask = props => {
                     <View style={styles.buttonView}>
                         <View style={styles.btnView}>
                             <Button
-                                width={Data.isCreadtedByAdmin ? wp(80) :wp(40)}
+                                width={wp(40)}
                                 buttonText={'Cancel'}
                                 // buttonText={Data.status === 'COMPLETED' ? 'Cancel' : 'Complete' }
                                 onPress={() => props.navigation.goBack() }
                             />
                         </View>
-                        {Data.isCreadtedByAdmin !== true ? <View style={styles.btnView}>
+                         <View style={styles.btnView}>
                             <Button
                                 width={wp(40)}
                                 buttonText={'Update'}
@@ -349,9 +381,9 @@ const EditTask = props => {
                                 borderColor={colors.white}
                                 textColor={colors.black}
                                 disabled={isDisable}
-                                onPress={() => onPressSave()}
+                                onPress={() => Data.isCreadtedByAdmin ? onAdminSave() : onPressSave()}
                             />
-                        </View> : null}
+                        </View>
                     </View>
                     <DateTimePickerModal
                         isVisible={dateModal}

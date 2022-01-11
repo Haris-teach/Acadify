@@ -100,17 +100,16 @@ const styles = StyleSheet.create({
         justifyContent:'space-between',
     },
     buttonView: {
-        height: hp(21),
+        marginTop:hp(10),
+        height: hp(10),
         width: wp(100),
         justifyContent: 'center',
-        alignItems: 'center',
         flexDirection: 'row',
         zIndex:-1,
     },
     btnView: {
-        height: hp(20),
+        height: hp(10),
         width: wp(45),
-        justifyContent: 'center',
         alignItems: 'center',
     },
     containerStyle: {
@@ -146,12 +145,11 @@ const styles = StyleSheet.create({
         width:wp(90),
         borderRadius:wp(5),
         backgroundColor:colors.image_background,
-        alignItems:'center',
         justifyContent:'space-between',
     },
     inputListView:{
         height:hp(6),
-        width:wp(90),
+        width:wp(80),
         borderRadius:wp(5),
         justifyContent:'center',
         fontSize:14,
@@ -163,6 +161,7 @@ const styles = StyleSheet.create({
         marginTop:hp(6),
         justifyContent:'center',
         alignItems:'center',
+        zIndex:-1
     }
 });
 
