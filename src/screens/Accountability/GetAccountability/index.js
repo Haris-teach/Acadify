@@ -13,6 +13,7 @@ import {useIsFocused} from "@react-navigation/native";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import {AnimatedCircularProgress} from "react-native-circular-progress";
 import moment from "moment";
+import Model from "react-native-modal";
 
 //================================ Local Imported Files ======================================//
 
@@ -30,6 +31,8 @@ import UnSelect from "../../../assets/images/unselectBox.svg";
 import Grouped from "../../../assets/images/selected.svg";
 import GroupIcon from "../../../assets/images/group.svg";
 import Button from "../../../components/Button/Button";
+import CourseDropdown from "../../../components/CourseDropDwon";
+import CategoryFilterModal from "../../../components/CategoryFilterModal";
 
 
 const GetAccountability = (props) => {
@@ -40,6 +43,8 @@ const GetAccountability = (props) => {
     const [loading,setLoading] = useState(false);
     const [data,setData] = useState([])
     const [lockModal, setLockModal] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+    let [categoryData, setCategoryData] = useState([]);
 
     const [selectedIndex,setSelectedIndex] = useState('');
     const [selectedItem,setSelectedItem]   = useState('');
@@ -50,6 +55,7 @@ const GetAccountability = (props) => {
             setLockModal(false)
             setSelectedIndex('')
             getGoals();
+            getCategories();
         } else {
             setLockModal(true)
         }
@@ -70,6 +76,25 @@ const GetAccountability = (props) => {
                 console.log('Response',response.response)
             }
         })
+    }
+
+
+    const getCategories = () => {
+        ApiHelper.getCategories(token,'ACCOUNTABILITY', (response) => {
+            if (response.isSuccess) {
+                if (response.response.data.code === 200) {
+                    setCategoryData(response.response.data.data)
+                } else {
+                }
+            } else {
+                console.log("Error in ==>", response.response);
+            }
+        });
+    };
+
+
+    const onCatSelect = (value) => {
+        console.log('Value',value)
     }
 
 
@@ -219,6 +244,23 @@ const GetAccountability = (props) => {
                     </View>
                 </View>}
             </View>
+
+            <Model
+                animationIn="zoomIn"
+                animationOut="zoomOut"
+                transparent={true}
+                isVisible={modalVisible}
+                onBackdropPress={() => setModalVisible(!modalVisible)}
+            >
+                <CategoryFilterModal
+                    onPressClose={() => setModalVisible(!modalVisible)}
+                    catData={categoryData}
+                    onSelect={(value) => {
+                        setModalVisible(!modalVisible)
+                        onCatSelect(value);
+                    }}
+                />
+            </Model>
         </View>
     );
 };

@@ -104,9 +104,8 @@ const styles = StyleSheet.create({
     imageView: {
         height: hp(4),
         width: wp(90),
-        paddingHorizontal:wp(1),
+        paddingHorizontal:wp(5),
         alignItems: "center",
-        justifyContent:'center',
         flexDirection:'row'
     },
 

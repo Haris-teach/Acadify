@@ -29,13 +29,10 @@ const SettingTabComponent = (props) => {
         >
             <View style={styles.imageView}>
                 {props.title === 'Profile' ? <Profile/> : null}
-                {props.title === 'Billing' ? <Bill/> : null}
-                {props.title === 'Payment & Subscription' ? <Plan/> : null}
                 {props.title === 'Payment Methods' ? <Payment/> : null}
-                {props.title === 'Task' ? <Task/> : null}
-                {props.title === 'Help' ? <Help/> : null}
                 {props.title === 'Sign out' ? <SignOut/> : null}
                 {props.title === 'Password Update' ? <Shield/> : null}
+                {props.title === 'Payment & Subscription' ? <Plan/> : null}
             </View>
             <View style={styles.nameView}>
                 <Text style={[styles.nameText, { fontSize: wp(5) }]} numberOfLines={1}>

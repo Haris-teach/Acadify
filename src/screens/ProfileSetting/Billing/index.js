@@ -488,8 +488,8 @@ const BillingListing = (props) => {
                                     bgColor={colors.white}
                                     borderColor={colors.white}
                                     textColor={colors.black}
-                                    onPress={() => updatePlan()}
-                                    // onPress={() => props.navigation.goBack()}
+                                    // onPress={() => updatePlan()}
+                                    onPress={() => props.navigation.goBack()}
                                 />
                             </View>
                         </View>

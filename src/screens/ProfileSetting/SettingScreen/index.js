@@ -4,8 +4,8 @@ import React, {useState} from 'react';
 import {
     View,
     Text,
-    FlatList,
     Alert,
+    FlatList,
     StatusBar,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
@@ -19,10 +19,9 @@ import SettingTabComponent from "../../../components/SettingTabComponent";
 import {
     BILLING_LISTING,
     LOGIN_SCREEN,
-    PASSWORD_UPDATE, PAYMENT_SCREEN,
-    PLAN_SCREEN,
+    PASSWORD_UPDATE,
+    PAYMENT_SCREEN,
     PROFILE_SCREEN,
-    TASK_LISTING
 } from "../../../constants/navigators";
 import colors from "../../../assets/colors/colors";
 import images from "../../../assets/images/images";
@@ -52,10 +51,6 @@ const SettingScreen = (props) => {
         },
         {
             id:4,
-            title:'Help'
-        },
-        {
-            id:5,
             title:'Sign out'
         },
     ])
@@ -83,8 +78,6 @@ const SettingScreen = (props) => {
         } else if(item.id === 3){
             props.navigation.navigate(PASSWORD_UPDATE)
         } else if(item.id === 4){
-
-        } else if(item.id === 5){
             onSignOut();
         }
     }

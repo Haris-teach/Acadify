@@ -80,6 +80,7 @@ const DashboardScreen = (props) => {
     let tempArray = [];
     ApiHelper.getCoursesData(token,page,(response) => {
       if (response.isSuccess) {
+        console.log('Value',response.response)
         if (response.response.data.code === 200) {
           response.response.data.data.docs.map((value) => {
             if(value.CoursePayeds.length > 0){
