@@ -107,7 +107,7 @@ const CourseScreen = ({navigation}) => {
         ApiHelper.getDashboardData(token,(resp) => {
             if(resp.isSuccess){
                 setLoading(false);
-                // console.log('Resp',resp.response)
+                ApiHelper.consoleBox('message',resp)
                 setSortData(resp.response.data.data)
                 setItems(resp.response.data.courses)
                 setAccountItems(resp.response.data.accountability)

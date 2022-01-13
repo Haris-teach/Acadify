@@ -10,6 +10,7 @@ const images = {
   diner:require('./diner.png'),
   american:require('./american.png'),
   dummy:require('./dummy.png'),
+  crossImage:require('./cross.png'),
 };
 
 export default images;

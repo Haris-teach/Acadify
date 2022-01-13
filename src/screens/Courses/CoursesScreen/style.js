@@ -6,6 +6,7 @@ import {
 } from "react-native-responsive-screen";
 import colors from "../../../assets/colors/colors";
 import fonts from "../../../assets/fonts/fonts";
+import images from "../../../assets/images/images";
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -25,6 +26,17 @@ const styles = StyleSheet.create({
     height:hp(5),
     marginLeft:wp(2),
     justifyContent:'center',
+  },
+  searchText:{
+    marginRight:wp(2),
+    marginLeft:wp(8),
+    height:hp(4.5),
+    width:wp(65),
+    borderRadius:wp(3),
+    backgroundColor:colors.image_background,
+    paddingHorizontal:wp(3),
+    flexDirection:'row',
+    alignItems:'center',
   },
   innerContainer: {
     marginVertical: wp(2),

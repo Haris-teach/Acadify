@@ -5,43 +5,56 @@ import {
   View,
   Text,
   Modal,
+  Image,
   FlatList,
+  TextInput,
   TouchableOpacity,
 } from "react-native";
 import { useState } from "react";
 import Model from "react-native-modal";
 import { useSelector } from "react-redux";
 import {useIsFocused} from "@react-navigation/native";
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from "react-native-responsive-screen";
+import * as Animatable from 'react-native-animatable';
 
 //================================ Local Imported Files ======================================//
 
 import styles from "./style";
 import ApiHelper from "../../../api/ApiHelper";
 import {COURSE_DETAILS, PLAN_SCREEN} from "../../../constants/navigators";
+import images from "../../../assets/images/images";
 import AppLoading from "../../../components/AppLoading";
 import Search from "../../../assets/images/searchBackground.svg";
 import Filter from "../../../assets/images/filterBackground.svg";
 import DropArrow from "../../../assets/images/dropdown.svg";
 import Button from "../../../components/Button/Button";
+import SearchIcon from "../../../assets/images/search.svg";
 import CourseCard from "../../../components/CourseCard/CourseCard";
 import CategoryFilterModal from "../../../components/CategoryFilterModal";
 import CourseDropdown from "../../../components/CourseDropDwon";
 
+let title='';
+let categoryId='';
+let isFreeKey='';
+let isFree='';
+let page = 1;
 
 const DashboardScreen = (props) => {
 
   const isFocused = useIsFocused();
   const token = useSelector((state) => state.ApiData.token);
+  let course = useSelector(state => state.ApiData.course);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [dropModal, setDropModal] = useState(false);
   const [lockModal, setLockModal] = useState(false);
-  let course = useSelector(state => state.ApiData.course);
   let [coursesData, setCoursesData] = useState([]);
-  let [page, setPage] = useState(1);
   let [categoryData, setCategoryData] = useState([]);
   let [catText, setCatText] = useState('All Courses');
+  let [select, setSelect] = useState(0);
   let dropText = [
     {
       id:0,
@@ -61,13 +74,20 @@ const DashboardScreen = (props) => {
     }
   ];
 
+  let [search, setSearch] = useState(false);
+
 
   useEffect(() => {
     if(course){
       setLockModal(false)
       setCatText('All Courses');
-      setPage(1);
-      getUserProfile();
+      setSearch(false)
+      page = 1;
+      title='';
+      categoryId='';
+      isFreeKey='';
+      isFree='';
+      getUserProfile(true);
       getCategories();
     } else {
       setLockModal(true);
@@ -75,12 +95,12 @@ const DashboardScreen = (props) => {
   }, [isFocused]);
 
 
-  const getUserProfile = () => {
-    setLoading(true);
+  const getUserProfile = (bool) => {
+    setLoading(bool);
     let tempArray = [];
-    ApiHelper.getCoursesData(token,page,(response) => {
+    let url = `/api/v1/courses/?page=${page}&size=30&${isFreeKey}=${isFree}&categoryId=${categoryId}&title=%${title}%`;
+    ApiHelper.getCoursesData(token,url,(response) => {
       if (response.isSuccess) {
-        console.log('Value',response.response)
         if (response.response.data.code === 200) {
           response.response.data.data.docs.map((value) => {
             if(value.CoursePayeds.length > 0){
@@ -121,7 +141,7 @@ const DashboardScreen = (props) => {
         }
       } else {
         setLoading(false);
-        console.log("Error in ==>", response.response.response);
+        console.log("Error inner ==>", response.data);
       }
     });
   };
@@ -129,80 +149,49 @@ const DashboardScreen = (props) => {
 
   const getCategories = () => {
     setLoading(true);
+    let accountArray = [{
+      id:0,
+      name:'All Categories'
+    }];
     ApiHelper.getCategories(token,'COURSES', (response) => {
       if (response.isSuccess) {
         setLoading(false);
         if (response.response.data.code === 200) {
-          setCategoryData(response.response.data.data)
+          response.response.data.data.map((value) => {
+            accountArray.push({
+              id:value.id,
+              name:value.name
+            })
+          })
+          setCategoryData(accountArray)
         } else {
         }
       } else {
         setLoading(false);
-        console.log("Error in ==>", response.response);
+        console.log("Error in asd ==>", response.response);
       }
     });
   };
 
 
   const onSelectType = (text) => {
-    let url;
-    let tempArray = [];
     if(text === 'All Courses'){
-      getUserProfile();
+      isFreeKey='';
+      isFree='';
+      getUserProfile(true);
     } else if(text === 'Paid Courses'){
-      url = '/api/v1/courses/?isFree=0';
+      isFreeKey='isFree';
+      isFree='0';
+      getUserProfile(true);
     } else if(text === 'Free Courses'){
-      url = '/api/v1/courses/?isFree=1';
+      isFreeKey='isFree'
+      isFree='1';
+      getUserProfile(true);
     } else if(text === 'Enrolled Courses'){
-      url = '/api/v1/courses/?notenrolled=yes';
+      isFreeKey='notenrolled'
+      isFree='yes';
+      getUserProfile(true);
     }
-    setLoading(true);
-    ApiHelper.getCourseTypes(token,url, (response) => {
-      if (response.isSuccess) {
-        if (response.response.data.code === 200) {
-          response.response.data.data.docs.map((value) => {
-            if(value.CoursePayeds.length > 0){
-              if(value.CoursePayeds[0].paid === true){
-                tempArray.push({
-                  isLock:false,
-                  id:value.id,
-                  catName:value.Category.name,
-                  title:value.title,
-                  image:value.imageURL,
-                  price:value.Courseprices[0].price
-                })
-              }else{
-                tempArray.push({
-                  isLock:true,
-                  id:value.id,
-                  catName:value.Category.name,
-                  title:value.title,
-                  image:value.imageURL,
-                  price:value.CoursePayeds[0].price
-                })
-              }
-            } else {
-              tempArray.push({
-                isLock:true,
-                id:value.id,
-                catName:value.Category.name,
-                title:value.title,
-                image:value.imageURL,
-                price:value.Courseprices[0].price
-              })
-            }
-          })
-
-          setCoursesData(tempArray);
-          setLoading(false);
-          console.log('Data ===>',response.response.data)
-        } else {
-        }
-      } else {
-        setLoading(false);
-        console.log("Error in ==>", response.response.data);
-      }
-    });
   };
 
 
@@ -221,62 +210,31 @@ const DashboardScreen = (props) => {
 
 
   const LoadMoreRandomData = () => {
-    setPage(page = page + 1);
-    setMoreData();
+    // page = page + 1;
+    // getUserProfile();
   }
 
 
-  const setMoreData = () => {
-    // setLoading(true);
-    // let tempArray = [];
-    // ApiHelper.getCoursesData(token,page,(response) => {
-    //   if (response.isSuccess) {
-    //     // setCategoryExtraData(coursesData = page === 2 ? response.response.data.data.docs : [...coursesData, ...response.response.data.data.docs]);
-    //     response.response.data.data.docs?.map((value) => {
-    //       if (value.CoursePayeds.length > 0) {
-    //       if (value.CoursePayeds[0].paid === true) {
-    //         tempArray.push({
-    //           isLock: false,
-    //           id: value.id,
-    //           catName: value.Category.name,
-    //           title: value.title,
-    //           image: value.imageURL,
-    //           price: value.Courseprices[0].price
-    //         })
-    //       } else {
-    //         tempArray.push({
-    //           isLock: true,
-    //           id: value.id,
-    //           catName: value.Category.name,
-    //           title: value.title,
-    //           image: value.imageURL,
-    //           price: value.CoursePayeds[0].price
-    //         })
-    //       }
-    //     } else {
-    //       tempArray.push({
-    //         isLock: true,
-    //         id: value.id,
-    //         catName: value.Category.name,
-    //         title: value.title,
-    //         image: value.imageURL,
-    //         price: value.Courseprices[0].price
-    //       })
-    //     }
-    //   })
-    //     console.log('te')
-    //     setCoursesData(coursesData = page === 2 ? response.response.data.data.docs : [...coursesData, ...tempArray]);
-    //     setLoading(false);
-    //   }else{
-    //     setLoading(false);
-    //   }
-    // })
+
+  const onCatSelect = (value,index) => {
+    console.log('Name',value,index)
+    if(value.name === 'All Categories'){
+      categoryId='';
+      setSelect(index)
+      getUserProfile(true);
+    } else {
+      categoryId=value.id;
+      setSelect(index)
+      getUserProfile(true);
+    }
   }
 
 
-  const onCatSelect = (value) => {
-    console.log('Value',value)
+  const openValue = (text) => {
+      title = text;
+      getUserProfile(false);
   }
+
 
 
   return (
@@ -286,34 +244,43 @@ const DashboardScreen = (props) => {
           {lockModal === false ?
               <FlatList
                   data={coursesData}
-              extraData={coursesData}
-              onEndReachedThreshold={0}
-              onEndReached={() => LoadMoreRandomData()}
-              keyExtractor={(item) => item.id}
-              // ListEmptyComponent={() => {
-              //   return (
-              //       <View style={styles.emptySection}>
-              //         <Text style={[styles.headerTextStyle, {fontSize: wp(5)}]}>No Courses Found</Text>
-              //       </View>
-              //   )
-              // }}
-              ListHeaderComponent={() => {
-                return (
-                    <View style={styles.upperView}>
-                      <TouchableOpacity style={styles.headerStyle} onPress={() => setDropModal(!dropModal)}>
-                        <Text style={styles.headerTextStyle}>{catText}</Text>
-                        <View style={styles.dropArrow}>
-                          <DropArrow/>
-                        </View>
-                      </TouchableOpacity>
+                  extraData={coursesData}
+                  onEndReachedThreshold={0}
+                  onEndReached={() => LoadMoreRandomData()}
+                  keyExtractor={(item) => item.id}
+                  ListHeaderComponent={() => {
+                    return (
+                        <View style={styles.upperView}>
+                          {!search ?
+                              <TouchableOpacity style={styles.headerStyle} onPress={() => setDropModal(!dropModal)}>
+                                <Text style={styles.headerTextStyle}>{catText}</Text>
+                                <View style={styles.dropArrow}>
+                                  <DropArrow/>
+                                </View>
+                              </TouchableOpacity> :
+                              <View style={styles.searchText}>
+                                <SearchIcon/>
+                                <TextInput
+                                    style={{width:wp(50),color:'white',paddingHorizontal:wp(3),height:hp(4.5)}}
+                                    onChangeText={(e) => openValue(e)}
+                                    value={title}
+                                />
+                                <TouchableOpacity
+                                    style={{height:hp(4.5),justifyContent:'center'}}
+                                    onPress={() => setSearch(false)}
+                                >
+                                  <Image source={images.crossImage} style={{height:hp(2),width:wp(5),resizeMode:'cover'}}/>
+                                </TouchableOpacity>
+                              </View>
+                          }
                       <View style={styles.filterIcons}>
-                        <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Searched')}>
+                        {!search && <TouchableOpacity
+                            activeOpacity={0.7}
+                            onPress={() => setSearch(true)}
+                        >
                           <Search/>
-                        </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={0.7} onPress={() => {
-                          console.log('Pressed')
-                          // setModalVisible(!modalVisible)
-                        }}>
+                        </TouchableOpacity>}
+                        <TouchableOpacity activeOpacity={0.7} onPress={() => setModalVisible(!modalVisible)}>
                           <Filter/>
                         </TouchableOpacity>
                       </View>
@@ -336,7 +303,7 @@ const DashboardScreen = (props) => {
         </View>
 
       <Model
-          animationIn="zoomIn"
+          animationIn="zoomInUp"
           animationOut="zoomOut"
           transparent={true}
           isVisible={modalVisible}
@@ -345,9 +312,10 @@ const DashboardScreen = (props) => {
         <CategoryFilterModal
             onPressClose={() => setModalVisible(!modalVisible)}
             catData={categoryData}
-            onSelect={(value) => {
+            index={select}
+            onSelect={(value,index) => {
               setModalVisible(!modalVisible)
-              onCatSelect(value);
+              onCatSelect(value,index);
             }}
         />
       </Model>

@@ -8,7 +8,7 @@ import { createNativeStackNavigator, } from "@react-navigation/native-stack";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
-import * as CardStyleInterpolators from "@react-navigation/native-stack/src/navigators/TransitionConfigs/CardStyleInterpolators";
+// import * as CardStyleInterpolators from "@react-navigation/native-stack/src/navigators/TransitionConfigs/CardStyleInterpolators";
 
 //================================ Local Imported Files ======================================//
 
@@ -115,7 +115,6 @@ const MyNewStack = () => {
             initialRouteName={SPLASH_SCREEN}
             screenOptions={{
                 headerShown: false,
-                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
             }}
         >
             <RootStack.Screen name={SPLASH_SCREEN} component={SplashScreen} />
@@ -212,7 +211,6 @@ const MyTabs = () => {
         <Tab.Navigator
             initialRouteName={COURSE_SCREEN}
             screenOptions={{
-                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
                 headerShown:false,
                 tabBarShowLabel:true,
                 tabBarActiveTintColor:colors.button_text,

@@ -28,8 +28,9 @@ const LiveComponent = (props) => {
                     onLoadEnd={() => setIsLoaded(true)}
                     onError={() => setIsError(true)}
                 >
-                    {isLoaded === false ? null : <View style={[styles.liveView, {width: props.width}]}>
-                        <LiveIcon height={15} width={15}/>
+                    {isLoaded === false ? null :
+                        <View style={[styles.liveView, {width: props.width}]}>
+                            <LiveIcon height={15} width={15}/>
                         <Text style={styles.liveText}>Live</Text>
                     </View>}
                     {
@@ -83,13 +84,13 @@ const styles = StyleSheet.create({
         borderTopLeftRadius:wp(6),
         borderTopRightRadius:wp(6),
         alignItems:'center',
-        // justifyContent:'center',
+        justifyContent:'center',
     },
     liveView:{
-        height:hp(6),
+        height:hp(8),
         width:wp(42),
         flexDirection:'row',
-        alignItems:'center',
+        alignItems:'flex-start',
         paddingLeft:wp(3),
     },
     liveText:{

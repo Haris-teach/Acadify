@@ -13,14 +13,19 @@ import {
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import Toast from "react-native-simple-toast";
+import {
+    heightPercentageToDP as hp,
+    widthPercentageToDP as wp
+} from "react-native-responsive-screen";
+import RNFetchBlob from 'rn-fetch-blob';
+import Model from "react-native-modal";
 import moment from "moment";
-import RNFetchBlob from 'rn-fetch-blob'
 
 //================================ Local Imported Files ======================================//
 
 import styles from "./style";
 import ApiHelper from "../../../api/ApiHelper";
-import {BUY_RESOURCES, LOGIN_SCREEN, PLAN_SCREEN} from "../../../constants/navigators";
+import {BUY_RESOURCES, PLAN_SCREEN} from "../../../constants/navigators";
 import AppLoading from "../../../components/AppLoading";
 import Search from "../../../assets/images/searchBackground.svg";
 import Filter from "../../../assets/images/filterBackground.svg";
@@ -28,10 +33,13 @@ import DropArrow from "../../../assets/images/dropdown.svg";
 import CourseDropdown from "../../../components/CourseDropDwon";
 import CategoryFilterModal from "../../../components/CategoryFilterModal";
 import ResourceCard from "../../../components/ResourcesCard";
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import Button from "../../../components/Button/Button";
-import {CommonActions} from "@react-navigation/native";
 
+let title='';
+let categoryId='';
+let isFreeKey='';
+let isFree='';
+let page = 1;
 
 const AllResourcesScreen = ({navigation}) => {
 
@@ -41,11 +49,12 @@ const AllResourcesScreen = ({navigation}) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [dropModal, setDropModal] = useState(false);
     const [lockModal, setLockModal] = useState(false);
-    let [page, setPage] = useState(1);
-    let [pageLength, pagePageLength] = useState(1);
+    let [pageLength, setPageLength] = useState(1);
     let [categoryData, setCategoryData] = useState([]);
     let [coursesData, setCoursesData]   = useState([]);
     let [catText, setCatText] = useState('All Resources');
+    let [select, setSelect] = useState(0);
+    let [search, setSearch] = useState(false);
     let dropText = [
         {
             id:0,
@@ -67,8 +76,12 @@ const AllResourcesScreen = ({navigation}) => {
             if(resource) {
                 setLockModal(false);
                 setCatText('All Resources');
-                setPage(1);
-                getAllResources();
+                 title='';
+                 categoryId='';
+                 isFreeKey='';
+                 isFree='';
+                 page = 1;
+                getAllResources(true);
                 getCategories();
             } else {
                 setLockModal(true);
@@ -77,14 +90,16 @@ const AllResourcesScreen = ({navigation}) => {
     }, [navigation]);
 
 
-    const getAllResources = () => {
-        setLoading(true);
-        ApiHelper.getResourceData(token, (response) => {
+
+    const getAllResources = (bool) => {
+        setLoading(bool);
+        let url = `/api/v1/resources/?size=30&page=${page}&${isFreeKey}=${isFree}&categoryId=${categoryId}&title=%${title}%`
+        ApiHelper.getResourceData(token, url,(response) => {
             if (response.isSuccess) {
                 if (response.response.data.code === 200) {
-                    console.log("Success of Resources ==>", response.response.data);
+                    ApiHelper.consoleBox("Success of Resources ==>", response.response.data);
                     setCoursesData(response.response.data.data.docs);
-                    pagePageLength(response.response.data.data.pages);
+                    setPageLength(response.response.data.data.pages);
                     setLoading(false);
                 } else {
                     console.log("Error inner ==>", response.response.data);
@@ -108,10 +123,20 @@ const AllResourcesScreen = ({navigation}) => {
 
     const getCategories = () => {
         setLoading(true);
+        let accountArray = [{
+            id:0,
+            name:'All Categories'
+        }];
         ApiHelper.getCategories(token,'RESOURCES', (response) => {
             if (response.isSuccess) {
                 if (response.response.data.code === 200) {
-                    setCategoryData(response.response.data.data)
+                    response.response.data.data.map((value) =>{
+                        accountArray.push({
+                            id:value.id,
+                            name:value.name
+                        })
+                    })
+                    setCategoryData(accountArray)
                     setLoading(false)
                 } else {
                 }
@@ -156,7 +181,6 @@ const AllResourcesScreen = ({navigation}) => {
             });
 
             if (isIOS) {
-                console.log('Config',configOptions)
                 config(configOptions)
                     .fetch('GET', linking[0])
                     .then((res) => {
@@ -192,7 +216,6 @@ const AllResourcesScreen = ({navigation}) => {
                 //
                 //     })
                 config(configOptions)
-
                     .fetch('GET', linking[0])
                     .then((res) => {
                         // RNFetchBlob.android.actionViewIntent(res.path());
@@ -217,29 +240,19 @@ const AllResourcesScreen = ({navigation}) => {
 
 
     const onSelectType = (text) => {
-        let url;
         if(text === 'All Resources'){
-            getAllResources();
+            isFreeKey= ''
+            isFree= ''
+            getAllResources(true);
         } else if(text === 'Services'){
-            url = '/api/v1/resources/?size=30&resourceType=SERVICES';
+            isFreeKey='resourceType'
+            isFree='SERVICES'
+            getAllResources(true);
         } else if(text === 'Documents'){
-            url = '/api/v1/resources/?size=30&resourceType=DOCUMENTS';
+            isFreeKey='resourceType'
+            isFree='DOCUMENTS'
+            getAllResources(true);
         }
-        setLoading(true);
-        ApiHelper.getResourceTypes(token,url, (response) => {
-            if (response.isSuccess) {
-                if (response.response.data.code === 200) {
-                    console.log("Success ==>", response.response.data);
-                    setCoursesData(response.response.data.data.docs);
-                    setLoading(false);
-                } else {
-                    console.log("Error inner ==>", response.response.data);
-                }
-            } else {
-                setLoading(false);
-                console.log("Error ==>", response.response);
-            }
-        });
     };
 
 
@@ -265,24 +278,23 @@ const AllResourcesScreen = ({navigation}) => {
 
 
     const LoadMoreRandomData = () => {
-        if(page < pageLength) {
-            setPage(page = page + 1);
-            setMoreData();
-        }
+        // if(page < pageLength) {
+        //     page = page + 1;
+        //     getAllResources(true)
+        // }
     }
 
 
-    const setMoreData = () => {
-        // setLoading(true);
-        // ApiHelper.getResourceData(token,page,(response) => {
-        //     if (response.isSuccess) {
-        //       setCoursesData(coursesData = page === 2 ? response.response.data.data.docs : [...coursesData, ...response.response.data.data.docs]);
-        //       setLoading(false);
-        //   }else{
-        //     setLoading(false);
-        //         console.log('Response error',response.response)
-        //   }
-        // })
+    const onCatSelect = (value,index) => {
+        if(value.name === 'All Categories'){
+            categoryId='';
+            setSelect(index)
+            getAllResources(true);
+        } else {
+            categoryId=value.id;
+            setSelect(index)
+            getAllResources(true);
+        }
     }
 
 
@@ -311,7 +323,10 @@ const AllResourcesScreen = ({navigation}) => {
                                     <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Searched')}>
                                         <Search/>
                                     </TouchableOpacity>
-                                    <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Pressed')}>
+                                    <TouchableOpacity
+                                        activeOpacity={0.7}
+                                        onPress={() => setModalVisible(!modalVisible)}
+                                    >
                                         <Filter/>
                                     </TouchableOpacity>
                                 </View>
@@ -333,18 +348,23 @@ const AllResourcesScreen = ({navigation}) => {
                 }
             </View>
 
-            {/*<Model*/}
-            {/*    animationIn="zoomIn"*/}
-            {/*    animationOut="zoomOut"*/}
-            {/*    transparent={true}*/}
-            {/*    isVisible={modalVisible}*/}
-            {/*    onBackdropPress={() => setModalVisible(!modalVisible)}*/}
-            {/*>*/}
-            {/*  <CategoryFilterModal*/}
-            {/*      onPressClose={() => setModalVisible(!modalVisible)}*/}
-            {/*      catData={categoryData}*/}
-            {/*  />*/}
-            {/*</Model>*/}
+            <Model
+                animationIn="zoomIn"
+                animationOut="zoomOut"
+                transparent={true}
+                isVisible={modalVisible}
+                onBackdropPress={() => setModalVisible(!modalVisible)}
+            >
+              <CategoryFilterModal
+                  onPressClose={() => setModalVisible(!modalVisible)}
+                  catData={categoryData}
+                  index={select}
+                  onSelect={(value,index) => {
+                      setModalVisible(!modalVisible)
+                      onCatSelect(value,index);
+                  }}
+              />
+            </Model>
 
             <Modal
                 animationType={'none'}

@@ -6,14 +6,14 @@ import {
     Text,
     FlatList,
     StatusBar,
-    TouchableOpacity,
+    TouchableOpacity, TextInput, Image,
 } from 'react-native';
 import {useSelector} from "react-redux";
 import {useIsFocused} from "@react-navigation/native";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import {AnimatedCircularProgress} from "react-native-circular-progress";
-import moment from "moment";
 import Model from "react-native-modal";
+import moment from "moment";
 
 //================================ Local Imported Files ======================================//
 
@@ -21,6 +21,8 @@ import styles from './style';
 import {ADD_GOAL, EDIT_ACCOUNTABILITY, PLAN_SCREEN} from "../../../constants/navigators";
 import ApiHelper from "../../../api/ApiHelper";
 import colors from "../../../assets/colors/colors";
+import images from "../../../assets/images/images";
+import CommonStyle from "../../../CommonStyle";
 import Add from "../../../assets/images/addIcon.svg";
 import AppLoading from "../../../components/AppLoading";
 import Search from "../../../assets/images/searchBackground.svg";
@@ -31,9 +33,13 @@ import UnSelect from "../../../assets/images/unselectBox.svg";
 import Grouped from "../../../assets/images/selected.svg";
 import GroupIcon from "../../../assets/images/group.svg";
 import Button from "../../../components/Button/Button";
-import CourseDropdown from "../../../components/CourseDropDwon";
 import CategoryFilterModal from "../../../components/CategoryFilterModal";
+import SearchIcon from "../../../assets/images/search.svg";
 
+
+let title='';
+let categoryId='';
+let page = 1;
 
 const GetAccountability = (props) => {
 
@@ -44,17 +50,19 @@ const GetAccountability = (props) => {
     const [data,setData] = useState([])
     const [lockModal, setLockModal] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
+    const [search, setSearch] = useState(false);
     let [categoryData, setCategoryData] = useState([]);
 
     const [selectedIndex,setSelectedIndex] = useState('');
     const [selectedItem,setSelectedItem]   = useState('');
+    let [select, setSelect] = useState(0);
 
 
     useEffect(() => {
         if(goal){
             setLockModal(false)
             setSelectedIndex('')
-            getGoals();
+            getGoals(true);
             getCategories();
         } else {
             setLockModal(true)
@@ -62,8 +70,8 @@ const GetAccountability = (props) => {
     }, [isFocused]);
 
 
-    const getGoals = () => {
-        setLoading(true);
+    const getGoals = (bool) => {
+        setLoading(bool);
         ApiHelper.getGoals(token,(response) => {
             if(response.isSuccess){
                 if(response.response.data.code === 200){
@@ -80,10 +88,20 @@ const GetAccountability = (props) => {
 
 
     const getCategories = () => {
+        let accountArray = [{
+            id:0,
+            name:'All Categories'
+        }];
         ApiHelper.getCategories(token,'ACCOUNTABILITY', (response) => {
             if (response.isSuccess) {
                 if (response.response.data.code === 200) {
-                    setCategoryData(response.response.data.data)
+                    response.response.data.data.map((value) =>{
+                        accountArray.push({
+                            id:value.id,
+                            name:value.name
+                        })
+                    })
+                    setCategoryData(accountArray)
                 } else {
                 }
             } else {
@@ -93,8 +111,17 @@ const GetAccountability = (props) => {
     };
 
 
-    const onCatSelect = (value) => {
-        console.log('Value',value)
+    const onCatSelect = (value,index) => {
+        console.log('Name',value,index)
+        if(value.name === 'All Categories'){
+            categoryId='';
+            setSelect(index)
+            getGoals(true);
+        } else {
+            categoryId=value.id;
+            setSelect(index)
+            getGoals(true);
+        }
     }
 
 
@@ -157,15 +184,35 @@ const GetAccountability = (props) => {
                         return(
                             <View style={styles.upperView}>
                                 <View style={styles.headerStyle}>
-                                    <Text style={styles.headerTextStyle}>Accountability</Text>
+                                    {!search ? <Text style={styles.headerTextStyle}>Accountability</Text> : null}
                                     <View style={styles.filterIcons}>
-                                        <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Searched')}>
-                                            <Search/>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity activeOpacity={0.7} onPress={() =>  console.log('Filter')}>
+                                        {!search ?
+                                            <TouchableOpacity activeOpacity={0.7} onPress={() => setSearch(!search)}>
+                                                <Search/>
+                                            </TouchableOpacity>:
+                                            <View style={[CommonStyle.searchText,{marginLeft:wp(3),width:wp(60)}]}>
+                                                <SearchIcon/>
+                                                <TextInput
+                                                    style={{width:wp(45),color:'white',paddingHorizontal:wp(3),height:hp(4.5)}}
+                                                    onChangeText={(e) => console.log(e)}
+                                                    value={title}
+                                                />
+                                                <TouchableOpacity
+                                                    style={{height:hp(4.5),justifyContent:'center'}}
+                                                    onPress={() => setSearch(false)}
+                                                >
+                                                    <Image source={images.crossImage} style={{height:hp(2),width:wp(5),resizeMode:'cover'}}/>
+                                                </TouchableOpacity>
+                                            </View>
+                                        }
+                                        <TouchableOpacity activeOpacity={0.7} onPress={() => setModalVisible(!modalVisible)}>
                                             <Filter/>
                                         </TouchableOpacity>
-                                        <TouchableOpacity activeOpacity={0.7} onPress={() => props.navigation.navigate(ADD_GOAL)}>
+                                        <TouchableOpacity
+                                            activeOpacity={0.7}
+                                            style={{marginLeft: search ? wp(2) : null}}
+                                            onPress={() => props.navigation.navigate(ADD_GOAL)}
+                                        >
                                             <Add/>
                                         </TouchableOpacity>
                                     </View>
@@ -173,13 +220,6 @@ const GetAccountability = (props) => {
                             </View>
                         )
                     }}
-                    // ListEmptyComponent={() => {
-                    //     return (
-                    //         <View style={styles.emptySection}>
-                    //             <Text style={[styles.headerTextStyle, {fontSize: wp(5)}]}>No Record Found</Text>
-                    //         </View>
-                    //     )
-                    // }}
                     keyExtractor={(item) => item.id}
                     renderItem={({item,index}) => {
                         let date = moment(item.dateCompleted).format('MM/DD/YYYY');
@@ -255,9 +295,10 @@ const GetAccountability = (props) => {
                 <CategoryFilterModal
                     onPressClose={() => setModalVisible(!modalVisible)}
                     catData={categoryData}
-                    onSelect={(value) => {
+                    index={select}
+                    onSelect={(value,index) => {
                         setModalVisible(!modalVisible)
-                        onCatSelect(value);
+                        onCatSelect(value,index);
                     }}
                 />
             </Model>

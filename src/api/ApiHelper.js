@@ -649,11 +649,11 @@ class ApiServices {
         });
   }
 
-  getCoursesData = (token,page,callback) => {
+  getCoursesData = (token,url,callback) => {
     var config = {
       method: "get",
-      // url: BASE_URL + `/api/v1/courses/?size=10&page=${page}`,
-      url: BASE_URL + '/api/v1/courses/?size=30',
+      url: BASE_URL + url,
+      // url: BASE_URL + '/api/v1/courses/?size=30',
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -700,11 +700,10 @@ class ApiServices {
       });
   };
 
-  getResourceData = (token, callback) => {
+  getResourceData = (token,url, callback) => {
     var config = {
       method: "get",
-      // url: BASE_URL + `/api/v1/resources/?size=15&page=${page}`,
-      url: BASE_URL + '/api/v1/resources/?size=30',
+      url: BASE_URL + url,
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -1091,6 +1090,12 @@ class ApiServices {
           });
         });
   }
+
+
+  consoleBox = (title,message) => {
+    console.log(title?title:'',message?message:'')
+  }
+
 }
 
 const apiService = new ApiServices();
