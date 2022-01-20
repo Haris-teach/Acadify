@@ -29,6 +29,7 @@ import Button from '../../../components/Button/Button';
 import AppHeader from '../../../components/AppHeader';
 import AppLoading from '../../../components/AppLoading';
 
+
 const AddNewCardScreen = props => {
 
     const tokens = useSelector((state) => state.ApiData.token);
@@ -63,7 +64,6 @@ const AddNewCardScreen = props => {
             data[0],
             data[1],
         );
-        console.log('Token', token);
         if (token.error) {
             setLoading(false);
             setTimeout(() => {
@@ -71,7 +71,7 @@ const AddNewCardScreen = props => {
             },200)
         }else{
             setLoading(true);
-            console.log('Token', token.id);
+            ApiHelper.consoleBox('Token', token.id);
             addNewCard(token.id)
         }
     };
@@ -81,7 +81,7 @@ const AddNewCardScreen = props => {
         ApiHelper.addCard(tokens,id,name,(response) => {
             if(response.isSuccess){
                 if(response.response.data.code === 200){
-                    console.log('Add card response ===>',response.response)
+                    ApiHelper.consoleBox('Add card response ===>',response.response)
                     setLoading(false)
                     setTimeout(() =>{
                         Toast.show('Card Added Successfully',Toast.LONG)
@@ -89,7 +89,7 @@ const AddNewCardScreen = props => {
                     props.navigation.goBack()
                 }
             }else{
-                console.log('response.response',response.response)
+                ApiHelper.consoleBox('response.response',response.response)
                 setLoading(false);
             }
         })

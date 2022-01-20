@@ -64,7 +64,6 @@ const CommonStyles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'space-between',
     },
-
     headerTextStyle:{
         fontFamily:fonts.semi,
         fontWeight:'700',

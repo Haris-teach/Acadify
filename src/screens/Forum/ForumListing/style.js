@@ -15,6 +15,8 @@ const styles = StyleSheet.create({
     },
     container:{
         flex:0.9,
+        justifyContent:'center',
+        alignItems:'center'
     },
     dropArrow:{
         height:hp(5),

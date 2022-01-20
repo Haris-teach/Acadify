@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
     },
     bodyView:{
         flex:0.83,
-        // marginTop:Platform.OS === 'ios' ? hp(1) : null,
     },
     userDetailView:{
         height:hp(15),
@@ -45,8 +44,8 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
     imageStyle:{
-        height:hp(11),
-        width:hp(11),
+        height:hp(9),
+        width:hp(9),
         borderRadius:hp(2),
         resizeMode:'cover',
         justifyContent:'center',

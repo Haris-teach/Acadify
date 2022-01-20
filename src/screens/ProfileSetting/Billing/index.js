@@ -6,17 +6,19 @@ import {
     Text,
     FlatList,
     StatusBar,
+    ScrollView,
     RefreshControl,
     TouchableOpacity,
-    ScrollView,
-    Appearance
 } from 'react-native';
-import moment from "moment";
-import {widthPercentageToDP, widthPercentageToDP as wp} from "react-native-responsive-screen";
+import {
+    widthPercentageToDP,
+    widthPercentageToDP as wp
+} from "react-native-responsive-screen";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {useIsFocused} from "@react-navigation/native";
 import {useDispatch, useSelector} from "react-redux";
 import Toast from "react-native-simple-toast";
+import moment from "moment";
 
 //================================ Local Imported Files ======================================//
 
@@ -36,6 +38,7 @@ import Button from "../../../components/Button/Button";
 import Tick from "../../../assets/images/tick.svg";
 import BillComponent from "../../../components/BillingComponent";
 
+let page = 1;
 
 const BillingListing = (props) => {
 
@@ -53,7 +56,6 @@ const BillingListing = (props) => {
     const [title,setTitle] = useState('Billing');
     const [items,setItems] = useState([]);
     const [packageData,setPackageData] = useState('');
-    const [page,setPage] = useState(1);
 
     const [catText,setCatText] = useState('bill');
 
@@ -62,36 +64,35 @@ const BillingListing = (props) => {
     const [stripeId, setStripeId] = useState('');
     const [planName, setPlaneName] = useState('');
     const [setIndex, setIndexValue] = useState(0);
+    const [pagesLength, setPagesLength] = useState(0);
     const [isVisible, setVisible] = useState(false);
 
 
     useEffect(() => {
-        // Appearance.addChangeListener((value) => {
-        //     console.log('value',value)
-        // })
         setDate('MM/DD/YYYY')
         setEndDate('MM/DD/YYYY')
         setStart_Date('')
         setEnd_Date('')
-        setPage(1)
+        page = 1;
         setCatText('bill')
         getTasks();
     },[isFocused])
 
 
-
      const getTasks = () => {
        setLoading(true)
-        ApiHelper.getTasks(token,start_date,end_date,page,(response) => {
+         let url = `/api/v1/payment?start_date=${start_date}&end_date=${end_date}&size=20&page=${page}`;
+         ApiHelper.getTasks(token,url,(response) => {
             if(response.isSuccess){
-                console.log('Billing success ===>',response.response.data)
+                ApiHelper.consoleBox('Billing success ===>',response.response.data)
                 if(response.response.data.code === 201){
                     setLoading(false)
-                    setItems(response.response.data.data.docs)
+                    setItems([...items, ...response.response.data.data.docs])
+                    setPagesLength(response.response.data.data.pages)
                 }
             }else {
                 setLoading(false)
-                console.log('Billing Error ===>',response.response)
+                ApiHelper.consoleBox('Billing Error ===>',response.response)
             }
         })
     }
@@ -103,7 +104,7 @@ const BillingListing = (props) => {
             if (response.isSuccess) {
                 setLoading(false);
                 if (response.response.data.code === 200) {
-                    console.log('Response ===>', response.response.data);
+                    ApiHelper.consoleBox('Response ===>', response.response.data);
                     setIndexValue(0);
                     setPackageData(response.response.data.result[0].name)
                     setPackages(response.response.data.result[0].Stripes);
@@ -140,7 +141,7 @@ const BillingListing = (props) => {
             if (response.isSuccess) {
                 if (response.response.data.code === 200) {
                     setLoading(false);
-                    console.log('Success of Change Plan ==>', response.response.data.data.token);
+                    ApiHelper.consoleBox('Success of Change Plan ==>', response.response.data.data.token);
                     dispatch(ApiDataActions.SetUserToken(response.response.data.data.token));
                     dispatch(ApiDataActions.SetLoginData(response.response.data.data));
                     setRights(response.response.data.data);
@@ -150,7 +151,7 @@ const BillingListing = (props) => {
                     },200)
                 } else {
                     setLoading(false);
-                    console.log('Error ==>', response.response);
+                    ApiHelper.consoleBox('Error ==>', response.response);
                     setTimeout(() => {
                         Toast.show(response.response.data.error.email, Toast.LONG);
                     },200)
@@ -160,7 +161,7 @@ const BillingListing = (props) => {
                 setTimeout(() => {
                     Toast.show(response.response.response.data.message, Toast.LONG);
                 },200)
-                console.log('Error ===>', response.response.response.data.message);
+                ApiHelper.consoleBox('Error ===>', response.response.response.data.message);
             }
         });
     }
@@ -180,6 +181,7 @@ const BillingListing = (props) => {
             />
         )
     }
+
 
     const renderItemsFeature = (item, index) => {
         return (
@@ -228,11 +230,11 @@ const BillingListing = (props) => {
         setLoading(true)
         ApiHelper.getRefreshTasks(token,start_date,end_date,page,(response) => {
             if(response.isSuccess){
-                console.log('Billing success ===>',response.response.data)
+                ApiHelper.consoleBox('Billing success ===>',response.response.data)
                 if(response.response.data.code === 201){
                     setLoading(false)
                     setItems(response.response.data.data.docs)
-                    setPage(1)
+                    page = 1;
                     setStart_Date('')
                     setEnd_Date('')
                     setDate('MM/DD/YYYY')
@@ -240,7 +242,7 @@ const BillingListing = (props) => {
                 }
             }else {
                 setLoading(false)
-                console.log('Billing Error ===>',response.response)
+                ApiHelper.consoleBox('Billing Error ===>',response.response)
             }
         })
     }
@@ -277,7 +279,6 @@ const BillingListing = (props) => {
             </TouchableOpacity>
         );
     };
-
 
 
     const onConfirmDate = (value) => {
@@ -329,8 +330,10 @@ const BillingListing = (props) => {
 
 
     const LoadMoreRandomData = () => {
-         // setPage({page: page + 1})
-        // getTasks()
+         if(page < pagesLength){
+             page = page + 1
+             getTasks();
+         }
      }
 
 

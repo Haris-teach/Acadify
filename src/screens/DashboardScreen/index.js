@@ -27,14 +27,16 @@ import fonts from "../../assets/fonts/fonts";
 import images from "../../assets/images/images";
 import ApiHelper from "../../api/ApiHelper";
 import {
-    GET_ACCOUNTABILITY,
-    DASHBOARD_SCREEN,
-    ALL_RESOURCES,
-    NOTIFICATION,
-    LIVE_EVENTS,
     FORUM,
     JOURNEY,
-    SETTINGS, TASK_LISTING,
+    SETTINGS,
+    LIVE_EVENTS,
+    TASK_LISTING,
+    ALL_RESOURCES,
+    NOTIFICATION,
+    DASHBOARD_SCREEN,
+    GET_ACCOUNTABILITY,
+    CHAT_THREAD_LISTING,
 } from "../../constants/navigators";
 import AppHeaderNative from "../../components/AppHeaderNative";
 import AppLoading from "../../components/AppLoading";
@@ -107,7 +109,6 @@ const CourseScreen = ({navigation}) => {
         ApiHelper.getDashboardData(token,(resp) => {
             if(resp.isSuccess){
                 setLoading(false);
-                ApiHelper.consoleBox('message',resp)
                 setSortData(resp.response.data.data)
                 setItems(resp.response.data.courses)
                 setAccountItems(resp.response.data.accountability)
@@ -242,8 +243,8 @@ const CourseScreen = ({navigation}) => {
                     onPressTask={() => navigation.navigate(TASK_LISTING)}
                     onPressSetting={() => navigation.navigate(SETTINGS)}
                     onPressJourney={() => navigation.navigate(JOURNEY)}
-                    onPressChat={() => console.log('Chat Pressed')}
                     onPressRing={() => navigation.navigate(NOTIFICATION)}
+                    onPressChat={() => navigation.navigate(CHAT_THREAD_LISTING)}
                 />
             </View>
             {loading ? null : (

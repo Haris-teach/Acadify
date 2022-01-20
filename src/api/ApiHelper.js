@@ -660,6 +660,8 @@ class ApiServices {
       },
     };
 
+    console.log('Url',url)
+
     axios(config)
       .then((response) => {
         callback({
@@ -829,10 +831,10 @@ class ApiServices {
   };
 
 
-  getTasks = (token,start_date,end_date,page ,callback) => {
+  getTasks = (token,url,callback) => {
     var config = {
       method: "get",
-      url: BASE_URL + `/api/v1/payment?start_date=${start_date}&end_date=${end_date}&size=300&page=${page}`,
+      url: BASE_URL + url,
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",

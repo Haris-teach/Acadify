@@ -43,8 +43,8 @@ const styles = StyleSheet.create({
     videoSection:{
         height:hp(32),
         width:wp(100),
-        justifyContent:'center',
-        alignItems:'center',
+        // justifyContent:'center',
+        // alignItems:'center',
     },
     sectionView:{
       width:wp(100),

@@ -9,15 +9,16 @@ import {
   FlatList,
   TextInput,
   TouchableOpacity,
+  ActionSheetIOS
 } from "react-native";
 import { useState } from "react";
-import Model from "react-native-modal";
 import { useSelector } from "react-redux";
-import {useIsFocused} from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
+import Model from "react-native-modal";
 import * as Animatable from 'react-native-animatable';
 
 //================================ Local Imported Files ======================================//
@@ -55,6 +56,7 @@ const DashboardScreen = (props) => {
   let [categoryData, setCategoryData] = useState([]);
   let [catText, setCatText] = useState('All Courses');
   let [select, setSelect] = useState(0);
+  let [pageLength, setPageLength] = useState(0);
   let dropText = [
     {
       id:0,
@@ -87,6 +89,7 @@ const DashboardScreen = (props) => {
       categoryId='';
       isFreeKey='';
       isFree='';
+      setCoursesData([])
       getUserProfile(true);
       getCategories();
     } else {
@@ -98,10 +101,11 @@ const DashboardScreen = (props) => {
   const getUserProfile = (bool) => {
     setLoading(bool);
     let tempArray = [];
-    let url = `/api/v1/courses/?page=${page}&size=30&${isFreeKey}=${isFree}&categoryId=${categoryId}&title=%${title}%`;
+    let url = `/api/v1/courses/?page=${page}&size=10&${isFreeKey}=${isFree}&categoryId=${categoryId}&title=%${title}%`;
     ApiHelper.getCoursesData(token,url,(response) => {
       if (response.isSuccess) {
         if (response.response.data.code === 200) {
+          ApiHelper.consoleBox("data ==>", response.response.data);
           response.response.data.data.docs.map((value) => {
             if(value.CoursePayeds.length > 0){
               if(value.CoursePayeds[0].paid === true){
@@ -134,14 +138,15 @@ const DashboardScreen = (props) => {
               })
             }
           })
+          setPageLength(response.response.data.data.pages)
           setCoursesData(tempArray);
           setLoading(false);
         } else {
-          console.log("Error inner ==>", response.response.data);
+          ApiHelper.consoleBox("Error inner ==>", response.response.data);
         }
       } else {
         setLoading(false);
-        console.log("Error inner ==>", response.data);
+        ApiHelper.consoleBox("Error inner ==>", response.data);
       }
     });
   };
@@ -168,7 +173,7 @@ const DashboardScreen = (props) => {
         }
       } else {
         setLoading(false);
-        console.log("Error in asd ==>", response.response);
+        ApiHelper.consoleBox("Error in course Category ==>", response.response);
       }
     });
   };
@@ -176,18 +181,22 @@ const DashboardScreen = (props) => {
 
   const onSelectType = (text) => {
     if(text === 'All Courses'){
+      setCoursesData([])
       isFreeKey='';
       isFree='';
       getUserProfile(true);
     } else if(text === 'Paid Courses'){
+      setCoursesData([])
       isFreeKey='isFree';
       isFree='0';
       getUserProfile(true);
     } else if(text === 'Free Courses'){
+      setCoursesData([])
       isFreeKey='isFree'
       isFree='1';
       getUserProfile(true);
     } else if(text === 'Enrolled Courses'){
+      setCoursesData([])
       isFreeKey='notenrolled'
       isFree='yes';
       getUserProfile(true);
@@ -210,14 +219,14 @@ const DashboardScreen = (props) => {
 
 
   const LoadMoreRandomData = () => {
-    // page = page + 1;
-    // getUserProfile();
+    if(page < pageLength){
+      page = page + 1;
+      getUserProfile(true);
+    }
   }
 
 
-
   const onCatSelect = (value,index) => {
-    console.log('Name',value,index)
     if(value.name === 'All Categories'){
       categoryId='';
       setSelect(index)
@@ -235,6 +244,24 @@ const DashboardScreen = (props) => {
       getUserProfile(false);
   }
 
+
+  const data = () => {
+      ActionSheetIOS.showActionSheetWithOptions(
+          {
+            options: ["Cancel", "Generate number", "Reset"],
+            destructiveButtonIndex: 2,
+            cancelButtonIndex: 0,
+            userInterfaceStyle: 'dark'
+          }, buttonIndex => {
+            if (buttonIndex === 0) {
+              // cancel action
+            } else if (buttonIndex === 1) {
+              // setResult(Math.floor(Math.random() * 100) + 1);
+            } else if (buttonIndex === 2) {
+              // setResult("🔮");
+            }
+          });
+  }
 
 
   return (

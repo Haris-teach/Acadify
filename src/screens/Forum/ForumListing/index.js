@@ -17,16 +17,17 @@ import moment from "moment";
 //================================ Local Imported Files ======================================//
 
 import styles from "./style";
+import CommonStyles from "../../../CommonStyle";
 import ApiHelper from "../../../api/ApiHelper";
+import {PLAN_SCREEN} from "../../../constants/navigators";
 import AppLoading from "../../../components/AppLoading";
 import Search from "../../../assets/images/searchBackground.svg";
 import DropArrow from "../../../assets/images/dropdown.svg";
 import Add from "../../../assets/images/addIcon.svg";
 import Refresh from "../../../assets/images/refresh.svg";
+import Button from "../../../components/Button/Button";
 import CourseDropdown from "../../../components/CourseDropDwon";
 import ForumMainComponent from "../../../components/ForumMainComponent";
-import Button from "../../../components/Button/Button";
-import {PLAN_SCREEN} from "../../../constants/navigators";
 
 
 const ForumListing = ({navigation}) => {
@@ -56,18 +57,18 @@ const ForumListing = ({navigation}) => {
     ];
 
 
-    useEffect(() => {
-        return navigation.addListener('focus', () => {
-            if(forum){
-                setLockModal(false)
-                setCatText('All Forum');
-                setPage(1);
-                getAllResources();
-            } else {
-                setLockModal(true)
-            }
-        });
-    }, [navigation]);
+    // useEffect(() => {
+    //     return navigation.addListener('focus', () => {
+    //         if(forum){
+    //             setLockModal(false)
+    //             setCatText('All Forum');
+    //             setPage(1);
+    //             getAllResources();
+    //         } else {
+    //             setLockModal(true)
+    //         }
+    //     });
+    // }, [navigation]);
 
 
     const getAllResources = () => {
@@ -75,16 +76,16 @@ const ForumListing = ({navigation}) => {
         ApiHelper.getAllForum(token, (response) => {
             if (response.isSuccess) {
                 if (response.response.data.code === 200) {
-                    console.log("Success of Forum ==>", response.response.data);
+                    ApiHelper.consoleBox("Success of Forum ==>", response.response.data);
                     setCoursesData(response.response.data.data.docs);
                     pagePageLength(response.response.data.data.pages);
                     setLoading(false);
                 } else {
-                    console.log("Error inner ==>", response.response.data);
+                    ApiHelper.consoleBox("Error inner ==>", response.response.data);
                 }
             } else {
                 setLoading(false);
-                console.log("Error ==>", response.response);
+                ApiHelper.consoleBox("Error ==>", response.response);
             }
         });
     };
@@ -103,15 +104,15 @@ const ForumListing = ({navigation}) => {
         ApiHelper.getResourceTypes(token,url, (response) => {
             if (response.isSuccess) {
                 if (response.response.data.code === 200) {
-                    console.log("Success ==>", response.response.data);
+                    ApiHelper.consoleBox("Success ==>", response.response.data);
                     setCoursesData(response.response.data.data.docs);
                     setLoading(false);
                 } else {
-                    console.log("Error inner ==>", response.response.data);
+                    ApiHelper.consoleBox("Error inner ==>", response.response.data);
                 }
             } else {
                 setLoading(false);
-                console.log("Error ==>", response.response);
+                ApiHelper.consoleBox("Error ==>", response.response);
             }
         });
     };
@@ -165,48 +166,49 @@ const ForumListing = ({navigation}) => {
             {AppLoading.renderLoading(loading)}
 
             <View style={styles.container}>
-                {lockModal === false ?
-                    <FlatList
-                    data={coursesData}
-                    extraData={coursesData}
-                    onEndReachedThreshold={0}
-                    onEndReached={() => LoadMoreRandomData()}
-                    keyExtractor={(item) => item.id}
-                    ListHeaderComponent={() => {
-                        return(
-                            <View style={styles.upperView}>
-                                <TouchableOpacity style={styles.headerStyle}  onPress={() => setDropModal(!dropModal)}>
-                                    <Text style={styles.headerTextStyle}>{catText}</Text>
-                                    <View style={styles.dropArrow}>
-                                        <DropArrow/>
-                                    </View>
-                                </TouchableOpacity>
-                                <View style={styles.filterIcons}>
-                                    <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Searched')}>
-                                        <Search/>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Refresh')}>
-                                        <Refresh/>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Add New')}>
-                                        <Add/>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        )
-                    }}
-                    renderItem={({item,index}) => renderResourceItems(item,index)}
-                />:
-                    <View style={styles.upgradePlan}>
-                        <Text style={[styles.headerTextStyle,{fontSize:wp(6),fontWeight:'500',textAlign:'center'}]}>Upgrade Your Plan To Get Access</Text>
-                        <View style={{marginTop:hp(2)}}>
-                            <Button
-                                buttonText={'UPGRADE PLAN'}
-                                width={wp(50)}
-                                onPress={() => navigation.navigate(PLAN_SCREEN,{fromChange:true})}
-                            />
-                        </View>
-                    </View>}
+                <Text style={CommonStyles.headerTextStyle}>Coming Soon...</Text>
+                {/*{lockModal === false ?*/}
+                {/*    <FlatList*/}
+                {/*    data={coursesData}*/}
+                {/*    extraData={coursesData}*/}
+                {/*    onEndReachedThreshold={0}*/}
+                {/*    onEndReached={() => LoadMoreRandomData()}*/}
+                {/*    keyExtractor={(item) => item.id}*/}
+                {/*    ListHeaderComponent={() => {*/}
+                {/*        return(*/}
+                {/*            <View style={styles.upperView}>*/}
+                {/*                <TouchableOpacity style={styles.headerStyle}  onPress={() => setDropModal(!dropModal)}>*/}
+                {/*                    <Text style={styles.headerTextStyle}>{catText}</Text>*/}
+                {/*                    <View style={styles.dropArrow}>*/}
+                {/*                        <DropArrow/>*/}
+                {/*                    </View>*/}
+                {/*                </TouchableOpacity>*/}
+                {/*                <View style={styles.filterIcons}>*/}
+                {/*                    <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Searched')}>*/}
+                {/*                        <Search/>*/}
+                {/*                    </TouchableOpacity>*/}
+                {/*                    <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Refresh')}>*/}
+                {/*                        <Refresh/>*/}
+                {/*                    </TouchableOpacity>*/}
+                {/*                    <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Add New')}>*/}
+                {/*                        <Add/>*/}
+                {/*                    </TouchableOpacity>*/}
+                {/*                </View>*/}
+                {/*            </View>*/}
+                {/*        )*/}
+                {/*    }}*/}
+                {/*    renderItem={({item,index}) => renderResourceItems(item,index)}*/}
+                {/*/>:*/}
+                {/*    <View style={styles.upgradePlan}>*/}
+                {/*        <Text style={[styles.headerTextStyle,{fontSize:wp(6),fontWeight:'500',textAlign:'center'}]}>Upgrade Your Plan To Get Access</Text>*/}
+                {/*        <View style={{marginTop:hp(2)}}>*/}
+                {/*            <Button*/}
+                {/*                buttonText={'UPGRADE PLAN'}*/}
+                {/*                width={wp(50)}*/}
+                {/*                onPress={() => navigation.navigate(PLAN_SCREEN,{fromChange:true})}*/}
+                {/*            />*/}
+                {/*        </View>*/}
+                {/*    </View>}*/}
             </View>
 
             <Modal

@@ -4,13 +4,16 @@ import React,{useState,useEffect} from "react";
 import {
     View,
     Text,
+    StatusBar,
     ScrollView,
     SectionList,
-    StatusBar,
+    ImageBackground,
     ActivityIndicator,
-    ImageBackground
 } from "react-native";
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+} from "react-native-responsive-screen";
 import {useSelector} from "react-redux";
 import Toast from "react-native-simple-toast";
 
@@ -57,8 +60,8 @@ const CourseDetailScreen = ({navigation,route}) => {
                 image={item.imageURL}
                 title={item.title}
                 description={item.description}
-                onPressContent={() => console.log('Section Data',section)}
-                // onPressContent={() => navigation.navigate(COURSE_CONTENT_PLAY,{courseDetails:courseDetails,section})}
+                // onPressContent={() => console.log('Section Data',section)}
+                onPressContent={() => navigation.navigate(COURSE_CONTENT_PLAY,{courseDetails:courseDetails,section})}
             />
         )
     }
@@ -70,7 +73,7 @@ const CourseDetailScreen = ({navigation,route}) => {
         ApiHelper.getSingleCourse(token,route.params.courseId,(response) => {
             if (response.isSuccess) {
                 if(response.response.data.code === 200){
-                    console.log('SingleCourse ===>',response.response.data.data)
+                    ApiHelper.consoleBox('SingleCourse ===>',response.response.data.data)
                     response.response.data.data.CourseSections?.map((value) => {
                         tempArray.push({
                             id:value.id,
@@ -87,7 +90,6 @@ const CourseDetailScreen = ({navigation,route}) => {
                             setShowBtn(false)
                             setCourseDetails(response.response.data.data);
                             setLoading(false)
-                            // console.log('Price',coursePrice,courseDetails,coursePrice)
                         }else{
                             setIsDisabled(true);
                             setCoursePrice(response.response.data.data.CoursePayeds[0].price);
@@ -114,7 +116,7 @@ const CourseDetailScreen = ({navigation,route}) => {
                 }
             }else{
                 setLoading(false)
-                console.log('Course Error',response.response.response);
+                ApiHelper.consoleBox('Course Error',response.response.response);
             }
         })
     }
@@ -142,7 +144,6 @@ const CourseDetailScreen = ({navigation,route}) => {
         ApiHelper.enrollCourse(token,object,url,(resp) => {
             if(resp.isSuccess){
                 setLoading(false);
-                console.log('Success',resp.response.response)
                 setLoading(false);
                 setTimeout(() => {
                     Toast.show('Successfully Subscribe',Toast.LONG);

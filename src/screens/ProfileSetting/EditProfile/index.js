@@ -87,9 +87,7 @@ const EditProfileScreen = props => {
         };
         launchImageLibrary(options, (res) => {
             if (res.didCancel) {
-                console.log("User cancelled image picker");
             } else if (res.errorMessage) {
-                console.log("ImagePicker Error: ", res.errorMessage);
             } else {
                 const image = {
                     uri: res.assets[0].uri,
@@ -110,7 +108,7 @@ const EditProfileScreen = props => {
             if(response.isSuccess){
                 setLoading(false);
                 if(response.response.status === 200){
-                    console.log('Success Data URL ===>',response.response.data.Location)
+                    ApiHelper.consoleBox('Success Data URL ===>',response.response.data.Location)
                     let values = {
                         firstName:firstName,
                         lastName:lastName,
@@ -123,7 +121,7 @@ const EditProfileScreen = props => {
                 }
             }else{
                 setLoading(false);
-                console.log('False Data ===>',response.response.response)
+                ApiHelper.consoleBox('False Data ===>',response.response.response)
                 setTimeout(() => {
                     Toast.show(response.response.response.data.message,Toast.LONG)
                 },200)
@@ -159,7 +157,7 @@ const EditProfileScreen = props => {
             if(response.isSuccess){
                 setLoading(false);
                 if(response.response.data.code === 200){
-                    console.log('Success Data ===>',response.response)
+                    ApiHelper.consoleBox('Success Data ===>',response.response)
                     dispatch(ApiDataActions.SetUserToken(response.response.data.token));
                     Keyboard.dismiss()
                     setTimeout(() => {
@@ -169,7 +167,7 @@ const EditProfileScreen = props => {
                 }
             }else{
                 setLoading(false);
-                console.log('False Data ===>',response.response.response)
+                ApiHelper.consoleBox('False Data ===>',response.response.response)
                 setTimeout(() => {
                     Toast.show(response.response.response.data.message,Toast.LONG)
                 },200)
@@ -196,13 +194,8 @@ const EditProfileScreen = props => {
                     />
                 </View>
 
-
                 <View style={styles.imageBackground}>
                     <View style={styles.imageStyle}>
-                        {/*<Image*/}
-                        {/*    source={hasImage ? {uri: image.uri} : images.placeHolder}*/}
-                        {/*    style={styles.imageStyle}*/}
-                        {/*/>*/}
                         <ImageBackground
                             source={hasImage ? {uri: image.uri} : (profileImage !== 'null' ? {uri:profileImage} : images.placeHolder)}
                             style={styles.imageStyle}

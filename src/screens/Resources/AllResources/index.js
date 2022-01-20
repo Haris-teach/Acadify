@@ -93,12 +93,12 @@ const AllResourcesScreen = ({navigation}) => {
 
     const getAllResources = (bool) => {
         setLoading(bool);
-        let url = `/api/v1/resources/?size=30&page=${page}&${isFreeKey}=${isFree}&categoryId=${categoryId}&title=%${title}%`
+        let url = `/api/v1/resources/?size=10&page=${page}&${isFreeKey}=${isFree}&categoryId=${categoryId}&title=%${title}%`
         ApiHelper.getResourceData(token, url,(response) => {
             if (response.isSuccess) {
                 if (response.response.data.code === 200) {
                     ApiHelper.consoleBox("Success of Resources ==>", response.response.data);
-                    setCoursesData(response.response.data.data.docs);
+                    setCoursesData([...coursesData,...response.response.data.data.docs]);
                     setPageLength(response.response.data.data.pages);
                     setLoading(false);
                 } else {
@@ -243,14 +243,20 @@ const AllResourcesScreen = ({navigation}) => {
         if(text === 'All Resources'){
             isFreeKey= ''
             isFree= ''
+            page = 1;
+            setCoursesData([])
             getAllResources(true);
         } else if(text === 'Services'){
             isFreeKey='resourceType'
             isFree='SERVICES'
+            page = 1;
+            setCoursesData([])
             getAllResources(true);
         } else if(text === 'Documents'){
             isFreeKey='resourceType'
             isFree='DOCUMENTS'
+            page = 1;
+            setCoursesData([])
             getAllResources(true);
         }
     };
@@ -278,10 +284,10 @@ const AllResourcesScreen = ({navigation}) => {
 
 
     const LoadMoreRandomData = () => {
-        // if(page < pageLength) {
-        //     page = page + 1;
-        //     getAllResources(true)
-        // }
+        if(page < pageLength) {
+            page = page + 1;
+            getAllResources(true)
+        }
     }
 
 
@@ -289,10 +295,14 @@ const AllResourcesScreen = ({navigation}) => {
         if(value.name === 'All Categories'){
             categoryId='';
             setSelect(index)
+            page = 1;
+            setCoursesData([])
             getAllResources(true);
         } else {
             categoryId=value.id;
             setSelect(index)
+            page = 1;
+            setCoursesData([])
             getAllResources(true);
         }
     }

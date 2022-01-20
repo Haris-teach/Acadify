@@ -8,7 +8,6 @@ import { createNativeStackNavigator, } from "@react-navigation/native-stack";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
-// import * as CardStyleInterpolators from "@react-navigation/native-stack/src/navigators/TransitionConfigs/CardStyleInterpolators";
 
 //================================ Local Imported Files ======================================//
 
@@ -56,7 +55,8 @@ import {
     SPLASH_SCREEN,
     EVENTS_DETAILS,
     PAYMENT_SCREEN,
-    ADD_NEW_CARD_SCREEN
+    ADD_NEW_CARD_SCREEN,
+    CHAT_THREAD_LISTING
 } from "./constants/navigators";
 import PlanScreen from "./screens/Auth/PlanScreen";
 import CardScreen from "./screens/Auth/CardScreen";
@@ -87,6 +87,8 @@ import SplashScreen from "./screens/Auth/SplashScreen";
 import EventDetailScreen from "./screens/LiveEvents/EventDetails";
 import PaymentScreen from "./screens/ProfileSetting/PaymentMethod";
 import BillingListing from "./screens/ProfileSetting/Billing";
+import AddNewCardScreen from "./screens/ProfileSetting/AddNewCard";
+import ChatThreadListing from "./screens/Chat/ChatThread/ChatThread";
 import MenuBar from "./components/MenuBar";
 
 //================================ Bottom Icons ======================================//
@@ -103,7 +105,6 @@ import ForumInActive from "./assets/dropIcon/forumIn.svg";
 import ForumActive from "./assets/dropIcon/forumA.svg";
 import ResourcesInActive from "./assets/dropIcon/resourceIn.svg";
 import ResourcesActive from "./assets/dropIcon/resourceA.svg";
-import AddNewCardScreen from "./screens/ProfileSetting/AddNewCard";
 
 
 const RootStack = createNativeStackNavigator();
@@ -151,6 +152,7 @@ const MyNewStack = () => {
             <RootStack.Screen name={BILLING_LISTING} component={BillingListing}/>
             <RootStack.Screen name={PAYMENT_SCREEN} component={PaymentScreen}/>
             <RootStack.Screen name={ADD_NEW_CARD_SCREEN} component={AddNewCardScreen}/>
+            <RootStack.Screen name={CHAT_THREAD_LISTING} component={ChatThreadListing}/>
         </RootStack.Navigator>
     );
 };
