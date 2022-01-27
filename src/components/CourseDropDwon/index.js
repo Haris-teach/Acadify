@@ -5,12 +5,13 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import {View, Text, TouchableOpacity, StyleSheet} from "react-native";
+import {View, Text, TouchableOpacity, StyleSheet, Platform} from "react-native";
 
 //================================ Local Imported Files ======================================//
 
 import colors from "../../assets/colors/colors";
 import fonts from "../../assets/fonts/fonts";
+
 
 const CourseDropdown = (props) => {
 
@@ -60,7 +61,7 @@ const CourseDropdown = (props) => {
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        paddingTop:hp(18),
+        paddingTop:Platform.OS === 'ios' ? hp(13) : hp(8),
         paddingLeft:wp(10),
     },
     container: {

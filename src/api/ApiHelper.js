@@ -1,9 +1,11 @@
 import axios from "axios";
 const BASE_URL = "https://api.stagingaia.com";
-// const BASE_URL = "http://192.168.1.179:5001";
+// const BASE_URL = "http://192.168.0.36:5001"; //Fatima
+// const BASE_URL = "http://192.168.0.21:5001"; //Usama
 const BASE_URL_STRIPE = "https://api.stripe.com/v1";
-const STRIPE_PUBLISHABLE_KEY =
-  "pk_test_51IbuHCL3SLhyon2BLACBp27GY1ecVJhQlbD2DIX7cGCmQWHNayYdJVlP9aXAdMjK6jMKR9VD4HRCAOlGAMQMB8XU005FRCU1zA";
+const STRIPE_PUBLISHABLE_KEY = "pk_test_p70ntuGAVS0fwxQrqHagViMn00ndsuW2zD";
+// const STRIPE_PUBLISHABLE_KEY = "pk_live_lI9hJ044r9Pd2uqFwctf4BRS00OCyTO4Vf";
+
 
 class ApiServices {
   constructor(props) {}
@@ -37,6 +39,42 @@ class ApiServices {
         });
       });
   };
+
+
+  addCard = (token, id,name, callback) => {
+    var data = JSON.stringify({
+      "source": id,
+      "name": name,
+      "address_line1": "Pakistan LHR"
+    });
+
+    var config = {
+      method: 'post',
+      url: 'https://api.stagingaia.com/api/v1/users/addcard',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+
+    console.log('Config',config)
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  };
+
 
   onGetPlan = (callback) => {
     let config = {
@@ -98,17 +136,13 @@ class ApiServices {
       });
   };
 
-
-  createImageUrl = (token, type,name, callback) => {
-    var data = JSON.stringify({
-      "ContentType": type,
-      "Key": name,
-      "title": ''
-    });
+  createImageUrl = (token, image, callback) => {
+    let data = new FormData();
+    data.append('profileImage',image)
 
     var config = {
       method: 'post',
-      url: BASE_URL + '/api/v1/media/signed/url',
+      url: BASE_URL + '/api/v1/media/signed/url/mob',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -130,7 +164,6 @@ class ApiServices {
           });
         });
   };
-
 
   updateProfile = (token,value, callback) => {
     var config = {
@@ -158,9 +191,7 @@ class ApiServices {
         });
   };
 
-
   onSignUpPaidApi = (id,stripeId, data, callback) => {
-    console.log("Stripe ID", stripeId);
     let value = JSON.stringify({
       email: data.email,
       firstName: data.firstName,
@@ -196,7 +227,6 @@ class ApiServices {
       });
   };
 
-
   getToken = async (cardName, cardNumber, cvc, month, year) => {
     const card = {
       "card[number]": cardNumber.replace(/ /g, ""),
@@ -216,7 +246,6 @@ class ApiServices {
         .join("&"),
     }).then((response) => response.json());
   };
-
 
   getUserProfile = (token, callback) => {
     var config = {
@@ -243,7 +272,6 @@ class ApiServices {
       });
   };
 
-
   getCategories = (token,type,callback) => {
     var config = {
       method: "get",
@@ -269,6 +297,30 @@ class ApiServices {
         });
   };
 
+  getUserTasks = (token,callback) => {
+    var config = {
+      method: "get",
+      url: BASE_URL + '/api/v1/tasks/user',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  };
 
   getCourseTypes = (token,url,callback) => {
     var config = {
@@ -295,7 +347,6 @@ class ApiServices {
         });
   };
 
-
   getResourceTypes = (token,url,callback) => {
     var config = {
       method: "get",
@@ -321,6 +372,32 @@ class ApiServices {
         });
   };
 
+  getNotifications = (token,page,callback) => {
+    var config = {
+      method: "get",
+      url: BASE_URL +`/api/v1/notification?admin=false&page=${page}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    console.log('Config',config)
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  };
 
   newJourney = (token,title,description,callback) => {
     var data = JSON.stringify({
@@ -352,7 +429,6 @@ class ApiServices {
           });
         });
   }
-
 
   createGoal = (token,title,description,catId,progress,dateComplete,checkList,callback) => {
     var data = JSON.stringify({
@@ -389,11 +465,145 @@ class ApiServices {
         });
   }
 
+  editGoal = (token,goalId,title,description,catId,progress,dateComplete,checkList,deleteList,callback) => {
+    var data = JSON.stringify({
+      "title": title,
+      "description": description,
+      "categoryId": catId,
+      "progress": progress,
+      "dateCompleted": dateComplete,
+      "checklist": checkList,
+      // "previous_checklist": checkList,
+      // "delete_checklist": deleteList,
+    });
+
+    var config = {
+      method: 'put',
+      url: BASE_URL + '/api/v1/goals/'+ goalId,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+
+    console.log('Config',config)
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  }
+
+  createUserTask = (token,title,status,priority,description,date,endDate,callback) => {
+    var data = JSON.stringify({
+      "title": title,
+      "priority": priority,
+      "status": status,
+      "startDate": date,
+      "dueDate": endDate,
+      "description": description
+    });
+
+    var config = {
+      method: 'post',
+      url: BASE_URL + '/api/v1/tasks/user',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  }
+
+  updateUserTask = (id,token,title,status,priority,description,date,endDate,callback) => {
+    var data = JSON.stringify({
+      "title": title,
+      "priority": priority,
+      "status": status,
+      "startDate": date,
+      "dueDate": endDate,
+      "description": description
+    });
+
+    var config = {
+      method: 'put',
+      url: BASE_URL + `/api/v1/tasks/${id}`,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  }
+
+  deleteUserTask = (token,id,callback) => {
+
+    var config = {
+      method: 'delete',
+      url: BASE_URL + `/api/v1/tasks/user/${id}`,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  }
 
   getJourney = (token,callback) => {
     var config = {
       method: 'get',
-      url: BASE_URL + '/api/v1/journey/alljourney/?size=30',
+      url: BASE_URL + '/api/v1/journey/alljourney/?size=100',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -414,12 +624,11 @@ class ApiServices {
           });
         });
   }
-
 
   getGoals = (token,callback) => {
     var config = {
       method: 'get',
-      url: BASE_URL + '/api/v1/goals/user',
+      url: BASE_URL + '/api/v1/goals/user/?size=100',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -441,11 +650,38 @@ class ApiServices {
         });
   }
 
-  getCoursesData = (token,page,callback) => {
+  getCoursesData = (token,url,callback) => {
     var config = {
       method: "get",
-      // url: BASE_URL + `/api/v1/courses/?size=10&page=${page}`,
-      url: BASE_URL + '/api/v1/courses/?size=30',
+      url: BASE_URL + url,
+      // url: BASE_URL + '/api/v1/courses/?size=30',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    console.log('Url',url)
+
+    axios(config)
+      .then((response) => {
+        callback({
+          isSuccess: true,
+          response: response,
+        });
+      })
+      .catch((error) => {
+        callback({
+          isSuccess: false,
+          response: error,
+        });
+      });
+  };
+
+  getEvents = (token,url,callback) => {
+    var config = {
+      method: "get",
+      url: BASE_URL + url,
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -467,11 +703,10 @@ class ApiServices {
       });
   };
 
-  getResourceData = (token, callback) => {
+  getResourceData = (token,url, callback) => {
     var config = {
       method: "get",
-      // url: BASE_URL + `/api/v1/resources/?size=15&page=${page}`,
-      url: BASE_URL + '/api/v1/resources/?size=30',
+      url: BASE_URL + url,
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -479,6 +714,32 @@ class ApiServices {
     };
 
     console.log('Config',config)
+
+    axios(config)
+      .then((response) => {
+        callback({
+          isSuccess: true,
+          response: response,
+        });
+      })
+      .catch((error) => {
+        callback({
+          isSuccess: false,
+          response: error,
+        });
+      });
+  };
+
+  getAllForum = (token, callback) => {
+    var config = {
+      method: "get",
+      // url: BASE_URL + `/api/v1/resources/?size=15&page=${page}`,
+      url: BASE_URL + '/api/v1/forum/getall',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
 
     axios(config)
       .then((response) => {
@@ -570,10 +831,67 @@ class ApiServices {
         });
   };
 
-  getTasks = (token,start_date,end_date, callback) => {
+
+  getTasks = (token,url,callback) => {
     var config = {
       method: "get",
-      url: BASE_URL + `/api/v1/payment?start_date=${start_date}&end_date=${end_date}&size=30`,
+      url: BASE_URL + url,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    console.log('config',config)
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  };
+
+
+  getRefreshTasks = (token,start_date,end_date,page ,callback) => {
+    var config = {
+      method: "get",
+      url: BASE_URL + '/api/v1/payment?start_date=&end_date=&size=300&page=1',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    console.log('config',config)
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  };
+
+
+  getCardsData = (token, callback) => {
+    var config = {
+      method: "get",
+      url: BASE_URL + '/api/v1/users/getcard',
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -595,16 +913,46 @@ class ApiServices {
         });
   };
 
-  enrollCourse = (token,data,callback) => {
+  enrollCourse = (token,data,url,callback) => {
     var config = {
       method: 'post',
-      url: BASE_URL + '/api/v1/courses/enroll',
+      url: BASE_URL + url,
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
       data : data
     };
+
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  }
+
+
+  onChangePlan = (token,data,url,callback) => {
+    var config = {
+      method: 'post',
+      url: BASE_URL + url,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+
+    console.log('Config',config)
 
     axios(config)
         .then((response) => {
@@ -670,6 +1018,87 @@ class ApiServices {
           });
         });
   }
+
+  getNotificationsSeen = (token,id,callback) => {
+    var config = {
+      method: 'put',
+      url: BASE_URL + `/api/v1/notification/read/${id}`,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  }
+
+  sendForgotEmail = (email,callback) => {
+    var config = {
+      method: 'get',
+      url: BASE_URL + `/api/v1/auth/sendemail/${email}`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  }
+
+
+  changeDefault = (token,url,method,callback) => {
+    var config = {
+      method: method,
+      url: BASE_URL + url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    };
+
+    axios(config)
+        .then((response) => {
+          callback({
+            isSuccess: true,
+            response: response,
+          });
+        })
+        .catch((error) => {
+          callback({
+            isSuccess: false,
+            response: error,
+          });
+        });
+  }
+
+
+  consoleBox = (title,message) => {
+    console.log(title?title:'',message?message:'')
+  }
+
 }
 
 const apiService = new ApiServices();

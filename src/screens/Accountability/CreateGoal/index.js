@@ -8,10 +8,10 @@ import {
     TextInput,
     Platform,
     Keyboard,
-    ScrollView,
-    KeyboardAvoidingView,
-    TouchableOpacity,
     FlatList,
+    ScrollView,
+    TouchableOpacity,
+    KeyboardAvoidingView,
 } from 'react-native';
 import {useSelector} from "react-redux";
 import Toast from "react-native-simple-toast";
@@ -111,15 +111,16 @@ const AddGoal = props => {
         //     Toast.show('Please Select Progress',Toast.LONG)
         // }
         else {
+            setIsDisable(true);
             if(checkList.length > 0){
                 checkList.map((value) => {
-                    if(value.name === ''){
+                    if(value.name === '' || testAddress.test(value.name) !== true){
                        checkValue = true;
                     }
                 })
                 if(checkValue){
                     setIsDisable(false);
-                    Toast.show('Please Enter Checklist Name',Toast.LONG)
+                    Toast.show('Please Enter Valid Checklist Title',Toast.LONG)
                 }else{
                     for (let i = 0; i < items.length; i++) {
                         if (items[i].value === value) {
@@ -156,6 +157,9 @@ const AddGoal = props => {
             }else {
                 setLoading(false);
                 setIsDisable(false);
+                setTimeout(() => {
+                    Toast.show(response.response.response.data.error,Toast.LONG)
+                },200)
                 console.log('Response',response.response.response.data.error)
             }
         })
@@ -204,9 +208,9 @@ const AddGoal = props => {
 
 
     const updateState = (index,value) => {
-        const Textdata = [...checkList];
-        Textdata[index].name = value;
-        setTextInputs(Textdata)
+        const textData = [...checkList];
+        textData[index].name = value;
+        setTextInputs(textData)
     }
 
 
@@ -277,7 +281,7 @@ const AddGoal = props => {
                         <Text style={styles.titleText}>Description</Text>
                         <TextInput
                             placeholder={'Enter your description here'}
-                            style={[styles.inputStyle,{height:hp(15),paddingTop:wp(5)}]}
+                            style={[styles.inputStyle,{height:hp(15),paddingTop:wp(5),paddingBottom:wp(5)}]}
                             placeholderTextColor={colors.inputColor}
                             multiline={true}
                             textAlignVertical={'top'}
@@ -308,7 +312,7 @@ const AddGoal = props => {
                                 closeAfterSelecting={true}
                                 showTickIcon={false}
                                 zIndex={9999}
-                                dropDownContainerStyle={{backgroundColor:colors.image_background,marginTop:hp(2),borderColor:'transparent',borderTopStartRadius:hp(1),borderTopEndRadius:hp(1),zIndex:0}}
+                                dropDownContainerStyle={{backgroundColor:colors.image_background,marginTop:hp(2),borderWidth:0.3,borderColor:colors.button_text,borderTopStartRadius:hp(1),borderTopEndRadius:hp(1),zIndex:0}}
                                 arrowIconStyle={{tintColor:colors.white,height:25,width:25}}
                                 listItemLabelStyle={{color:colors.white}}
                                 containerStyle={styles.containerStyle}
@@ -391,6 +395,7 @@ const AddGoal = props => {
                 <DateTimePickerModal
                     isVisible={dateModal}
                     mode={"date"}
+                    minimumDate={new Date()}
                     timePickerModeAndroid={"clock"}
                     onConfirm={(value) => onConfirmDate(value)}
                     onCancel={() => onCancelDate()}

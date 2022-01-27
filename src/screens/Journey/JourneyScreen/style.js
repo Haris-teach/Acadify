@@ -21,11 +21,11 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
     upperView:{
-        height:hp(15),
+        height:hp(10),
         width:wp(100),
     },
     headerStyle:{
-        height:hp(10),
+        height:hp(5),
         width:wp(100),
         paddingHorizontal:wp(7.5),
         flexDirection:'row',
@@ -36,19 +36,30 @@ const styles = StyleSheet.create({
         height:hp(5),
         width:wp(100),
         paddingHorizontal:wp(7.5),
+        justifyContent:'center',
     },
     activityText:{
         fontSize:wp(4.2),
         color:colors.white,
         fontFamily:fonts.semi
     },
+    emptySection:{
+        height:hp(60),
+        justifyContent:'center',
+        alignItems:'center',
+    },
     headerTextStyle:{
         fontFamily:fonts.semi,
         fontWeight:'700',
         color:colors.white,
         fontSize:24
-    }
-
+    },
+    upgradePlan:{
+        height:hp(90),
+        width:wp(100),
+        justifyContent:"center",
+        alignItems:'center',
+    },
 });
 
 export default styles;

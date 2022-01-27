@@ -4,17 +4,18 @@ import React,{useState,useEffect} from "react";
 import {
     View,
     Text,
-    TouchableOpacity,
+    StatusBar,
     ScrollView,
     SectionList,
-    StatusBar,
-    ActivityIndicator,
     ImageBackground,
+    ActivityIndicator,
 } from "react-native";
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+} from "react-native-responsive-screen";
 import {useSelector} from "react-redux";
 import Toast from "react-native-simple-toast";
-import Clipboard from '@react-native-clipboard/clipboard';
 
 //================================ Local Imported Files ======================================//
 
@@ -25,13 +26,11 @@ import fonts from "../../../assets/fonts/fonts";
 import ApiHelper from "../../../api/ApiHelper";
 import {COURSE_CONTENT_PLAY, CREDIT_CARD} from "../../../constants/navigators";
 import AppHeader from "../../../components/AppHeader";
-import Share from "../../../assets/images/share.svg";
 import Button from "../../../components/Button/Button";
 import AppLoading from "../../../components/AppLoading";
 import CourseContentView from "../../../components/CourseContentListComponent";
 
-
-const CourseDetailScreen = (props) => {
+const CourseDetailScreen = ({navigation,route}) => {
 
     const token = useSelector((state) => state.ApiData.token);
     const [loading,setLoading] = useState(false);
@@ -48,8 +47,10 @@ const CourseDetailScreen = (props) => {
 
 
     useEffect(() => {
-        getSingleCourse();
-    },[])
+        return navigation.addListener('focus', () => {
+            getSingleCourse();
+        });
+    },[navigation])
 
 
     const _renderContent = (item,section) => {
@@ -60,7 +61,7 @@ const CourseDetailScreen = (props) => {
                 title={item.title}
                 description={item.description}
                 // onPressContent={() => console.log('Section Data',section)}
-                onPressContent={() => props.navigation.navigate(COURSE_CONTENT_PLAY,{courseDetails:courseDetails,section})}
+                onPressContent={() => navigation.navigate(COURSE_CONTENT_PLAY,{courseDetails:courseDetails,section})}
             />
         )
     }
@@ -69,10 +70,10 @@ const CourseDetailScreen = (props) => {
     const getSingleCourse = () => {
         setLoading(true);
         let tempArray = [];
-        ApiHelper.getSingleCourse(token,props.route.params.courseId,(response) => {
+        ApiHelper.getSingleCourse(token,route.params.courseId,(response) => {
             if (response.isSuccess) {
                 if(response.response.data.code === 200){
-                    // console.log('SingleCourse ===>',response.response.data.data)
+                    ApiHelper.consoleBox('SingleCourse ===>',response.response.data.data)
                     response.response.data.data.CourseSections?.map((value) => {
                         tempArray.push({
                             id:value.id,
@@ -89,7 +90,6 @@ const CourseDetailScreen = (props) => {
                             setShowBtn(false)
                             setCourseDetails(response.response.data.data);
                             setLoading(false)
-                            // console.log('Price',coursePrice,courseDetails,coursePrice)
                         }else{
                             setIsDisabled(true);
                             setCoursePrice(response.response.data.data.CoursePayeds[0].price);
@@ -116,7 +116,7 @@ const CourseDetailScreen = (props) => {
                 }
             }else{
                 setLoading(false)
-                console.log('Course Error',response.response.response);
+                ApiHelper.consoleBox('Course Error',response.response.response);
             }
         })
     }
@@ -124,9 +124,10 @@ const CourseDetailScreen = (props) => {
 
     const _onPressButton = () => {
         if(coursePrice > 0){
-            props.navigation.navigate(CREDIT_CARD,{
+            navigation.navigate(CREDIT_CARD,{
                 fromCourse:true,
-                price:coursePrice
+                price:coursePrice,
+                courseId:courseDetails.id
             })
         } else {
             subscribeFreeCourse();
@@ -136,11 +137,13 @@ const CourseDetailScreen = (props) => {
 
     const subscribeFreeCourse = () => {
         setLoading(true)
+        let url = '/api/v1/courses/enroll';
         let object = JSON.stringify({
             "courseid": courseDetails.id
         });
-        ApiHelper.enrollCourse(token,object,(resp) => {
+        ApiHelper.enrollCourse(token,object,url,(resp) => {
             if(resp.isSuccess){
+                setLoading(false);
                 setLoading(false);
                 setTimeout(() => {
                     Toast.show('Successfully Subscribe',Toast.LONG);
@@ -153,12 +156,6 @@ const CourseDetailScreen = (props) => {
             }
         })
     }
-
-
-    const copyToClipboard = () => {
-        // Clipboard.setString(`${code}`);
-        Toast.show("Link Copied", Toast.LONG);
-    };
 
 
     return (
@@ -175,7 +172,7 @@ const CourseDetailScreen = (props) => {
                             <AppHeader
                                 leftIconPath={images.back_icon}
                                 backgroundColor={colors.image_background}
-                                onLeftIconPress={() => props.navigation.goBack()}
+                                onLeftIconPress={() => navigation.goBack()}
                             />
                         </View>
 
@@ -253,7 +250,8 @@ const CourseDetailScreen = (props) => {
                     </ScrollView>
                 </View>)}
 
-            {showBtn === true && loading !== true ? <View style={styles.btnView}>
+            {showBtn === true && loading !== true ?
+                <View style={styles.btnView}>
                 <Button
                     buttonText={btnTitle}
                     onPress={() => _onPressButton()}

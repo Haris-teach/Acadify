@@ -1,8 +1,8 @@
 //================================ React Native Imported Files ======================================//
 
-import React from "react";
+import React, {useState} from "react";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
-import {View, StyleSheet, Text, ImageBackground} from "react-native";
+import {View, StyleSheet, Text, ImageBackground, ActivityIndicator} from "react-native";
 
 //================================ Local Imported Files ======================================//
 
@@ -11,6 +11,11 @@ import fonts from "../../assets/fonts/fonts";
 import Play from "../../assets/images/play_card.svg";
 
 const FeatureComponent = (props) => {
+
+    const [isLoaded,setIsLoaded] = useState(false);
+    const [isError,setIsError] = useState(false);
+    const [isShowActivity,setIsShowActivity] = useState(true);
+
     return (
         <View style={styles.container}>
             <View style={styles.upperImageView}>
@@ -19,8 +24,19 @@ const FeatureComponent = (props) => {
                     borderRadius={wp(7)}
                     source={{uri: props.image}}
                     style={styles.imageViewStyle}
+                    imageStyle={styles.imageViewStyle}
+                    onLoadEnd={() => setIsLoaded(true)}
+                    onError={() => setIsError(true)}
                 >
-                    <Play height={40} width={40}/>
+                    {isLoaded !== true ? null : <Play height={40} width={40}/>}
+                    {
+                        (isLoaded && !isError) ? null :
+                            (isShowActivity && !isError) &&
+                            <ActivityIndicator
+                                size={'small'}
+                                color={colors.button_text}
+                            />
+                    }
                 </ImageBackground>
             </View>
             <View style={styles.descriptionView}>

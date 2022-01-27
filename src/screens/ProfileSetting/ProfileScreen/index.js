@@ -3,33 +3,39 @@
 import React, {useEffect, useState} from 'react';
 import {
     View,
-    TextInput,
+    Image,
+    Platform,
+    StatusBar,
     ScrollView,
     KeyboardAvoidingView,
-    Platform,
-    StatusBar, Image,
 } from 'react-native';
 import {TextInput as Input} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
-import {heightPercentageToDP as hp, widthPercentageToDP} from "react-native-responsive-screen";
+import {useIsFocused} from "@react-navigation/native";
+import {
+    heightPercentageToDP as hp,
+    widthPercentageToDP as wp
+} from "react-native-responsive-screen";
 import Toast from 'react-native-simple-toast';
 
 //================================ Local Imported Files ======================================//
 
 import Button from "../../../components/Button/Button";
-import styles from './style';
+import AppHeader from '../../../components/AppHeader';
+import AppLoading from "../../../components/AppLoading";
+import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
+import {EDIT_PROFILE_SCREEN} from '../../../constants/navigators';
 import colors from '../../../assets/colors/colors';
 import fonts from '../../../assets/fonts/fonts';
-import AppHeader from '../../../components/AppHeader';
 import images from '../../../assets/images/images';
-import {EDIT_PROFILE_SCREEN} from '../../../constants/navigators';
 import ApiHelper from "../../../api/ApiHelper";
-import AppLoading from "../../../components/AppLoading";
-import {useIsFocused} from "@react-navigation/native";
+import styles from './style';
 
-const ProfileScreen = props => {
+
+const ProfileScreen = ({navigation}) => {
 
     const isFocused = useIsFocused();
+    const dispatch = useDispatch();
     const token = useSelector(state => state.ApiData.token);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -42,8 +48,10 @@ const ProfileScreen = props => {
 
 
     useEffect(() => {
-        getUserProfile()
-    },[isFocused])
+        return navigation.addListener('focus', () => {
+            getUserProfile()
+        });
+    },[navigation,isFocused])
 
 
     const getUserProfile = () => {
@@ -52,27 +60,29 @@ const ProfileScreen = props => {
             if (response.isSuccess) {
                 setLoading(false);
                 if (response.response.data.code === 200) {
-                    console.log('Success of user profile ===>', response.response.data);
+                    ApiHelper.consoleBox('Success of user profile ===>', response.response.data);
+                    dispatch(ApiDataActions.SetLoginData(response.response.data));
                     setFirstName(response.response.data.user.firstName)
                     setLastName(response.response.data.user.lastName)
                     setEmail(response.response.data.user.email)
                     setPhoneNumber(response.response.data.user.phone)
                     setProfileImage(response.response.data.user.profilePictureURL)
+                    setDescription(response.response.data.user.description)
                     setUserResponse(response.response.data)
                 } else {
-                    console.log('Error inner ==>', response.response);
+                    ApiHelper.consoleBox('Error inner ==>', response.response);
                     Toast.show(response.response.data.error.email, Toast.LONG);
                 }
             } else {
                 setLoading(false);
-                console.log('Error ==>', response.response);
+                ApiHelper.consoleBox('Error ==>', response.response);
             }
         })
     }
 
 
     const onPressEdit = () => {
-        props.navigation.navigate(EDIT_PROFILE_SCREEN,{
+        navigation.navigate(EDIT_PROFILE_SCREEN,{
             userResponse
         });
     };
@@ -91,13 +101,12 @@ const ProfileScreen = props => {
                   <AppHeader
                       title={'Profile'}
                       leftIconPath={images.back_icon}
-                      onLeftIconPress={() => props.navigation.goBack()}
+                      onLeftIconPress={() => navigation.goBack()}
                   />
                 </View>
                 <View style={styles.imageBackground}>
                     <View style={styles.imageStyle}>
-                        <Image source={images.placeHolder} style={styles.imageStyle} />
-                        {/*<Image source={profileImage !== '/' ? {uri:profileImage} : images.placeHolder} style={styles.imageStyle} />*/}
+                        <Image source={profileImage !== '/' ? {uri:profileImage} : images.placeHolder} style={styles.imageStyle} />
                     </View>
                 </View>
                 <View style={styles.inputView}>
@@ -210,17 +219,43 @@ const ProfileScreen = props => {
                         />
                     </View>
                     <View style={[styles.inputSection,{height:hp(17)}]}>
-                        <TextInput
-                            style={[styles.inputText,{height:hp(15),borderWidth:1,paddingTop:hp(2),paddingLeft:widthPercentageToDP(4),borderColor:colors.app_border}]}
-                            placeholder="Description"
-                            placeholderTextColor={colors.white}
+                        <Input
+                            style={[styles.inputText,{height:hp(15),width:wp(85),paddingTop:wp(7),paddingBottom:wp(7)}]}
+                            label="Description"
+                            mode={'outlined'}
+                            selectionColor={colors.white}
+                            theme={{
+                                roundness: 6,
+                                colors: {
+                                    primary: colors.inputFocus,
+                                    placeholder: colors.white,
+                                    text: colors.white,
+                                },
+                                fonts: {
+                                    regular: {
+                                        fontFamily: fonts.regular,
+                                    },
+                                },
+                            }}
+                            outlineColor={colors.app_border}
                             multiline={true}
                             textAlignVertical={'top'}
-                            outlineColor={colors.app_border}
+                            underlineColorAndroid="transparent"
                             editable={false}
-                            onChangeText={description => setDescription(description)}
+                            onChangeText={text => setDescription(text)}
                             value={description}
                         />
+                        {/*<TextInput*/}
+                        {/*    style={[styles.inputText,{height:hp(15),borderWidth:1,paddingTop:hp(2),paddingLeft:widthPercentageToDP(4),borderColor:colors.app_border}]}*/}
+                        {/*    placeholder="Description"*/}
+                        {/*    placeholderTextColor={colors.white}*/}
+                        {/*    multiline={true}*/}
+                        {/*    textAlignVertical={'top'}*/}
+                        {/*    outlineColor={colors.app_border}*/}
+                        {/*    editable={false}*/}
+                        {/*    onChangeText={description => setDescription(description)}*/}
+                        {/*    value={description}*/}
+                        {/*/>*/}
                     </View>
                 </View>
                 <View style={styles.bottomView}>

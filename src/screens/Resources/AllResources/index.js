@@ -4,46 +4,61 @@ import React, { useEffect } from "react";
 import {
     View,
     Text,
-    TouchableOpacity,
-    FlatList,
     Modal,
+    Alert,
+    Linking,
+    FlatList,
     Platform,
-    Linking
+    TouchableOpacity,
+    PermissionsAndroid,
 } from "react-native";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import {useIsFocused} from "@react-navigation/native";
 import Toast from "react-native-simple-toast";
-import RNFetchBlob from 'rn-fetch-blob'
+import {useIsFocused} from "@react-navigation/native";
+import {
+    heightPercentageToDP as hp,
+    widthPercentageToDP as wp
+} from "react-native-responsive-screen";
+import RNFetchBlob from 'rn-fetch-blob';
+import Model from "react-native-modal";
 import moment from "moment";
 
 //================================ Local Imported Files ======================================//
 
 import styles from "./style";
 import ApiHelper from "../../../api/ApiHelper";
-import AppHeaderNative from "../../../components/AppHeaderNative";
+import {BUY_RESOURCES, PLAN_SCREEN} from "../../../constants/navigators";
 import AppLoading from "../../../components/AppLoading";
 import Search from "../../../assets/images/searchBackground.svg";
 import Filter from "../../../assets/images/filterBackground.svg";
 import DropArrow from "../../../assets/images/dropdown.svg";
 import CourseDropdown from "../../../components/CourseDropDwon";
-import {BUY_RESOURCES, CREDIT_CARD} from "../../../constants/navigators";
 import CategoryFilterModal from "../../../components/CategoryFilterModal";
 import ResourceCard from "../../../components/ResourcesCard";
+import Button from "../../../components/Button/Button";
 
+let title='';
+let categoryId='';
+let isFreeKey='';
+let isFree='';
+let page = 1;
 
-const AllResourcesScreen = (props) => {
+const AllResourcesScreen = ({navigation}) => {
 
     const isFocused = useIsFocused();
     const token = useSelector((state) => state.ApiData.token);
+    let resource = useSelector(state => state.ApiData.resource);
     const [loading, setLoading] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [dropModal, setDropModal] = useState(false);
-    let [page, setPage] = useState(1);
-    let [pageLength, pagePageLength] = useState(1);
+    const [lockModal, setLockModal] = useState(false);
+    let [pageLength, setPageLength] = useState(1);
     let [categoryData, setCategoryData] = useState([]);
     let [coursesData, setCoursesData]   = useState([]);
     let [catText, setCatText] = useState('All Resources');
+    let [select, setSelect] = useState(0);
+    let [search, setSearch] = useState(false);
     let dropText = [
         {
             id:0,
@@ -61,28 +76,59 @@ const AllResourcesScreen = (props) => {
 
 
     useEffect(() => {
-        setCatText('All Resources');
-        setPage(1);
-        getAllResources();
-        getCategories();
+        // return navigation.addListener('focus', () => {
+            if(resource) {
+                setLockModal(false);
+                setCatText('All Resources');
+                 title='';
+                 categoryId='';
+                 isFreeKey='';
+                 isFree='';
+                 page = 1;
+                getAllResources(true,false);
+                getCategories();
+            } else {
+                setLockModal(true);
+            }
+        // });
     }, [isFocused]);
 
 
-    const getAllResources = () => {
-        setLoading(true);
-        ApiHelper.getResourceData(token, (response) => {
+    const getAllResources = (bool, doRefresh) => {
+        setLoading(bool);
+        let url = `/api/v1/resources/?size=100&page=${page}&${isFreeKey}=${isFree}&categoryId=${categoryId}&title=%${title}%`
+        ApiHelper.getResourceData(token, url,(response) => {
             if (response.isSuccess) {
+                console.log('Data',response)
                 if (response.response.data.code === 200) {
-                    console.log("Success ==>", response.response.data);
-                    setCoursesData(response.response.data.data.docs);
-                    pagePageLength(response.response.data.data.pages);
+                    ApiHelper.consoleBox("Success of Resources ==>", response.response.data);
+                    if(doRefresh)
+                    {
+                        setCoursesData(response.response.data.data.docs);
+                        setPageLength(1);
+                    }
+                    else
+                    {
+                        setCoursesData(response.response.data.data.docs);
+                        setPageLength(response.response.data.data.pages);
+                    }
+
                     setLoading(false);
                 } else {
                     console.log("Error inner ==>", response.response.data);
                 }
             } else {
                 setLoading(false);
-                console.log("Error ==>", response.response);
+                console.log("Error ==>", response.response.response);
+                if(response.response.response.status === 401){
+                    // navigation.dispatch(
+                    //     CommonActions.reset({
+                    //         index: 0,
+                    //         routes: [{name: LOGIN_SCREEN}],
+                    //     }),
+                    // );
+                    Toast.show('Session Expired...',Toast.LONG);
+                }
             }
         });
     };
@@ -90,10 +136,20 @@ const AllResourcesScreen = (props) => {
 
     const getCategories = () => {
         setLoading(true);
+        let accountArray = [{
+            id:0,
+            name:'All Categories'
+        }];
         ApiHelper.getCategories(token,'RESOURCES', (response) => {
             if (response.isSuccess) {
                 if (response.response.data.code === 200) {
-                    setCategoryData(response.response.data.data)
+                    response.response.data.data.map((value) =>{
+                        accountArray.push({
+                            id:value.id,
+                            name:value.name
+                        })
+                    })
+                    setCategoryData(accountArray)
                     setLoading(false)
                 } else {
                 }
@@ -105,9 +161,8 @@ const AllResourcesScreen = (props) => {
     };
 
 
-    const downloadDocument = (items,value) => {
+    const downloadFile = (items,value) => {
         if(value === 'download'){
-            console.log('Data ===>',items)
             Toast.show('Downloading ...',Toast.LONG);
             var date = new Date();
             let linking = items.url.split(' ');
@@ -125,13 +180,15 @@ const AllResourcesScreen = (props) => {
                 },
 
                 android: {
-                    fileCache: false,
                     addAndroidDownloads: {
+                        fileCache: true,
                         useDownloadManager: true,
                         notification: true,
                         path: fPath,
                         title: linking[0],
-                        description: 'Downloading docs...',
+                        description: 'Downloading file...',
+                        overwrite : true,
+                        indicator:true
                     }
                 },
             });
@@ -147,89 +204,144 @@ const AllResourcesScreen = (props) => {
 
                     })
                     .catch((errorMessage) => {
-                        Toast.show(errorMessage,Toast.LONG);
-                    });
-                // const { fs } = RNFetchBlob;
-                // RNFetchBlob
-                //     .config({
-                //         fileCache : true,
-                //         addAndroidDownloads: {
-                //             useDownloadManager: true,
-                //             notification: true,
-                //             title: items.title,
-                //             path: Platform.OS === "ios" ? fs.dirs.DocumentDir : fs.dirs.DCIMDir + "/me_" + "." + items.contentType,
-                //             description: "Downloading file.",
-                //         },
-                //     })
-                //     .fetch('GET', linking[0], {
-                //     })
-                //     .then((res) => {
-                //         console.log('Downloaded ====>', res.path())
-                //     })
-                //     .catch((error) => {
-                //         console.log('error', error)
-                //     })
-            } else {
-                config(configOptions)
-                    .fetch('GET', linking[0])
-                    .then((res) => {
-                        // RNFetchBlob.android.actionViewIntent(res.path());
-                        Toast.show('File download successfully',Toast.LONG);
-                    })
-                    .catch((errorMessage, statusCode) => {
-                        Toast.show(errorMessage,Toast.LONG);
+                        Toast.show('Download Failed',Toast.LONG);
                     });
             }
         } else if (value === 'link'){
             Linking.openURL(items.url)
         } else if (value > 0){
-            props.navigation.navigate(BUY_RESOURCES,{
+            navigation.navigate(BUY_RESOURCES,{
                 fromResource: true,
-                price: value * 100
+                price: value * 100,
+                resourceId: items.id,
             })
         }
     };
 
 
-    const onSelectType = (text) => {
-        let url;
-        if(text === 'All Resources'){
-            getAllResources();
-        } else if(text === 'Services'){
-            url = '/api/v1/resources/?size=30&resourceType=SERVICES';
-        } else if(text === 'Documents'){
-            url = '/api/v1/resources/?size=30&resourceType=DOCUMENTS';
-        }
-        setLoading(true);
-        ApiHelper.getResourceTypes(token,url, (response) => {
-            if (response.isSuccess) {
-                if (response.response.data.code === 200) {
-                    setCoursesData(response.response.data.data.docs);
-                    setLoading(false);
-                } else {
-                    console.log("Error inner ==>", response.response.data);
+    const checkPermission = async (title,value) => {
+        if (Platform.OS === 'ios') {
+            downloadFile(title,value);
+        } else {
+            if (value === 'download') {
+                try {
+                    const granted = await PermissionsAndroid.request(
+                        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                        {
+                            title: 'Storage Permission Required',
+                            message:
+                                'Acadify needs access to your storage to download File',
+                        }
+                    );
+                    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                        downloadAndroidFile(title, value);
+                        console.log('Storage Permission Granted.');
+                    } else {
+                        Alert.alert('Error', 'Storage Permission Not Granted');
+                    }
+                } catch (err) {
+                    console.log("++++" + err);
                 }
-            } else {
-                setLoading(false);
-                console.log("Error ==>", response.response);
+            } else if (value === 'link') {
+                Linking.openURL(title.url)
+            } else if (value > 0) {
+                navigation.navigate(BUY_RESOURCES, {
+                    fromResource: true,
+                    price: value * 100,
+                    resourceId: title.id,
+                })
             }
-        });
+        }
     };
 
 
-    const renderResourceItems = (item) => {
+    const downloadAndroidFile = (title,value) => {
+        Toast.show('Downloading ...',Toast.LONG);
+        let date = new Date();
+        let FILE_URL = title.url;
+        let file_ext = getFileExtention(FILE_URL);
+        file_ext = '.' + file_ext[0];
+        const { config, fs } = RNFetchBlob;
+        let RootDir = fs.dirs.DownloadDir;
+        let options = {
+            fileCache: true,
+            addAndroidDownloads: {
+                path:
+                    RootDir+
+                    '/file_' +
+                    Math.floor(date.getTime() + date.getSeconds() / 2) +
+                    file_ext,
+                description: 'downloading file...',
+                notification: true,
+                title:title.url,
+                useDownloadManager: true,
+            },
+        };
+        config(options)
+            .fetch('GET', FILE_URL)
+            .then(res => {
+                console.log('File Download response ==> ', JSON.stringify(res));
+            });
+    };
+
+
+    const getFileExtention = fileUrl => {
+        return /[.]/.exec(fileUrl) ?
+            /[^.]+$/.exec(fileUrl) : undefined;
+    };
+
+
+    const onSelectType = (text) => {
+        setCoursesData([])
+        let doRefresh = false;
+        if(text === 'All Resources'){
+            if(isFree!='')
+            {
+                doRefresh = true;
+            }
+            isFreeKey= ''
+            isFree= ''
+            page = 1;
+            getAllResources(true, doRefresh);
+        } else if(text === 'Services'){
+            if(isFree!='SERVICES')
+            {
+                doRefresh = true;
+            }
+
+            isFreeKey='resourceType'
+            isFree='SERVICES'
+            page = 1;
+            getAllResources(true, doRefresh);
+        } else if(text === 'Documents'){
+            if(isFree!='DOCUMENTS')
+            {
+                doRefresh = true;
+            }
+            isFreeKey='resourceType'
+            isFree='DOCUMENTS'
+            page = 1;
+            getAllResources(true, doRefresh);
+        }
+    };
+
+
+    const renderResourceItems = (item,index) => {
         let date = moment(item.createdAt).format('DD/MM/YYYY');
         return (
             <ResourceCard
+                id={item.id}
                 title={item.title}
                 imgUri={item.imageUrl}
                 url={item.contentUrl}
                 type={item.resourceType}
                 price={item.Documentprices}
                 pay={item.DocumentPayeds}
+                length={coursesData.length}
                 createdAt={date}
+                index={index}
                 contentType={item.contentType}
-                onPressContent={(title,value) => downloadDocument(title,value)}
+                onPressContent={(title,value) => checkPermission(title,value)}
             />
         );
     }
@@ -237,40 +349,36 @@ const AllResourcesScreen = (props) => {
 
     const LoadMoreRandomData = () => {
         if(page < pageLength) {
-            setPage(page = page + 1);
-            setMoreData();
+            page = page + 1;
+            getAllResources(true,false)
         }
     }
 
 
-    const setMoreData = () => {
-        // setLoading(true);
-        // ApiHelper.getResourceData(token,page,(response) => {
-        //     if (response.isSuccess) {
-        //       setCoursesData(coursesData = page === 2 ? response.response.data.data.docs : [...coursesData, ...response.response.data.data.docs]);
-        //       setLoading(false);
-        //   }else{
-        //     setLoading(false);
-        //         console.log('Response error',response.response)
-        //   }
-        // })
+    const onCatSelect = (value,index) => {
+        if(value.name === 'All Categories'){
+            categoryId='';
+            setSelect(index)
+            page = 1;
+            setCoursesData([])
+            getAllResources(true);
+        } else {
+            categoryId=value.id;
+            setSelect(index)
+            page = 1;
+            setCoursesData([])
+            getAllResources(true);
+        }
     }
 
 
     return (
         <View style={styles.mainContainer}>
             {AppLoading.renderLoading(loading)}
-            <View style={styles.headerView}>
-                <AppHeaderNative
-                    leftIconPath={true}
-                    rightIconOnePath={true}
-                    onLeftIconPress={() => props.navigation.openDrawer()}
-                    onRightIconPress={() => console.log('Data on Ring')}
-                />
-            </View>
 
             <View style={styles.container}>
-                <FlatList
+                {lockModal === false ?
+                    <FlatList
                     data={coursesData}
                     extraData={coursesData}
                     onEndReachedThreshold={0}
@@ -285,33 +393,52 @@ const AllResourcesScreen = (props) => {
                                         <DropArrow/>
                                     </View>
                                 </TouchableOpacity>
-                                <View style={styles.filterIcons}>
-                                    <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Searched')}>
-                                        <Search/>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Pressed')}>
-                                        <Filter/>
-                                    </TouchableOpacity>
-                                </View>
+                                {/*<View style={styles.filterIcons}>*/}
+                                {/*    <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Searched')}>*/}
+                                {/*        <Search/>*/}
+                                {/*    </TouchableOpacity>*/}
+                                {/*    <TouchableOpacity*/}
+                                {/*        activeOpacity={0.7}*/}
+                                {/*        onPress={() => setModalVisible(!modalVisible)}*/}
+                                {/*    >*/}
+                                {/*        <Filter/>*/}
+                                {/*    </TouchableOpacity>*/}
+                                {/*</View>*/}
                             </View>
                         )
                     }}
-                    renderItem={({item}) => renderResourceItems(item)}
-                />
+                    renderItem={({item,index}) => renderResourceItems(item,index)}
+                /> :
+                    <View style={styles.upgradePlan}>
+                        <Text style={[styles.headerTextStyle,{fontSize:wp(6),fontWeight:'500',textAlign:'center'}]}>Upgrade Your Plan To Get Access</Text>
+                        <View style={{marginTop:hp(2)}}>
+                            <Button
+                                buttonText={'UPGRADE PLAN'}
+                                width={wp(50)}
+                                onPress={() => navigation.navigate(PLAN_SCREEN,{fromChange:true})}
+                            />
+                        </View>
+                    </View>
+                }
             </View>
 
-            {/*<Model*/}
-            {/*    animationIn="zoomIn"*/}
-            {/*    animationOut="zoomOut"*/}
-            {/*    transparent={true}*/}
-            {/*    isVisible={modalVisible}*/}
-            {/*    onBackdropPress={() => setModalVisible(!modalVisible)}*/}
-            {/*>*/}
-            {/*  <CategoryFilterModal*/}
-            {/*      onPressClose={() => setModalVisible(!modalVisible)}*/}
-            {/*      catData={categoryData}*/}
-            {/*  />*/}
-            {/*</Model>*/}
+            <Model
+                animationIn="zoomIn"
+                animationOut="zoomOut"
+                transparent={true}
+                isVisible={modalVisible}
+                onBackdropPress={() => setModalVisible(!modalVisible)}
+            >
+              <CategoryFilterModal
+                  onPressClose={() => setModalVisible(!modalVisible)}
+                  catData={categoryData}
+                  index={select}
+                  onSelect={(value,index) => {
+                      setModalVisible(!modalVisible)
+                      onCatSelect(value,index);
+                  }}
+              />
+            </Model>
 
             <Modal
                 animationType={'none'}

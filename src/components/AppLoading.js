@@ -23,15 +23,15 @@ class AppLoading {
                 size={'large'}
                 color={'#B7A675'}
               />
-              <Text
-                style={{
-                  fontSize: 14,
-                  fontWeight: '200',
-                  color: '#030031',
-                  opacity: 1,
-                }}>
-                Loading
-              </Text>
+              {/*<Text*/}
+              {/*  style={{*/}
+              {/*    fontSize: 14,*/}
+              {/*    fontWeight: '200',*/}
+              {/*    color: '#030031',*/}
+              {/*    opacity: 1,*/}
+              {/*  }}>*/}
+              {/*  Loading*/}
+              {/*</Text>*/}
             </View>
           </Modal>
         ) : null}

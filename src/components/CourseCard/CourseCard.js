@@ -10,6 +10,7 @@ import LockIcon from "../../assets/images/lock_course.svg";
 import colors from "../../assets/colors/colors";
 import fonts from "../../assets/fonts/fonts";
 
+
 const CourseCard = (props) => {
 
   const [isLoaded,setIsLoaded] = useState(false);
@@ -26,7 +27,7 @@ const CourseCard = (props) => {
           onLoadEnd={() => setIsLoaded(true)}
           onError={() => setIsError(true)}
       >
-        {props.isLock ? <LockIcon height={45} width={45}/> : null}
+        {props.isLock === true && isLoaded !== false ? <LockIcon height={45} width={45}/> : null}
         {
           (isLoaded && !isError) ? null :
               (isShowActivity && !isError) &&

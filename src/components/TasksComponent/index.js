@@ -2,30 +2,35 @@
 
 import React from "react";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
-import { View, StyleSheet, Text } from "react-native";
+import {View, StyleSheet, Text, TouchableOpacity} from "react-native";
 
 //================================ Local Imported Files ======================================//
 
 import colors from "../../assets/colors/colors";
 import fonts from "../../assets/fonts/fonts";
+import Calendar from "../../assets/images/calendar.svg";
 
 
 const TaskComponent = (props) => {
 
     return (
-        <View style={ styles.container}>
-            <View style={styles.headingView}>
-                <Text style={[styles.titleText,{fontSize:wp(4)}]} numberOfLines={2}>Title</Text>
-                {/*<Text style={[styles.titleText,{fontSize:wp(3.8),marginTop:wp(2),fontWeight:'400',color:colors.inputColor}]}>Completed</Text>*/}
+        <TouchableOpacity
+            style={ styles.container}
+            activeOpacity={0.7}
+            onPress={() => props.onPressTask()}
+        >
+            <View style={[styles.headingView,{paddingHorizontal:wp(3)}]}>
+                <Text style={[styles.titleText,{fontSize:wp(4),width:wp(84)}]} numberOfLines={2}>{props.title}</Text>
             </View>
-            <View style={[styles.headingView,{width:wp(30)}]}>
-                {/*<Text style={[styles.titleText,{fontSize:wp(4)}]} numberOfLines={2}></Text>*/}
-                <Text style={[styles.titleText,{fontSize:wp(3.8),marginTop:wp(2),fontWeight:'400',color:colors.inputColor}]}>Completed</Text>
+            <View style={[styles.headingView,{flexDirection:'row',alignItems:'center',justifyContent:'space-between',width:wp(84)}]}>
+                <Text style={[styles.titleText,{fontSize:wp(3.6),fontWeight:'400',width:wp(25),color:colors.inputColor,}]}>{props.status}</Text>
+                <Text style={[styles.titleText,{fontSize:wp(3.6),fontWeight:'400',color:colors.inputColor,width:wp(25)}]}>{props.priority}</Text>
+                <View style={[styles.dateView,{width:wp(24)}]}>
+                    <Calendar height={12} width={12}/>
+                    <Text style={[styles.titleText,{fontSize:12,marginLeft:wp(1)}]}>{props.dueDate}</Text>
+                </View>
             </View>
-            <View style={styles.calView}>
-                <Text style={[styles.titleText,{width:wp(30),paddingLeft:wp(2),fontSize:wp(4), color:colors.white,fontWeight:'500'}]} numberOfLines={1}>{props.date}</Text>
-            </View>
-        </View>
+        </TouchableOpacity>
     );
 };
 
@@ -44,7 +49,15 @@ const styles = StyleSheet.create({
         height:hp(5),
         width:wp(90),
         justifyContent:'center',
-        backgroundColor:'red'
+    },
+    dateView:{
+        height:hp(3),
+        width:wp(18),
+        borderRadius:wp(3),
+        paddingHorizontal:wp(2),
+        backgroundColor:colors.date_background,
+        flexDirection:'row',
+        alignItems:'center',
     },
     numberView:{
         height:hp(6),
@@ -57,21 +70,19 @@ const styles = StyleSheet.create({
     titleText:{
         fontWeight:'500',
         color:colors.white,
-        fontFamily:fonts.semi,
+        fontFamily:fonts.regular,
     },
     imageView: {
         height: hp(10),
         width: wp(30),
         justifyContent:'flex-end',
         alignItems:'center',
-        backgroundColor:'red'
     },
     calView: {
         height: hp(10),
         width: wp(31),
         justifyContent:'flex-end',
         alignItems:'center',
-        backgroundColor:'yellow'
     },
 });
 

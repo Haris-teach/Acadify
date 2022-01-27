@@ -6,6 +6,7 @@ import {
 } from 'react-native-responsive-screen';
 import colors from '../../../assets/colors/colors';
 import fonts from '../../../assets/fonts/fonts';
+import {height_screen} from "../../../utils/Dimentions";
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -17,7 +18,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.bold,
     fontSize: wp(9),
     position: 'absolute',
-    top: Platform.OS === 'android' ? hp(4.5) : hp(11),
+    top: Platform.OS === 'android' ? hp(4.5) : height_screen < 675 ? hp(5) : hp(11),
     left: wp(7),
     width: wp(60),
   },

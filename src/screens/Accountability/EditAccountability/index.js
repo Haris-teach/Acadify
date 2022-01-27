@@ -11,7 +11,8 @@ import {
     ScrollView,
     KeyboardAvoidingView,
     TouchableOpacity,
-    FlatList, Alert,
+    FlatList,
+    Alert,
 } from 'react-native';
 import {useSelector} from "react-redux";
 import Toast from "react-native-simple-toast";
@@ -37,6 +38,7 @@ import DeleteSign from "../../../assets/images/delete.svg";
 import EditIcon from "../../../assets/images/delete-Icon.svg";
 import AppHeader from "../../../components/AppHeader";
 
+
 const EditAccountability = props => {
 
     let data = props.route.params.item;
@@ -56,6 +58,7 @@ const EditAccountability = props => {
     const [checkList, setCheckList]    = useState(data.ChecklistItems);
     const [textInputs, setTextInputs]  = useState([]);
     const [items, setItems]            = useState([]);
+    const [deleteList, setDeleteList]  = useState([]);
 
 
     useEffect(() => {
@@ -113,15 +116,16 @@ const EditAccountability = props => {
         //     Toast.show('Please Select Progress',Toast.LONG)
         // }
         else {
+            setIsDisable(true);
             if(checkList.length > 0){
                 checkList.map((value) => {
-                    if(value.name === ''){
+                    if(value.name === '' || testAddress.test(value.name) !== true){
                         checkValue = true;
                     }
                 })
                 if(checkValue){
                     setIsDisable(false);
-                    Toast.show('Please Enter Checklist Name',Toast.LONG)
+                    Toast.show('Please Enter Valid Checklist Title',Toast.LONG)
                 }else{
                     for (let i = 0; i < items.length; i++) {
                         if (items[i].value === value) {
@@ -142,7 +146,7 @@ const EditAccountability = props => {
 
     const onSaveApi = (id) => {
         setLoading(true);
-        ApiHelper.newJourney(token,title,description,id,progress,date,checkList,(response) => {
+        ApiHelper.editGoal(token,data.id,title,description,id,progress,date,checkList,deleteList,(response) => {
             if(response.isSuccess){
                 if(response.response.data.code === 200){
                     setLoading(false);
@@ -151,13 +155,16 @@ const EditAccountability = props => {
                     setDescription('');
                     setTimeout(() => {
                         Toast.show('Goal Successfully Updated',Toast.LONG)
-                    },200)
+                    },500)
                     props.navigation.goBack();
                 }
             }else {
                 setLoading(false);
                 setIsDisable(false);
-                console.log('Response',response.response)
+                setTimeout(() => {
+                    Toast.show(response.response.response.data.error,Toast.LONG)
+                },200)
+                console.log('Response',response.response.response)
             }
         })
     };
@@ -167,7 +174,8 @@ const EditAccountability = props => {
         const filteredData = checkList.filter((value,index) => index !== indexes);
         const filtered = textInputs.filter((value,index) => index !== indexes);
         setCheckList(filteredData);
-        setTextInputs(filtered)
+        setTextInputs(filtered);
+        setDeleteList([...deleteList, item.id])
     }
 
 
@@ -203,16 +211,17 @@ const EditAccountability = props => {
 
 
     const updateState = (index,value) => {
-        const Textdata = [...checkList];
-        Textdata[index].name = value;
-        setTextInputs(Textdata)
+        const textData = [...checkList];
+        textData[index].name = value;
+        setTextInputs(textData)
     }
 
 
     const renderItems = (item,index) => {
         return(
             <Swipeable
-                enabled={!data.isCreatedByAdmin}
+                key={item.id}
+                // enabled={!data.isCreatedByAdmin}
                 renderRightActions = {() => leftAction(item,index)}
                 onSwipeableRightOpen = {() => console.log('Open')}
             >
@@ -318,7 +327,7 @@ const EditAccountability = props => {
                         <Text style={styles.titleText}>Description</Text>
                         <TextInput
                             placeholder={'Enter your description here'}
-                            style={[styles.inputStyle,{height:hp(15),paddingTop:wp(5)}]}
+                            style={[styles.inputStyle,{height:hp(15),paddingTop:wp(5),paddingBottom:wp(5)}]}
                             placeholderTextColor={colors.inputColor}
                             multiline={true}
                             editable={!data.isCreatedByAdmin}
@@ -329,13 +338,24 @@ const EditAccountability = props => {
                     </View>
                     <View style={[styles.inputBox,{height:hp(12),marginTop:wp(2)}]}>
                         <Text style={styles.titleText}>Target Date</Text>
-                        <TouchableOpacity style={styles.dateViewStyle} disabled={data.isCreatedByAdmin} activeOpacity={0.7} onPress={() => setDateModal(!dateModal)}>
+                        <TouchableOpacity
+                            style={styles.dateViewStyle}
+                            disabled={data.isCreatedByAdmin}
+                            activeOpacity={0.7}
+                            onPress={() => setDateModal(!dateModal)}
+                        >
                             <Text style={date === 'MM/DD/YYYY' ? styles.placeHolderText : [styles.placeHolderText,{color:colors.white}]}>{date}</Text>
-                            <TouchableOpacity style={styles.dateView} disabled={data.isCreatedByAdmin} activeOpacity={0.7} onPress={() => setDateModal(true)}>
+                            <TouchableOpacity
+                                style={styles.dateView}
+                                disabled={data.isCreatedByAdmin}
+                                activeOpacity={0.7}
+                                onPress={() => setDateModal(true)}
+                            >
                                 <DateImage/>
                             </TouchableOpacity>
                         </TouchableOpacity>
                     </View>
+
                     <View style={styles.inputBox}>
                         <Text style={styles.titleText}>Category</Text>
                         <DropDownPicker
@@ -351,7 +371,7 @@ const EditAccountability = props => {
                             closeAfterSelecting={true}
                             showTickIcon={false}
                             zIndex={9999}
-                            dropDownContainerStyle={{backgroundColor:colors.image_background,marginTop:hp(2),borderColor:'transparent',borderTopStartRadius:hp(1),borderTopEndRadius:hp(1),zIndex:0}}
+                            dropDownContainerStyle={{backgroundColor:colors.image_background,marginTop:hp(2),borderWidth:0.3,borderColor:colors.button_text,borderTopStartRadius:hp(1),borderTopEndRadius:hp(1),zIndex:0}}
                             arrowIconStyle={{tintColor:colors.white,height:25,width:25}}
                             listItemLabelStyle={{color:colors.white}}
                             containerStyle={styles.containerStyle}
@@ -396,10 +416,14 @@ const EditAccountability = props => {
                     <View style={[styles.inputBox,{height:hp(5),zIndex:-1}]}>
                         <View style={styles.checkListView}>
                             <Text style={styles.titleText}>Checklist</Text>
-                            {data.isCreatedByAdmin !== true ?  <TouchableOpacity activeOpacity={0.7} disabled={data.isCreatedByAdmin}
-                                               onPress={() => onAddNewList()}>
-                                <AddSign height={25} width={25}/>
-                            </TouchableOpacity> : null}
+                            {data.isCreatedByAdmin !== true ?
+                                <TouchableOpacity
+                                    activeOpacity={0.7}
+                                    disabled={data.isCreatedByAdmin}
+                                    onPress={() => onAddNewList()}
+                                >
+                                    <AddSign height={25} width={25}/>
+                                </TouchableOpacity> : null}
                         </View>
                     </View>
                 </View>

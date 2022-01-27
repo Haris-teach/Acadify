@@ -1,6 +1,9 @@
 import * as React from 'react';
-import {StyleSheet} from 'react-native';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import {Platform, StyleSheet} from 'react-native';
+import {
+    heightPercentageToDP as hp,
+    widthPercentageToDP as wp
+} from 'react-native-responsive-screen';
 import colors from "../../assets/colors/colors";
 import fonts from "../../assets/fonts/fonts";
 
@@ -8,12 +11,13 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         backgroundColor: colors.app_background,
+        paddingTop:Platform.OS === 'ios' ? hp(5) : null
     },
     headerView:{
-        flex:0.1
+        flex:0.07
     },
     bodyView:{
-        flex:1,
+        flex:0.83,
     },
     userDetailView:{
         height:hp(15),
@@ -40,10 +44,12 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
     imageStyle:{
-        height:hp(11),
-        width:hp(11),
+        height:hp(9),
+        width:hp(9),
         borderRadius:hp(2),
-        resizeMode:'cover'
+        resizeMode:'cover',
+        justifyContent:'center',
+        alignItems:'center'
     },
     announcementView:{
         maxHeight:hp(220),
@@ -56,15 +62,15 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
     announceImage:{
-        height: '100%',
-        width: '90%',
+        height: hp(30),
+        width: wp(95),
         resizeMode:'cover',
     },
     announceTextView:{
         maxHeight:hp(220),
         width:wp(100),
-        justifyContent:'center',
         paddingBottom:hp(2),
+        justifyContent:'center',
     },
     announceView:{
         height:hp(5),

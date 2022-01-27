@@ -4,15 +4,16 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  ScrollView,
-  KeyboardAvoidingView,
   Platform,
   StatusBar,
+  ScrollView,
+  KeyboardAvoidingView,
 } from "react-native";
-import { TextInput } from "react-native-paper";
 import { useDispatch } from "react-redux";
-import { CommonActions } from "@react-navigation/native";
 import Toast from "react-native-simple-toast";
+import { TextInput } from "react-native-paper";
+import { CommonActions } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //================================ Local Imported Files ======================================//
 
@@ -22,22 +23,26 @@ import fonts from "../../../assets/fonts/fonts";
 import Button from "../../../components/Button/Button";
 import LoginLogo from "../../../assets/images/login_screen.svg";
 import {
-  FORGOT_PASSWORD,
-  MY_DRAWER,
+  MY_TAB,
   SIGNUP_SCREEN,
+  FORGOT_PASSWORD,
 } from "../../../constants/navigators";
 import AppLoading from "../../../components/AppLoading";
 import ApiHelper from "../../../api/ApiHelper";
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import {SET_USER_RESOURCE} from "../../../../redux/store/actions/ApiData";
+
 
 const LoginScreen = (props) => {
   const dispatch = useDispatch();
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("hassan_inayat@mail.com");
-  const [password, setPassword] = useState("Password@1");
+  // const [email, setEmail] = useState('');
+  // const [password, setPassword] = useState('');
+  // const [email, setEmail] = useState("hussain41.cs@gmail.com");
+  // const [password, setPassword] = useState("Password@2");
+  const [email, setEmail] = useState("useram@mailinator.com");
+  const [password, setPassword] = useState("Dvorak123!");
   const [loading, setLoading]   = useState(false);
+
 
   const onPressLogin = () => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -52,6 +57,7 @@ const LoginScreen = (props) => {
     }
   };
 
+
   const onLoginApi = () => {
     setLoading(true);
     ApiHelper.onLoginApi(email, password, (response) => {
@@ -59,16 +65,17 @@ const LoginScreen = (props) => {
         dispatch(ApiDataActions.SetLoginData(response.response.data.data));
         setLoading(false);
         if (response.response.data.status === 200) {
+          setRights(response.response.data.data)
           if(response.response.data.data.user.userType === 2){
+            // ApiHelper.consoleBox("Login Response ===>", response.response.data.data);
             dispatch(ApiDataActions.SetLoginData(response.response.data.data));
-            dispatch(
-                ApiDataActions.SetUserToken(response.response.data.data.token)
-            );
-            setToken(response.response.data.data.token)
+            dispatch(ApiDataActions.SetLoginCard(response.response.data.data.card));
+            dispatch(ApiDataActions.SetUserToken(response.response.data.data.token));
+            setData(JSON.stringify(response.response.data.data))
             props.navigation.dispatch(
                 CommonActions.reset({
                   index: 0,
-                  routes: [{ name: MY_DRAWER }],
+                  routes: [{ name: MY_TAB }],
                 })
             );
             setPassword("");
@@ -85,19 +92,42 @@ const LoginScreen = (props) => {
         }
       } else {
         setLoading(false);
-        console.log("Error ==>", response.response);
+        console.log("Error ==>", response.response.response.data);
+        setTimeout(() => {
+          Toast.show('502 Bad Gateway', Toast.LONG);
+        }, 200);
       }
     });
   };
 
 
-  const setToken = async(value) => {
+  const setData = async(value) => {
     try {
-      await AsyncStorage.setItem('token',value);
+      await AsyncStorage.setItem('user',value);
     }catch (e) {
       console.log('Error',e)
     }
   }
+
+
+  const setRights = (data) => {
+    data.user.UserRights.map((value) => {
+      if(value.access === 'resources'){
+        dispatch(ApiDataActions.SetUserResource(true));
+      } else if(value.access === 'goals'){
+        dispatch(ApiDataActions.SetUserGoal(true));
+      } else if(value.access === 'journey'){
+        dispatch(ApiDataActions.SetUserJourney(true));
+      } else if(value.access === 'courses'){
+        dispatch(ApiDataActions.SetUserCourse(true));
+      } else if(value.access === 'zoom'){
+        dispatch(ApiDataActions.SetUserZoom(true));
+      } else if(value.access === 'forum'){
+        dispatch(ApiDataActions.SetUserForum(true));
+      }
+    })
+  }
+
 
   return (
     <KeyboardAvoidingView

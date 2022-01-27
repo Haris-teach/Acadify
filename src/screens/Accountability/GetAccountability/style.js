@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import {
     heightPercentageToDP as hp,
     widthPercentageToDP as wp,
@@ -11,17 +11,19 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         backgroundColor: colors.app_background,
-    },
-    headerView:{
-        flex:0.1
+        paddingTop:Platform.OS === 'ios' ? hp(5) : null
     },
     listView:{
         flex:0.9,
-        paddingBottom:hp(3)
     },
     upperView:{
         height:hp(10),
         width:wp(100),
+    },
+    emptySection:{
+        height:hp(70),
+        justifyContent:'center',
+        alignItems:'center',
     },
     headerStyle:{
         height:hp(10),
@@ -36,7 +38,8 @@ const styles = StyleSheet.create({
         width:wp(30),
         flexDirection:'row',
         alignItems:'center',
-        justifyContent:'space-between',
+        justifyContent:'flex-end',
+        // justifyContent:'space-between', //actual
     },
     activityView:{
         height:hp(5),
@@ -55,7 +58,7 @@ const styles = StyleSheet.create({
         fontSize:24
     },
     container: {
-        maxHeight: hp(40),
+        maxHeight: hp(100),
         width: wp(90),
         marginVertical: wp(2),
         alignSelf:'center',
@@ -68,8 +71,13 @@ const styles = StyleSheet.create({
         paddingLeft:wp(6),
         justifyContent:'center',
     },
+    titleUpperText:{
+        height:hp(4),
+        width:wp(44),
+        flexDirection:'row',
+        alignItems:'center',
+    },
     titleText:{
-        width:wp(47),
         fontSize:wp(3.8),
         fontWeight:'500',
         color:colors.white,
@@ -97,7 +105,7 @@ const styles = StyleSheet.create({
      flexDirection:'row'
     },
     flatListView:{
-        maxHeight:hp(25),
+        maxHeight:hp(100),
         borderBottomLeftRadius:wp(7),
         borderBottomRightRadius:wp(7),
         alignItems:'center',
@@ -133,8 +141,12 @@ const styles = StyleSheet.create({
         borderTopColor:colors.button_text,
         borderTopWidth:0.3,
     },
-
-
+    upgradePlan:{
+        height:hp(90),
+        width:wp(100),
+        justifyContent:"center",
+        alignItems:'center',
+    }
 
 
 });

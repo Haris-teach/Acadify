@@ -8,7 +8,7 @@ import {
   Platform,
   StatusBar,
   ImageBackground,
-  Text,
+  Text, Alert, Keyboard,
 } from 'react-native';
 import {TextInput} from 'react-native-paper';
 import {
@@ -18,6 +18,7 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import Toast from 'react-native-simple-toast';
 import {CommonActions} from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //================================ Local Imported Files ======================================//
 
@@ -30,7 +31,7 @@ import Button from '../../../components/Button/Button';
 import AppHeader from '../../../components/AppHeader';
 import AppLoading from '../../../components/AppLoading';
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
-import {LOGIN_SCREEN, MY_TABS} from "../../../constants/navigators";
+import {LOGIN_SCREEN, MY_TAB} from "../../../constants/navigators";
 
 const AddCardScreen = props => {
 
@@ -39,17 +40,17 @@ const AddCardScreen = props => {
   const [cardNumber, setCardNumber] = useState('');
   const [cvc, setCvc] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
-  const [cvcLength, setCvcLength] = useState(3);
+  const [cvcLength, setCvcLength] = useState(4);
   const [loading, setLoading] = useState(false);
 
 
   const onPay = () => {
-    if (cardNumber.length < 19) {
+    if (cardNumber.length < 14) {
       Toast.show('Invalid card number', Toast.LONG);
     } else if (expiryDate.length < 5) {
       Toast.show('Invalid expiry date', Toast.LONG);
     } else if (cvc < cvcLength) {
-      Toast.show('Invalid expiry date', Toast.LONG);
+      Toast.show('Invalid cvc', Toast.LONG);
     } else {
       onPayApi();
     }
@@ -69,7 +70,9 @@ const AddCardScreen = props => {
     console.log('Token', token);
     if (token.error) {
       setLoading(false);
-      Toast.show(token.error.code,Toast.LONG);
+      setTimeout(() => {
+        Toast.show(token.error.code,Toast.LONG);
+      },200)
     }else{
       console.log('Token', token.id);
       startSignUp(token.id)
@@ -83,23 +86,64 @@ const AddCardScreen = props => {
       if (response.isSuccess) {
         setLoading(false);
         if (response.response.data.code === 200) {
-          console.log('Success ===>', response.response.data);
-          dispatch(ApiDataActions.SetUserToken(response.response.data.token));
-          props.navigation.dispatch(
-              CommonActions.reset({
-                index: 0,
-                routes: [{name: MY_TABS}],
-              }),
-          );
+          setLoading(false);
+          Keyboard.dismiss();
+          onSignUp()
         } else {
           console.log('Error inner ==>', response.response);
-          Toast.show(response.response.data.error.email, Toast.LONG);
+          if(response.response.data.status === 400){
+            setTimeout(() => {
+              Toast.show(response.response.data.message, Toast.LONG);
+            },200)
+          } else {
+            setTimeout(() => {
+              Toast.show(response.response.data.error.email, Toast.LONG);
+            },200)
+          }
         }
       } else {
         setLoading(false);
         console.log('Error ==>', response.response);
       }
     });
+  }
+
+
+  const onSignUp = () => {
+    Alert.alert(
+        "Account created",
+        "Account successfully created",
+        [
+          { text: "OK", onPress: () => {
+              props.navigation.dispatch(
+                  CommonActions.reset({
+                    index: 0,
+                    routes: [{name: LOGIN_SCREEN}],
+                  }),
+              );
+            }}
+        ],
+        {cancelable:false}
+    );
+  }
+
+
+  const setRights = (data) => {
+    data.user.UserRights.map((value) => {
+      if(value.access === 'resources'){
+        dispatch(ApiDataActions.SetUserResource(true));
+      } else if(value.access === 'goals'){
+        dispatch(ApiDataActions.SetUserGoal(true));
+      } else if(value.access === 'journey'){
+        dispatch(ApiDataActions.SetUserJourney(true));
+      } else if(value.access === 'courses'){
+        dispatch(ApiDataActions.SetUserCourse(true));
+      } else if(value.access === 'zoom'){
+        dispatch(ApiDataActions.SetUserZoom(true));
+      } else if(value.access === 'forum'){
+        dispatch(ApiDataActions.SetUserForum(true));
+      }
+    })
   }
 
   return (
@@ -324,8 +368,7 @@ const AddCardScreen = props => {
               bgColor={colors.white}
               borderColor={colors.white}
               textColor={colors.black}
-              // onPress={() => onPay()}
-              onPress={() => props.navigation.navigate(LOGIN_SCREEN)}
+              onPress={() => onPay()}
             />
           </View>
         </View>

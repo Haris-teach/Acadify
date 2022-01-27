@@ -84,6 +84,8 @@ const styles = StyleSheet.create({
         height:hp(16),
         width:hp(16),
         borderRadius:hp(16),
+        justifyContent:'center',
+        alignItems:"center",
         resizeMode:'cover',
     },
     editView:{

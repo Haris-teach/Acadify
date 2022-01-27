@@ -16,7 +16,6 @@ import ApiHelper from "../../../api/ApiHelper";
 import AppHeader from "../../../components/AppHeader";
 import images from "../../../assets/images/images";
 
-
 const AddJourney = props => {
 
     const token = useSelector(state => state.ApiData.token);

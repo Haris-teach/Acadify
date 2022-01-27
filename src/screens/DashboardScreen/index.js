@@ -2,21 +2,19 @@
 
 import React, {useEffect, useState} from 'react';
 import {
+    ActivityIndicator,
+    ImageBackground,
+    RefreshControl,
     ScrollView,
     StatusBar,
-    View,
-    Text,
-    Image,
-    LogBox,
-    RefreshControl,
     Platform,
-    ImageBackground,
-    ActivityIndicator
+    LogBox,
+    Text,
+    View
 } from 'react-native';
-import {widthPercentageToDP as wp,heightPercentageToDP as hp} from "react-native-responsive-screen";
-import {useSelector} from "react-redux";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import Carousel from 'react-native-snap-carousel';
-import {useIsFocused} from "@react-navigation/native";
+import {useDispatch, useSelector} from "react-redux";
 import RenderHtml from 'react-native-render-html';
 import Video from 'react-native-video';
 import moment from "moment";
@@ -28,6 +26,18 @@ import colors from "../../assets/colors/colors";
 import fonts from "../../assets/fonts/fonts";
 import images from "../../assets/images/images";
 import ApiHelper from "../../api/ApiHelper";
+import {
+    FORUM,
+    JOURNEY,
+    SETTINGS,
+    LIVE_EVENTS,
+    TASK_LISTING,
+    ALL_RESOURCES,
+    NOTIFICATION,
+    DASHBOARD_SCREEN,
+    GET_ACCOUNTABILITY,
+    CHAT_THREAD_LISTING,
+} from "../../constants/navigators";
 import AppHeaderNative from "../../components/AppHeaderNative";
 import AppLoading from "../../components/AppLoading";
 import CourseView from "../../components/CourseView";
@@ -36,16 +46,18 @@ import ResourceComponent from "../../components/ResourceComponent";
 import ForumComponent from "../../components/ForumCardDesign";
 import LiveComponent from "../../components/LiveComponent";
 import FeatureComponent from "../../components/FeaturedView";
-import {COURSE_SCREEN, DASHBOARD_SCREEN} from "../../constants/navigators";
+import * as ApiDataActions from "../../../redux/store/actions/ApiData";
 
 LogBox.ignoreAllLogs(true);
-const CourseScreen = props => {
+const CourseScreen = ({navigation}) => {
 
-    const isFocused = useIsFocused();
+    const dispatch = useDispatch();
     let userData = useSelector(state => state.ApiData.loginData);
     const token = useSelector(state => state.ApiData.token);
+    const dashboard = useSelector(state => state.ApiData.dashboard);
     const [loading,setLoading] = useState(false);
     const [hasImage,setHasImage] = useState(false);
+    const [noUrl, setNoUrl] = useState(false);
     const [announcement,setAnnouncement] = useState('');
     const [items,setItems] = useState([]);
     const [accountItems,setAccountItems] = useState([]);
@@ -54,18 +66,22 @@ const CourseScreen = props => {
     const [liveItems,setLiveItems] = useState([]);
     const [sortData,setSortData] = useState([]);
     const [video,setVideos] = useState([]);
-    const [noUrl, setNoUrl] = useState(false);
     const [announceTest,setAnnounceTest] = useState([]);
 
     const [isLoaded,setIsLoaded] = useState(false);
     const [isError,setIsError] = useState(false);
     const [isShowActivity,setIsShowActivity] = useState(true);
 
+    const [isLoadeds,setIsLoadeds] = useState(false);
+    const [isErrors,setIsErrors] = useState(false);
+
 
     useEffect(() => {
-        getAnnouncements();
-        getDashboardData();
-    }, [isFocused]);
+        // return navigation.addListener('focus', () => {
+            getAnnouncements();
+            getDashboardData();
+        // });
+    }, []);
 
 
     const onRefresh = () => {
@@ -75,11 +91,12 @@ const CourseScreen = props => {
 
 
     const getAnnouncements = () => {
+        setLoading(!dashboard);
         setLoading(true);
         ApiHelper.getAnnouncements(token,(resp) => {
             if(resp.isSuccess){
                 if(resp.response.data.code === 200){
-                    VideoCheck(resp.response.data.data)
+                    videoCheck(resp.response.data.data)
                 }
             }else{
                 console.log('Error',resp.response)
@@ -91,6 +108,7 @@ const CourseScreen = props => {
     const getDashboardData = () => {
         ApiHelper.getDashboardData(token,(resp) => {
             if(resp.isSuccess){
+                // console.log('Response',resp.response)
                 setLoading(false);
                 setSortData(resp.response.data.data)
                 setItems(resp.response.data.courses)
@@ -100,6 +118,7 @@ const CourseScreen = props => {
                 setLiveItems(resp.response.data.livetraining)
                 setVideos(resp.response.data.videos)
                 setAnnounceTest(resp.response.data.announcement)
+                dispatch(ApiDataActions.SetDashboard(true));
             }else{
                 setLoading(false);
             }
@@ -107,7 +126,7 @@ const CourseScreen = props => {
     }
 
 
-    const VideoCheck = (url) => {
+    const videoCheck = (url) => {
         if (!url.contentUrl) {
            setNoUrl(true);
         }
@@ -222,15 +241,16 @@ const CourseScreen = props => {
             {AppLoading.renderLoading(loading)}
             <View style={styles.headerView}>
                 <AppHeaderNative
-                    leftIconPath={true}
-                    rightIconOnePath={true}
-                    onLeftIconPress={() => props.navigation.openDrawer()}
-                    onRightIconPress={() => console.log('Data on Ring')}
+                    onPressTask={() => navigation.navigate(TASK_LISTING)}
+                    onPressSetting={() => navigation.navigate(SETTINGS)}
+                    onPressJourney={() => navigation.navigate(JOURNEY)}
+                    onPressRing={() => navigation.navigate(NOTIFICATION)}
+                    onPressChat={() => navigation.navigate(CHAT_THREAD_LISTING)}
                 />
             </View>
             {loading ? null : (
                 <ScrollView
-                    style={[styles.bodyView,{marginBottom:hp(2)}]}
+                    style={[styles.bodyView,{marginBottom:hp(7)}]}
                     showsVerticalScrollIndicator={false}
                     refreshControl={
                         <RefreshControl
@@ -245,12 +265,26 @@ const CourseScreen = props => {
                 >
                     <View style={styles.userDetailView}>
                         <View style={styles.nameView}>
-                            <Text style={styles.userNameText} numberOfLines={1}>{userData.user.username}</Text>
+                            <Text style={styles.userNameText} numberOfLines={1}>{userData.user.firstName} {userData.user.lastName}</Text>
                             <Text style={[styles.userNameText,{fontSize:wp(4),marginTop:wp(2),fontFamily:fonts.regular,fontWeight:'400',width:wp(40),color:colors.sub_heading}]}>What would you like to learn today?</Text>
                         </View>
                         <View style={styles.imageView}>
-                            {/*<Image source={userData.user.profilePictureURL === 'null' ? images.placeHolder : {uri: userData.user.profilePictureURL}} style={styles.imageStyle}/>*/}
-                            <Image source={images.profile_placeHolder} style={styles.imageStyle}/>
+                            <ImageBackground
+                                source={userData.user.profilePictureURL === 'null' ? images.placeHolder : {uri: userData.user.profilePictureURL}}
+                                style={styles.imageStyle}
+                                imageStyle={styles.imageStyle}
+                                onLoadEnd={() => setIsLoadeds(true)}
+                                onError={() => setIsErrors(true)}
+                            >
+                                {
+                                    (isLoadeds && !isErrors) ? null :
+                                        !isError &&
+                                        <ActivityIndicator
+                                            size={'small'}
+                                            color={colors.button_text}
+                                        />
+                                }
+                            </ImageBackground>
                         </View>
                     </View>
 
@@ -310,10 +344,10 @@ const CourseScreen = props => {
                     {sortData && sortData.map((value) => {
                         if(value.name === 'livetraining' && value.itemCount > 0 && liveItems.length > 0 ){
                             return(
-                                <View style={styles.courseView}>
+                                <View style={[styles.courseView,{height:hp(25)}]}>
                                     <View style={styles.courseTitle}>
-                                        <Text style={[styles.userNameText,styles.headerText]}>Live Training</Text>
-                                        <Text style={[styles.userNameText,styles.showAll]} onPress={() => console.log('Pressed')}>Show all</Text>
+                                        <Text style={[styles.userNameText,styles.headerText]}>Live Events</Text>
+                                        <Text style={[styles.userNameText,styles.showAll]} onPress={() => navigation.navigate(LIVE_EVENTS)}>Show all</Text>
                                     </View>
                                     <View style={styles.videoSection}>
                                         <Carousel
@@ -331,10 +365,10 @@ const CourseScreen = props => {
                             )
                         }else if(value.name === 'accountability' && value.itemCount > 0 && accountItems.length > 0){
                             return(
-                                 <View style={[styles.courseView,{height:hp(23)}]}>
+                                 <View style={[styles.courseView,{height:hp(25)}]}>
                                         <View style={styles.courseTitle}>
                                             <Text style={[styles.userNameText,styles.headerText]}>Accountability</Text>
-                                            <Text style={[styles.userNameText,styles.showAll]} onPress={() => console.log('Pressed')}>Show all</Text>
+                                            <Text style={[styles.userNameText,styles.showAll]} onPress={() => navigation.navigate(GET_ACCOUNTABILITY)}>Show all</Text>
                                         </View>
                                         <View style={styles.videoSection}>
                                             <Carousel
@@ -355,13 +389,12 @@ const CourseScreen = props => {
                                <View style={[styles.courseView,{height:hp(25)}]}>
                                    <View style={styles.courseTitle}>
                                        <Text style={[styles.userNameText,styles.headerText]}>Resources</Text>
-                                       <Text style={[styles.userNameText,styles.showAll]} onPress={() => console.log('Pressed')}>Show all</Text>
+                                       <Text style={[styles.userNameText,styles.showAll]} onPress={() => navigation.navigate(ALL_RESOURCES)}>Show all</Text>
                                    </View>
                                    <View style={styles.videoSection}>
                                        <Carousel
                                            data={resourceItems}
                                            keyExtractor={(item) => item.id}
-                                           // layout={'tinder'}
                                            renderItem={({item}) => _renderResourceItems(item)}
                                            autoplay={true}
                                            activeSlideAlignment={'start'}
@@ -372,33 +405,35 @@ const CourseScreen = props => {
                                    </View>
                                </View>
                             )
-                        } else if(value.name === 'forum' && value.itemCount > 0 && forumItems.length > 0){
-                            return(
-                                <View style={[styles.courseView,{height:hp(23)}]}>
-                                    <View style={styles.courseTitle}>
-                                        <Text style={[styles.userNameText,styles.headerText]}>Forum</Text>
-                                        <Text style={[styles.userNameText,styles.showAll]} onPress={() => console.log('Pressed')}>Show all</Text>
-                                    </View>
-                                    <View style={styles.videoSection}>
-                                        <Carousel
-                                            data={forumItems}
-                                            keyExtractor={(item) => item.id}
-                                            renderItem={({item}) => _renderForumItems(item)}
-                                            autoplay={true}
-                                            activeSlideAlignment={'start'}
-                                            loop={true}
-                                            sliderWidth={wp(90)}
-                                            itemWidth={wp(90)}
-                                        />
-                                    </View>
-                                </View>
-                            )
-                        } else if(value.name === 'courses' && value.itemCount > 0 && items.length > 0 ){
+                        }
+                        // else if(value.name === 'forum' && value.itemCount > 0 && forumItems.length > 0){
+                        //     return(
+                        //         <View style={[styles.courseView,{height:hp(25)}]}>
+                        //             <View style={styles.courseTitle}>
+                        //                 <Text style={[styles.userNameText,styles.headerText]}>Forum</Text>
+                        //                 <Text style={[styles.userNameText,styles.showAll]} onPress={() => navigation.navigate(FORUM)}>Show all</Text>
+                        //             </View>
+                        //             <View style={styles.videoSection}>
+                        //                 <Carousel
+                        //                     data={forumItems}
+                        //                     keyExtractor={(item) => item.id}
+                        //                     renderItem={({item}) => _renderForumItems(item)}
+                        //                     autoplay={true}
+                        //                     activeSlideAlignment={'start'}
+                        //                     loop={true}
+                        //                     sliderWidth={wp(90)}
+                        //                     itemWidth={wp(90)}
+                        //                 />
+                        //             </View>
+                        //         </View>
+                        //     )
+                        // }
+                        else if(value.name === 'courses' && value.itemCount > 0 && items.length > 0 ){
                             return (
                                 <View style={styles.courseView}>
                                     <View style={styles.courseTitle}>
                                         <Text style={[styles.userNameText,styles.headerText]}>Courses</Text>
-                                        <Text style={[styles.userNameText,styles.showAll]} onPress={() => props.navigation.navigate(DASHBOARD_SCREEN)}>Show all</Text>
+                                        <Text style={[styles.userNameText,styles.showAll]} onPress={() => navigation.navigate(DASHBOARD_SCREEN)}>Show all</Text>
                                     </View>
                                     <View style={styles.videoSection}>
                                         <Carousel
@@ -413,11 +448,10 @@ const CourseScreen = props => {
                                         />
                                     </View>
                                 </View>
-
                             )
                         }else if(value.name === 'videos' && value.itemCount > 0 && video.length > 0 ){
                             return (
-                                <View style={styles.courseView}>
+                                <View style={[styles.courseView,{height:hp(25)}]}>
                                     <View style={styles.courseTitle}>
                                         <Text style={[styles.userNameText,styles.headerText]}>Featured Video</Text>
                                         <Text style={[styles.userNameText,styles.showAll]} onPress={() => console.log('Pressed')}>Show all</Text>

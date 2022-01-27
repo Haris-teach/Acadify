@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     headingView: {
-        height: hp(10),
+        height: hp(5),
         width: wp(100),
         justifyContent:'center',
     },
@@ -35,7 +35,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: wp(5),
     },
     inputView:{
-        height: hp(72),
+        height: hp(70),
+        marginTop:hp(2),
         width: wp(100),
         alignItems:'center',
     },
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
         width:wp(90),
         borderRadius:wp(5),
         backgroundColor:colors.image_background,
-        paddingLeft:wp(5),
+        paddingHorizontal:wp(5),
         fontFamily:fonts.regular,
         fontWeight:'500',
         color:colors.white
@@ -97,17 +98,16 @@ const styles = StyleSheet.create({
         justifyContent:'space-between',
     },
     buttonView: {
-        height: hp(21),
+        marginTop:hp(10),
+        height: hp(10),
         width: wp(100),
         justifyContent: 'center',
-        alignItems: 'center',
         flexDirection: 'row',
         zIndex:-1
     },
     btnView: {
-        height: hp(20),
+        height: hp(10),
         width: wp(45),
-        justifyContent: 'center',
         alignItems: 'center',
     },
     containerStyle: {
@@ -117,6 +117,7 @@ const styles = StyleSheet.create({
         width:wp(90),
         flexDirection:'row',
         justifyContent:'space-between',
+        alignItems:"center",
     },
     newView:{
         height:hp(3),
@@ -137,17 +138,16 @@ const styles = StyleSheet.create({
         fontSize:wp(4)
     },
     listView:{
-        marginTop:wp(3),
+        marginVertical:wp(2),
         height:hp(6),
         width:wp(90),
         borderRadius:wp(5),
         backgroundColor:colors.image_background,
-        alignItems:'center',
         justifyContent:'space-between',
     },
     inputListView:{
         height:hp(6),
-        width:wp(90),
+        width:wp(80),
         borderRadius:wp(5),
         justifyContent:'center',
         fontSize:14,
@@ -156,9 +156,10 @@ const styles = StyleSheet.create({
         color:colors.white,
     },
     flatListView:{
-        marginTop:hp(3),
+        marginTop:hp(6),
         justifyContent:'center',
         alignItems:'center',
+        zIndex:-1
     }
 });
 

@@ -28,7 +28,7 @@ const BillComponent = (props) => {
             <View style={styles.calView}>
                 <View style={styles.priceTagView}>
                     <Price height={20} width={20}/>
-                    <Text style={[styles.titleText,{width:wp(30),paddingLeft:wp(2),fontSize:wp(4), color:colors.white,fontWeight:'500'}]} numberOfLines={1}>{props.charges > 0 ? props.charges / 100 : props.charges } $</Text>
+                    <Text style={[styles.titleText,{width:wp(30),paddingLeft:wp(2),fontSize:wp(4), color:colors.white,fontWeight:'500'}]} numberOfLines={1}>$ {props.charges > 0 ? props.charges / 100 : props.charges }</Text>
                 </View>
                 <View style={[styles.priceTagView,{marginTop:wp(1)}]}>
                     <Calendar height={18} width={18}/>
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     },
     numberView:{
         height:hp(6),
-        width:hp(6),
+        width:hp(5.5),
         borderRadius:hp(2),
         backgroundColor:colors.image_background,
         justifyContent:"center",

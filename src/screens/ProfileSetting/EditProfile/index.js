@@ -3,13 +3,14 @@
 import React, {useState} from 'react';
 import {
     View,
-    ScrollView,
-    KeyboardAvoidingView,
     Platform,
     StatusBar,
-    Image,
-    TouchableOpacity,
     Keyboard,
+    ScrollView,
+    ImageBackground,
+    TouchableOpacity,
+    ActivityIndicator,
+    KeyboardAvoidingView,
 } from 'react-native';
 import {TextInput} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
@@ -30,7 +31,6 @@ import Button from "../../../components/Button/Button";
 import AppHeader from '../../../components/AppHeader';
 import * as ApiDataActions from '../../../../redux/store/actions/ApiData';
 
-
 const EditProfileScreen = props => {
 
     let user  = props.route.params;
@@ -46,6 +46,9 @@ const EditProfileScreen = props => {
 
     const [image,setImage] = useState('');
     const [hasImage,setHasImage] = useState(false);
+
+    const [isLoaded,setIsLoaded] = useState(false);
+    const [isError,setIsError] = useState(false);
 
 
     const onPressSignUp = () => {
@@ -84,12 +87,15 @@ const EditProfileScreen = props => {
         };
         launchImageLibrary(options, (res) => {
             if (res.didCancel) {
-                console.log("User cancelled image picker");
             } else if (res.errorMessage) {
-                console.log("ImagePicker Error: ", res.errorMessage);
             } else {
-                console.log("ImagePicker",res);
-                setImage(res.assets[0])
+                const image = {
+                    uri: res.assets[0].uri,
+                    type: res.assets[0].type,
+                    name: res.assets[0].fileName,
+                };
+                console.log("ImagePicker",image);
+                setImage(image)
                 setHasImage(true);
             }
         });
@@ -97,24 +103,25 @@ const EditProfileScreen = props => {
 
 
     const createUrl = () => {
-        ApiHelper.createImageUrl(token,image.type,image.fileName,(response) => {
+        setLoading(true)
+        ApiHelper.createImageUrl(token,image,(response) => {
             if(response.isSuccess){
                 setLoading(false);
-                if(response.response.data.code === 200){
-                    console.log('Success Data URL ===>',response.response.data.data.url)
+                if(response.response.status === 200){
+                    ApiHelper.consoleBox('Success Data URL ===>',response.response.data.Location)
                     let values = {
                         firstName:firstName,
                         lastName:lastName,
                         description: description,
                         email: email,
                         phone:phoneNumber,
-                        profilePictureURL:response.response.data.data.url
+                        profilePictureURL:response.response.data.Location
                     };
                     onUpdateDetails(values);
                 }
             }else{
                 setLoading(false);
-                console.log('False Data ===>',response.response.response)
+                ApiHelper.consoleBox('False Data ===>',response.response.response)
                 setTimeout(() => {
                     Toast.show(response.response.response.data.message,Toast.LONG)
                 },200)
@@ -133,7 +140,8 @@ const EditProfileScreen = props => {
                 'firstName': userData.firstName,
                 'lastName': userData.lastName,
                 'phone': userData.phone,
-                'profilePictureURL': userData.profilePictureURL
+                'profilePictureURL': userData.profilePictureURL,
+                'username': `${userData.firstName} ${userData.lastName}`
             });
         }else {
             value = JSON.stringify({
@@ -141,6 +149,7 @@ const EditProfileScreen = props => {
                 'firstName': userData.firstName,
                 'lastName': userData.lastName,
                 'phone': userData.phone,
+                'username': `${userData.firstName} ${userData.lastName}`
             });
         }
 
@@ -148,7 +157,7 @@ const EditProfileScreen = props => {
             if(response.isSuccess){
                 setLoading(false);
                 if(response.response.data.code === 200){
-                    console.log('Success Data ===>',response.response)
+                    ApiHelper.consoleBox('Success Data ===>',response.response)
                     dispatch(ApiDataActions.SetUserToken(response.response.data.token));
                     Keyboard.dismiss()
                     setTimeout(() => {
@@ -158,7 +167,7 @@ const EditProfileScreen = props => {
                 }
             }else{
                 setLoading(false);
-                console.log('False Data ===>',response.response.response)
+                ApiHelper.consoleBox('False Data ===>',response.response.response)
                 setTimeout(() => {
                     Toast.show(response.response.response.data.message,Toast.LONG)
                 },200)
@@ -184,15 +193,33 @@ const EditProfileScreen = props => {
                         onLeftIconPress={() => props.navigation.goBack()}
                     />
                 </View>
+
                 <View style={styles.imageBackground}>
                     <View style={styles.imageStyle}>
-                        <Image source={hasImage ? {uri: image.uri} : images.placeHolder} style={styles.imageStyle} />
-                        {/*<Image source={hasImage ? {uri: image.uri} : (profileImage !== 'null' ? {uri:profileImage} : images.placeHolder)} style={styles.imageStyle} />*/}
+                        <ImageBackground
+                            source={hasImage ? {uri: image.uri} : (profileImage !== 'null' ? {uri:profileImage} : images.placeHolder)}
+                            style={styles.imageStyle}
+                            imageStyle={styles.imageStyle}
+                            onLoadEnd={() => setIsLoaded(true)}
+                            onError={() => setIsError(true)}
+                        >
+                            {
+                                (isLoaded && !isError) ? null :
+                                     !isError &&
+                                    <ActivityIndicator
+                                        size={'small'}
+                                        color={colors.button_text}
+                                    />
+                            }
+                        </ImageBackground>
                         <TouchableOpacity activeOpacity={0.7} style={styles.editView} onPress={() => ImagePickerFromGallery()}>
                             <Camera height={22} width={22}/>
                         </TouchableOpacity>
                     </View>
                 </View>
+
+
+
                 <View style={styles.inputView}>
                     <View style={styles.inputSection}>
                         <TextInput

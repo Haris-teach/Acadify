@@ -6,23 +6,32 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+import Toast from "react-native-simple-toast";
+import {useSelector} from "react-redux";
 
 //================================ Local Imported Files ======================================//
 
 import styles from './style';
 import colors from '../../../assets/colors/colors';
 import fonts from '../../../assets/fonts/fonts';
-import {ADD_CARD} from '../../../constants/navigators';
+import {ADD_CARD, ADD_NEW_CARD_SCREEN, DASHBOARD_SCREEN} from '../../../constants/navigators';
 import images from "../../../assets/images/images";
+import ApiHelper from "../../../api/ApiHelper";
 import Button from '../../../components/Button/Button';
 import CreditCard from '../../../assets/images/credit_card.svg';
 import AppHeader from "../../../components/AppHeader";
+import AppLoading from "../../../components/AppLoading";
 
 
 const CardScreen = props => {
 
+    const token = useSelector((state) => state.ApiData.token);
+    let userData = useSelector(state => state.ApiData.loginData);
+    let card = useSelector(state => state.ApiData.card);
     const [planName,setPlanName] = useState('');
     const [title,setTitle] = useState('');
+    const [loading,setLoading] = useState(false);
+
 
     useEffect(() => {
        if(props.route.params.fromSignUp === true){
@@ -40,14 +49,51 @@ const CardScreen = props => {
             props.navigation.navigate(ADD_CARD, {
                 planName: props.route.params.planName,
             });
-        } else if(props.route.params.fromCourse === true){
-            console.log('Navigate');
+        } else {
+            if(userData.card !== null){
+                if (props.route.params.fromCourse === true) {
+                    subscribeFreeCourse()
+                }
+            } else {
+                props.navigation.navigate(ADD_NEW_CARD_SCREEN)
+            }
         }
     };
 
 
+    const subscribeFreeCourse = () => {
+        setLoading(true)
+        let url = '/api/v1/courses/enroll';
+        let object = JSON.stringify({
+            "courseid": props.route.params.courseId
+        });
+        ApiHelper.enrollCourse(token,object,url,(resp) => {
+            if(resp.isSuccess){
+                setLoading(false);
+                setTimeout(() => {
+                    Toast.show('Successfully Subscribe',Toast.LONG);
+                },300)
+                props.navigation.navigate(DASHBOARD_SCREEN)
+            }else{
+                setLoading(false);
+                console.log('Error',resp.response.response)
+                if(resp.response.response.data.code === 400){
+                    setTimeout(() => {
+                        Toast.show(resp.response.response.data.error,Toast.LONG)
+                    },200)
+                } else {
+                    setTimeout(() => {
+                        Toast.show(resp.response.response.data.message,Toast.LONG)
+                    },200)
+                }
+            }
+        })
+    }
+
+
   return (
     <View style={styles.mainContainer}>
+        {AppLoading.renderLoading(loading)}
       <StatusBar backgroundColor={colors.app_background} />
         <View style={styles.headerView}>
             <AppHeader

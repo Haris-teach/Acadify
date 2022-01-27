@@ -21,14 +21,16 @@ const ResourceCard = (props) => {
     const [isShowActivity,setIsShowActivity] = useState(true);
 
     const checkTerms = () => {
-        if(props.type === 'DOCUMENTS' && props.pay.length > 0 && props.pay[0].paid === true ){
+        if(props.type === 'DOCUMENTS' && props.pay.length > 0 && props.pay[0]?.paid === true ){
             props.onPressContent(props,'download')
-        } else if (props.type === 'DOCUMENTS' && props.pay.length > 0 && props.pay[0].paid === false){
+        } else if (props.type === 'DOCUMENTS' && props.pay.length > 0 && props.pay[0]?.paid === false){
             props.onPressContent(props,props.pay[0].price / 100)
-        } else if (props.type === 'DOCUMENTS' && props.pay.length < 1 && props.price[0].isFree === true){
+        } else if (props.type === 'DOCUMENTS' && props.pay.length < 1 && props.price[0]?.isFree === true){
             props.onPressContent(props,'download')
-        } else if (props.type === 'DOCUMENTS' && props.pay.length < 1 && props.price[0].isFree === false){
+        } else if (props.type === 'DOCUMENTS' && props.pay.length < 1 && props.price[0]?.isFree === false){
             props.onPressContent(props,props.price[0].price / 100)
+        } else if (props.type === 'DOCUMENTS' && props.pay.length < 1 && props.price.length < 1){
+            props.onPressContent(props,'download')
         } else if (props.type === 'SERVICES'){
             props.onPressContent(props,'link')
         }
@@ -38,7 +40,7 @@ const ResourceCard = (props) => {
     return (
         <TouchableOpacity
             activeOpacity={0.7}
-            style={styles.container}
+            style={props.length - 1 !== props.index ? [styles.container,{ borderColor: '#929292', borderBottomWidth:0.25,}] : styles.container }
             disabled={props.isDisable}
             onPress={() => checkTerms()}
         >
@@ -77,14 +79,19 @@ const ResourceCard = (props) => {
                 {props.type === 'DOCUMENTS' && (props.pay.length > 0 && props.pay[0].paid === false ?<View style={styles.iconView}>
                     <Lock height={18} width={18}/>
                     <Text style={{paddingLeft: wp(2), color: colors.white,fontFamily:fonts.semi,marginTop: wp(1.2)}}
-                          numberOfLines={2}>US ${props.pay[0].price / 100}.00</Text>
+                          numberOfLines={2}>${props.pay[0].price / 100}.00</Text>
                 </View> : null)}
                 {props.type === 'DOCUMENTS' && (props.pay.length < 1 && props.price[0]?.isFree === false ? <View style={styles.iconView}>
                     <Lock height={18} width={18}/>
                     <Text style={{paddingLeft: wp(2), color: colors.white,fontFamily:fonts.semi,marginTop: wp(1.2)}}
-                          numberOfLines={2}>US ${props.price[0].price / 100}.00</Text>
+                          numberOfLines={2}>${props.price[0].price / 100}.00</Text>
                 </View> : null)}
                 {props.type === 'DOCUMENTS' && (props.pay.length < 1 && props.price[0]?.isFree === true ? <View style={styles.iconView}>
+                    <Download height={18} width={18}/>
+                    <Text style={{paddingLeft: wp(2), color: colors.greyTxt,fontFamily:fonts.semi, marginTop: wp(1.2)}}
+                          numberOfLines={2}>Download</Text>
+                </View> : null)}
+                {props.type === 'DOCUMENTS' && (props.pay.length < 1 && props.price.length < 1 ? <View style={styles.iconView}>
                     <Download height={18} width={18}/>
                     <Text style={{paddingLeft: wp(2), color: colors.greyTxt,fontFamily:fonts.semi, marginTop: wp(1.2)}}
                           numberOfLines={2}>Download</Text>
@@ -104,8 +111,6 @@ const styles = StyleSheet.create({
     container: {
         height: hp(14),
         width: wp(90),
-        borderColor: '#929292',
-        borderBottomWidth:0.25,
         flexDirection: "row",
         alignSelf:'center',
         justifyContent:'center',
@@ -122,7 +127,7 @@ const styles = StyleSheet.create({
         width: hp(9),
         borderRadius: wp(6),
         justifyContent:'center',
-        alignItems:'center'
+        alignItems:'center',
     },
     textMainView:{
         justifyContent: "center",

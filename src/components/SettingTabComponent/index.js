@@ -17,28 +17,22 @@ import Help from "../../assets/images/help.svg";
 import SignOut from "../../assets/images/signout.svg";
 import Shield from "../../assets/images/shield.svg";
 
+
 const SettingTabComponent = (props) => {
 
     const [index,setIndex] = useState('');
 
-    const onPress = (value) => {
-        props.onPressCard();
-    }
-
     return (
         <TouchableOpacity
             style={index !== props.index ? styles.container : [styles.container,{backgroundColor:'#1F1F1F',borderRadius:wp(6)}]}
-            onPress={() => onPress(props.index)}
+            onPress={() =>  props.onPressCard()}
         >
             <View style={styles.imageView}>
                 {props.title === 'Profile' ? <Profile/> : null}
-                {props.title === 'Billing' ? <Bill/> : null}
-                {props.title === 'Change Plan' ? <Plan/> : null}
                 {props.title === 'Payment Methods' ? <Payment/> : null}
-                {props.title === 'Task' ? <Task/> : null}
-                {props.title === 'Help' ? <Help/> : null}
                 {props.title === 'Sign out' ? <SignOut/> : null}
                 {props.title === 'Password Update' ? <Shield/> : null}
+                {props.title === 'Payment & Subscription' ? <Plan/> : null}
             </View>
             <View style={styles.nameView}>
                 <Text style={[styles.nameText, { fontSize: wp(5) }]} numberOfLines={1}>
@@ -52,10 +46,10 @@ const SettingTabComponent = (props) => {
 const styles = StyleSheet.create({
     container: {
         height: hp(6),
-        width: wp(80),
+        width: wp(90),
         marginVertical: wp(2),
-        marginLeft:wp(9),
         borderRadius: wp(3),
+        alignSelf:'center',
         alignItems: "center",
         flexDirection: "row",
     },
@@ -78,10 +72,10 @@ const styles = StyleSheet.create({
         alignItems: "flex-start",
     },
     nameText: {
-        paddingLeft: wp(3),
         fontFamily:fonts.regular,
         fontWeight:'400',
-        fontSize: 14,
+        fontSize: wp(4),
+        width:wp(70),
         color: colors.white,
     },
 });

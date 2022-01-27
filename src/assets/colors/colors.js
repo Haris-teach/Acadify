@@ -17,7 +17,9 @@ const colors = {
   card_background: "#171717",
   checklist_item:'#565656',
   sub_heading:'#A9A9A9',
-  course_screen:'#A4A2A2'
+  course_screen:'#A4A2A2',
+  calendar_view:'#151515',
+  live_tabs:'rgb(168,144,68)',
 };
 
 export default colors;

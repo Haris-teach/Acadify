@@ -1,7 +1,7 @@
 //================================ React Native Imported Files ======================================//
 
-import React from "react";
-import {StyleSheet,ImageBackground, Text, TouchableOpacity, View} from "react-native";
+import React, {useState} from "react";
+import {StyleSheet, ImageBackground, Text, TouchableOpacity, View, ActivityIndicator} from "react-native";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 
 //================================ Local Imported Files ======================================//
@@ -10,6 +10,11 @@ import colors from "../../assets/colors/colors";
 import fonts from "../../assets/fonts/fonts";
 
 const CourseContentView = (props) => {
+
+    const [isLoaded,setIsLoaded] = useState(false);
+    const [isError,setIsError] = useState(false);
+    const [isShowActivity,setIsShowActivity] = useState(true);
+
     return (
         <TouchableOpacity
             activeOpacity={0.7}
@@ -20,8 +25,19 @@ const CourseContentView = (props) => {
             <ImageBackground
                 imageStyle={styles.imageView}
                 style={styles.imageView}
-                source={{ uri: props.image }}
-            />
+                source={{ uri: props.image}}
+                onLoadEnd={() => setIsLoaded(true)}
+                onError={() => setIsError(true)}
+            >
+                {
+                    (isLoaded && !isError) ? null :
+                        (isShowActivity && !isError) &&
+                        <ActivityIndicator
+                            size={'small'}
+                            color={colors.button_text}
+                        />
+                }
+            </ImageBackground>
             <View style={styles.textMainView}>
                 <Text style={styles.text} numberOfLines={2}>{props.title}</Text>
                 <Text style={{ width:wp(50),color: colors.greyTxt,marginTop:wp(2)}} numberOfLines={2}>{props.description}</Text>

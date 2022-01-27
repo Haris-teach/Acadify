@@ -4,12 +4,13 @@ import React, {useState} from 'react';
 import {
     View,
     Text,
-    FlatList,
     Alert,
+    FlatList,
     StatusBar,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 import {CommonActions} from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //================================ Local Imported Files ======================================//
 
@@ -17,14 +18,15 @@ import styles from './style';
 import SettingTabComponent from "../../../components/SettingTabComponent";
 import {
     BILLING_LISTING,
-    LOGIN_SCREEN,
     PASSWORD_UPDATE,
+    PAYMENT_SCREEN,
     PROFILE_SCREEN,
-    TASK_LISTING
+    LOGIN_SCREEN,
 } from "../../../constants/navigators";
-import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
-import AppHeaderNative from "../../../components/AppHeaderNative";
 import colors from "../../../assets/colors/colors";
+import images from "../../../assets/images/images";
+import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
+import AppHeader from "../../../components/AppHeader";
 
 
 const SettingScreen = (props) => {
@@ -37,33 +39,22 @@ const SettingScreen = (props) => {
         },
         {
             id:1,
-            title:'Billing'
+            title:'Payment & Subscription'
         },
         {
             id:2,
-            title:'Change Plan'
-        },
-        {
-            id:3,
             title:'Payment Methods'
         },
         {
-            id:4,
-            title:'Task'
-        },
-        {
-            id:5,
+            id:3,
             title:'Password Update'
         },
         {
-            id:6,
-            title:'Help'
-        },
-        {
-            id:7,
+            id:4,
             title:'Sign out'
         },
     ])
+
 
     const renderItems = (item,index) => {
         return(
@@ -83,16 +74,10 @@ const SettingScreen = (props) => {
         } else if(item.id === 1){
             props.navigation.navigate(BILLING_LISTING)
         } else if(item.id === 2){
-
+            props.navigation.navigate(PAYMENT_SCREEN)
         } else if(item.id === 3){
-
-        } else if(item.id === 4){
-            props.navigation.navigate(TASK_LISTING)
-        } else if(item.id === 5){
             props.navigation.navigate(PASSWORD_UPDATE)
-        } else if(item.id === 6){
-
-        } else if(item.id === 7){
+        } else if(item.id === 4){
             onSignOut();
         }
     }
@@ -111,13 +96,21 @@ const SettingScreen = (props) => {
                 {
                     text: "Yes",
                     onPress: () => {
-                        dispatch(ApiDataActions.SetLoginData(''));
                         props.navigation.dispatch(
                             CommonActions.reset({
                                 index: 0,
                                 routes: [{name: LOGIN_SCREEN}],
                             }),
                         );
+                        AsyncStorage.clear();
+                        dispatch(ApiDataActions.SetLoginData(''));
+                        dispatch(ApiDataActions.SetUserResource(false));
+                        dispatch(ApiDataActions.SetUserGoal(false));
+                        dispatch(ApiDataActions.SetUserJourney(false));
+                        dispatch(ApiDataActions.SetUserCourse(false));
+                        dispatch(ApiDataActions.SetUserZoom(false));
+                        dispatch(ApiDataActions.SetUserForum(false));
+                        dispatch(ApiDataActions.SetDashboard(false));
                     }
                 },
             ]
@@ -125,15 +118,14 @@ const SettingScreen = (props) => {
     }
 
 
+
     return (
         <View style={styles.mainContainer}>
             <StatusBar backgroundColor={colors.app_background} />
             <View style={styles.headerView}>
-                <AppHeaderNative
-                    leftIconPath={true}
-                    rightIconOnePath={true}
-                    onLeftIconPress={() => props.navigation.openDrawer()}
-                    onRightIconPress={() => console.log('Data on Ring')}
+                <AppHeader
+                    leftIconPath={images.back_icon}
+                    onLeftIconPress={() => props.navigation.goBack()}
                 />
             </View>
             <View style={styles.listView}>

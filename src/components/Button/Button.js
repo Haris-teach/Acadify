@@ -48,25 +48,25 @@ class Button extends React.Component {
     return (
       <TouchableOpacity
           disabled={disabled}
-        onPress={onPress}
-        activeOpacity={0.7}
-        style={[
-          containerStyle !== undefined
-            ? containerStyle
-            : [
-                styles.container,
-                {
-                  height: height || hp(6),
-                  width: width || wp(75),
-                  marginTop: marginTop,
-                  marginStart: marginStart,
-                  borderWidth: borderWidth || 1,
-                  borderColor: borderColor || colors.button_border,
-                  borderRadius: borderRadius || wp(2),
-                  backgroundColor: bgColor || colors.app_background,
-                },
-              ],
-        ]}>
+          onPress={onPress}
+          activeOpacity={0.7}
+          style={[
+            containerStyle !== undefined
+              ? containerStyle
+              : [
+                  styles.container,
+                  {
+                    height: height || hp(6),
+                    width: width || wp(75),
+                    marginTop: marginTop,
+                    marginStart: marginStart,
+                    borderWidth: borderWidth || 1,
+                    borderColor: borderColor || colors.button_border,
+                    borderRadius: borderRadius || wp(2),
+                    backgroundColor: bgColor || colors.app_background,
+                  },
+                ],
+          ]}>
         <ImageBackground
           source={BackgroundImage}
           resizeMode={'stretch'}
