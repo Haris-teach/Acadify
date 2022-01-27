@@ -132,7 +132,7 @@ const BillingListing = (props) => {
 
     const updatePlan = () => {
         setLoading(true);
-        clearData();
+        clearData(false);
         let url='/api/v1/stripe/change_plan';
         let data = JSON.stringify({
             'StripeId':stripeId
@@ -141,13 +141,13 @@ const BillingListing = (props) => {
             if (response.isSuccess) {
                 if (response.response.data.code === 200) {
                     setLoading(false);
-                    ApiHelper.consoleBox('Success of Change Plan ==>', response.response.data.data.token);
+                    ApiHelper.consoleBox('Success of Change Plan ==>', response.response.data);
                     dispatch(ApiDataActions.SetUserToken(response.response.data.data.token));
                     dispatch(ApiDataActions.SetLoginData(response.response.data.data));
                     setRights(response.response.data.data);
                     setTimeout(() => {
                         Toast.show('Plan Successfully Updated...', Toast.LONG);
-                        props.navigation.goBack();
+                        // props.navigation.goBack();
                     },200)
                 } else {
                     setLoading(false);
@@ -211,18 +211,18 @@ const BillingListing = (props) => {
                 }
             })
         } else {
-            clearData();
+            clearData(true);
         }
     }
 
 
-    const clearData = () => {
-        dispatch(ApiDataActions.SetUserResource(false));
-        dispatch(ApiDataActions.SetUserGoal(false));
-        dispatch(ApiDataActions.SetUserJourney(false));
-        dispatch(ApiDataActions.SetUserCourse(false));
-        dispatch(ApiDataActions.SetUserZoom(false));
-        dispatch(ApiDataActions.SetUserForum(false));
+    const clearData = (value) => {
+        dispatch(ApiDataActions.SetUserResource(value));
+        dispatch(ApiDataActions.SetUserGoal(value));
+        dispatch(ApiDataActions.SetUserJourney(value));
+        dispatch(ApiDataActions.SetUserCourse(value));
+        dispatch(ApiDataActions.SetUserZoom(value));
+        dispatch(ApiDataActions.SetUserForum(value));
     }
 
 
@@ -491,8 +491,8 @@ const BillingListing = (props) => {
                                     bgColor={colors.white}
                                     borderColor={colors.white}
                                     textColor={colors.black}
-                                    // onPress={() => updatePlan()}
-                                    onPress={() => props.navigation.goBack()}
+                                    onPress={() => updatePlan()}
+                                    // onPress={() => props.navigation.goBack()}
                                 />
                             </View>
                         </View>

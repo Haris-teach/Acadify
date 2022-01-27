@@ -16,7 +16,7 @@ import colors from '../../../assets/colors/colors';
 import fonts from '../../../assets/fonts/fonts';
 import images from "../../../assets/images/images";
 import ApiHelper from "../../../api/ApiHelper";
-import {LIVE_EVENTS} from "../../../constants/navigators";
+import {ADD_NEW_CARD_SCREEN, LIVE_EVENTS} from "../../../constants/navigators";
 import Button from '../../../components/Button/Button';
 import CreditCard from '../../../assets/images/credit_card.svg';
 import AppHeader from "../../../components/AppHeader";
@@ -26,9 +26,11 @@ import AppLoading from "../../../components/AppLoading";
 const ResourceBuyScreen = props => {
 
     const token = useSelector((state) => state.ApiData.token);
+    let userData = useSelector(state => state.ApiData.loginData);
     const [planName,setPlanName] = useState('');
     const [title,setTitle] = useState('');
     const [loading,setLoading] = useState(false);
+
 
     useEffect(() => {
         if(props.route.params.fromResource === true){
@@ -42,18 +44,22 @@ const ResourceBuyScreen = props => {
 
 
     const onPressYes = () => {
-        if(props.route.params.fromResource === true) {
-            let url = '/api/v1/resources/documentbuy';
-            let object = JSON.stringify({
-                "resource_id": props.route.params.resourceId
-            });
-            subscribeFreeCourse(url,object);
-        } else if(props.route.params.fromEvent === true){
-            let url = '/api/v1/zoom/join';
-            let object = JSON.stringify({
-                "id": props.route.params.eventId
-            });
-            subscribeFreeCourse(url,object);
+        if(userData.card !== null){
+            if(props.route.params.fromResource === true) {
+                let url = '/api/v1/resources/documentbuy';
+                let object = JSON.stringify({
+                    "resource_id": props.route.params.resourceId
+                });
+                subscribeFreeCourse(url,object);
+            } else if(props.route.params.fromEvent === true){
+                let url = '/api/v1/zoom/join';
+                let object = JSON.stringify({
+                    "id": props.route.params.eventId
+                });
+                subscribeFreeCourse(url,object);
+            }
+        } else {
+            props.navigation.navigate(ADD_NEW_CARD_SCREEN)
         }
     };
 

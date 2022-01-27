@@ -17,7 +17,6 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		17D1B7574DF760E40FCAE7D5 /* libPods-Acadify-AcadifyTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AEE627E4D01AB64AC5B36D93 /* libPods-Acadify-AcadifyTests.a */; };
-		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		F843F50B8500FECF0C9A3803 /* libPods-Acadify.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9431D66F36F23723CE9BC0D4 /* libPods-Acadify.a */; };
 /* End PBXBuildFile section */
 
@@ -48,7 +47,6 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Acadify/main.m; sourceTree = "<group>"; };
 		1C1FA4CD2D291F8C58B7976F /* Pods-Acadify.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Acadify.debug.xcconfig"; path = "Target Support Files/Pods-Acadify/Pods-Acadify.debug.xcconfig"; sourceTree = "<group>"; };
 		2A698A2D8A2F95BC5F66A627 /* Pods-Acadify.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Acadify.release.xcconfig"; path = "Target Support Files/Pods-Acadify/Pods-Acadify.release.xcconfig"; sourceTree = "<group>"; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Acadify/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9431D66F36F23723CE9BC0D4 /* libPods-Acadify.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Acadify.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9659C14C972356A1E4D97BCE /* Pods-Acadify-AcadifyTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Acadify-AcadifyTests.debug.xcconfig"; path = "Target Support Files/Pods-Acadify-AcadifyTests/Pods-Acadify-AcadifyTests.debug.xcconfig"; sourceTree = "<group>"; };
 		AEE627E4D01AB64AC5B36D93 /* libPods-Acadify-AcadifyTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Acadify-AcadifyTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -107,7 +105,6 @@
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
 			name = Acadify;
@@ -270,7 +267,6 @@
 				04398A0B2726848100C5580B /* Montserrat-Medium.ttf in Resources */,
 				04398A0C2726848100C5580B /* Montserrat-SemiBold.ttf in Resources */,
 				04398A122726848100C5580B /* Montserrat-Bold.ttf in Resources */,
-				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -511,7 +507,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 2.1;
+				CURRENT_PROJECT_VERSION = 2.3;
 				DEVELOPMENT_TEAM = JA9969JF2Y;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Acadify/Info.plist;
@@ -538,7 +534,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 2.1;
+				CURRENT_PROJECT_VERSION = 2.3;
 				DEVELOPMENT_TEAM = JA9969JF2Y;
 				INFOPLIST_FILE = Acadify/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

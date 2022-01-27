@@ -5,6 +5,7 @@ import {FlatList, Text, TouchableOpacity, View,} from "react-native";
 import {useSelector} from "react-redux";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import moment from "moment";
+import {useIsFocused} from "@react-navigation/native";
 
 //================================ Local Imported Files ======================================//
 
@@ -18,6 +19,7 @@ import LiveEvent from "../../../components/LiveEvent";
 
 const LiveEvents = ({navigation}) => {
 
+    const isFocused = useIsFocused();
     const token = useSelector((state) => state.ApiData.token);
     let zoom = useSelector(state => state.ApiData.zoom);
     const [loading, setLoading] = useState(false);
@@ -28,7 +30,7 @@ const LiveEvents = ({navigation}) => {
 
 
     useEffect(() => {
-        return navigation.addListener('focus', () => {
+        // return navigation.addListener('focus', () => {
             if (zoom) {
                 setLockModal(false);
                 setCatText('Live');
@@ -37,8 +39,8 @@ const LiveEvents = ({navigation}) => {
             } else {
                 setLockModal(true);
             }
-        });
-    }, [navigation]);
+        // });
+    }, [isFocused]);
 
 
     const getLiveEvents = (type) => {
@@ -153,9 +155,9 @@ const LiveEvents = ({navigation}) => {
     return (
         <View style={styles.mainContainer}>
             {AppLoading.renderLoading(loading)}
-            <View style={styles.headingView}>
+            {lockModal === false ?<View style={styles.headingView}>
                 <Text style={styles.headingText}>Live Events</Text>
-            </View>
+            </View>:null}
             {lockModal === false ?
                 <View style={styles.upperView}>
                 <TouchableOpacity

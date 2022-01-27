@@ -17,6 +17,10 @@ const CommonStyles = StyleSheet.create({
     container:{
         flex:0.9,
     },
+    headerScrollView:{
+        height:hp(10),
+        width:wp(100),
+    },
     emptySection:{
         height:hp(80),
         justifyContent:'center',

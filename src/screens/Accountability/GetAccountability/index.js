@@ -186,28 +186,28 @@ const GetAccountability = (props) => {
                                 <View style={styles.headerStyle}>
                                     {!search ? <Text style={styles.headerTextStyle}>Accountability</Text> : null}
                                     <View style={styles.filterIcons}>
-                                        {!search ?
-                                            <TouchableOpacity activeOpacity={0.7} onPress={() => setSearch(!search)}>
-                                                <Search/>
-                                            </TouchableOpacity>:
-                                            <View style={[CommonStyle.searchText,{marginLeft:wp(3),width:wp(60)}]}>
-                                                <SearchIcon/>
-                                                <TextInput
-                                                    style={{width:wp(45),color:'white',paddingHorizontal:wp(3),height:hp(4.5)}}
-                                                    onChangeText={(e) => console.log(e)}
-                                                    value={title}
-                                                />
-                                                <TouchableOpacity
-                                                    style={{height:hp(4.5),justifyContent:'center'}}
-                                                    onPress={() => setSearch(false)}
-                                                >
-                                                    <Image source={images.crossImage} style={{height:hp(2),width:wp(5),resizeMode:'cover'}}/>
-                                                </TouchableOpacity>
-                                            </View>
-                                        }
-                                        <TouchableOpacity activeOpacity={0.7} onPress={() => setModalVisible(!modalVisible)}>
-                                            <Filter/>
-                                        </TouchableOpacity>
+                                        {/*{!search ?*/}
+                                        {/*    <TouchableOpacity activeOpacity={0.7} onPress={() => setSearch(!search)}>*/}
+                                        {/*        <Search/>*/}
+                                        {/*    </TouchableOpacity>:*/}
+                                        {/*    <View style={[CommonStyle.searchText,{marginLeft:wp(3),width:wp(60)}]}>*/}
+                                        {/*        <SearchIcon/>*/}
+                                        {/*        <TextInput*/}
+                                        {/*            style={{width:wp(45),color:'white',paddingHorizontal:wp(3),height:hp(4.5)}}*/}
+                                        {/*            onChangeText={(e) => console.log(e)}*/}
+                                        {/*            value={title}*/}
+                                        {/*        />*/}
+                                        {/*        <TouchableOpacity*/}
+                                        {/*            style={{height:hp(4.5),justifyContent:'center'}}*/}
+                                        {/*            onPress={() => setSearch(false)}*/}
+                                        {/*        >*/}
+                                        {/*            <Image source={images.crossImage} style={{height:hp(2),width:wp(5),resizeMode:'cover'}}/>*/}
+                                        {/*        </TouchableOpacity>*/}
+                                        {/*    </View>*/}
+                                        {/*}*/}
+                                        {/*<TouchableOpacity activeOpacity={0.7} onPress={() => setModalVisible(!modalVisible)}>*/}
+                                        {/*    <Filter/>*/}
+                                        {/*</TouchableOpacity>*/}
                                         <TouchableOpacity
                                             activeOpacity={0.7}
                                             style={{marginLeft: search ? wp(2) : null}}

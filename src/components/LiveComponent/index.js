@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
         fontFamily:fonts.regular,
         fontWeight:'500',
         color:colors.white,
-        fontSize:wp(4)
+        fontSize:wp(4),
     }
 });
 

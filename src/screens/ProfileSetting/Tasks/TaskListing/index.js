@@ -77,7 +77,7 @@ const TaskListing = props => {
             {AppLoading.renderLoading(loading)}
             <View style={styles.headerView}>
                 <AppHeader
-                    title={'Task'}
+                    title={'Tasks'}
                     leftIconPath={images.back_icon}
                     onLeftIconPress={() => props.navigation.goBack()}
                 />

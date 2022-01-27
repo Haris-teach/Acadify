@@ -6,29 +6,32 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+import Toast from "react-native-simple-toast";
+import {useSelector} from "react-redux";
 
 //================================ Local Imported Files ======================================//
 
 import styles from './style';
 import colors from '../../../assets/colors/colors';
 import fonts from '../../../assets/fonts/fonts';
-import {ADD_CARD, DASHBOARD_SCREEN} from '../../../constants/navigators';
+import {ADD_CARD, ADD_NEW_CARD_SCREEN, DASHBOARD_SCREEN} from '../../../constants/navigators';
 import images from "../../../assets/images/images";
+import ApiHelper from "../../../api/ApiHelper";
 import Button from '../../../components/Button/Button';
 import CreditCard from '../../../assets/images/credit_card.svg';
 import AppHeader from "../../../components/AppHeader";
-import ApiHelper from "../../../api/ApiHelper";
-import Toast from "react-native-simple-toast";
-import {useSelector} from "react-redux";
 import AppLoading from "../../../components/AppLoading";
 
 
 const CardScreen = props => {
 
     const token = useSelector((state) => state.ApiData.token);
+    let userData = useSelector(state => state.ApiData.loginData);
+    let card = useSelector(state => state.ApiData.card);
     const [planName,setPlanName] = useState('');
     const [title,setTitle] = useState('');
     const [loading,setLoading] = useState(false);
+
 
     useEffect(() => {
        if(props.route.params.fromSignUp === true){
@@ -46,8 +49,14 @@ const CardScreen = props => {
             props.navigation.navigate(ADD_CARD, {
                 planName: props.route.params.planName,
             });
-        } else if(props.route.params.fromCourse === true){
-            subscribeFreeCourse()
+        } else {
+            if(userData.card !== null){
+                if (props.route.params.fromCourse === true) {
+                    subscribeFreeCourse()
+                }
+            } else {
+                props.navigation.navigate(ADD_NEW_CARD_SCREEN)
+            }
         }
     };
 

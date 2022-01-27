@@ -1,7 +1,6 @@
 export const SET_LOGIN_DATA = 'SET_LOGIN_DATA';
 export const SET_SIGNUP_DATA = 'SET_SIGNUP_DATA';
 export const SET_USER_TOKEN = 'SET_USER_TOKEN';
-
 export const SET_USER_RESOURCE = 'SET_USER_RESOURCE';
 export const SET_USER_GOAL = 'SET_USER_GOAL';
 export const SET_USER_JOURNEY = 'SET_USER_JOURNEY';
@@ -9,6 +8,7 @@ export const SET_USER_COURSE = 'SET_USER_COURSE';
 export const SET_USER_ZOOM = 'SET_USER_ZOOM';
 export const SET_USER_FORUM = 'SET_USER_FORUM';
 export const SET_DASHBOARD = 'SET_DASHBOARD';
+export const SET_CARD = 'SET_CARD';
 
 export const SetLoginData = res => {
   return {type: SET_LOGIN_DATA, response: res};
@@ -32,6 +32,10 @@ export const SetUserGoal = res => {
 };
 
 export const SetUserJourney = res => {
+  return {type: SET_USER_JOURNEY, response: res};
+};
+
+export const SetLoginCard = res => {
   return {type: SET_USER_JOURNEY, response: res};
 };
 

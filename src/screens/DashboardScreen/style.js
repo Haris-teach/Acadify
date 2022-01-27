@@ -62,10 +62,9 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
     announceImage:{
-        height: '100%',
-        width: '90%',
+        height: hp(30),
+        width: wp(95),
         resizeMode:'cover',
-        backgroundColor:'red'
     },
     announceTextView:{
         maxHeight:hp(220),

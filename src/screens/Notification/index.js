@@ -21,16 +21,19 @@ import AppLoading from "../../components/AppLoading";
 import NotificationComponent from "../../components/NotificationComponent";
 
 
+let page = 1;
+
 const NotificationScreen = (props) => {
 
     const token = useSelector(state => state.ApiData.token);
     let [notification,setNotification] = useState([])
     let [page,setPage] = useState(1)
+    let [pageLength,setPageLength] = useState()
     const [loading,setLoading] = useState(false)
 
 
     useEffect(() => {
-        setPage(1);
+        page = 1;
         setNotification([])
         getNotifications();
     },[])
@@ -41,8 +44,9 @@ const NotificationScreen = (props) => {
         ApiHelper.getNotifications(token,page,(response) => {
             if(response.isSuccess){
                 if(response.response.data.code === 200){
-                    // console.log('DATA',response.response.data.data.docs)
+                    console.log('DATA',response.response.data)
                     setNotification(notification = page === 1 ? response.response.data.data.docs : [...notification, ...response.response.data.data.docs]);
+                    setPageLength(response.response.data.data.pages)
                     setLoading(false);
                 }
             }else {
@@ -89,8 +93,10 @@ const NotificationScreen = (props) => {
 
 
     const LoadMoreRandomData = () => {
-        setPage(page = page + 1);
-        getNotifications();
+        if(page < pageLength){
+            page = page + 1;
+            getNotifications();
+        }
     }
 
 

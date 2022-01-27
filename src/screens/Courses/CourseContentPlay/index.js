@@ -4,14 +4,14 @@ import React,{useState,useEffect} from "react";
 import {
     View,
     Text,
-    Image,
     Linking,
     FlatList,
     Platform,
     StatusBar,
     ScrollView,
+    ImageBackground,
+    ActivityIndicator,
 } from "react-native";
-import {useSelector} from "react-redux";
 import Video from "react-native-video";
 import {
     heightPercentageToDP as hp,
@@ -27,17 +27,20 @@ import ApiHelper from "../../../api/ApiHelper";
 import AppHeader from "../../../components/AppHeader";
 import CourseContentView from "../../../components/CourseContentListComponent";
 
+
 const CourseContentPlay = (props) => {
 
     ApiHelper.consoleBox('Props',props.route.params.section.data)
-    const token = useSelector((state) => state.ApiData.token);
     const [title,setTitle]        = useState('');
     const [cardData,setCardData]  = useState([]);
     const [Data,setData]          = useState('');
+    const [isLoaded,setIsLoaded] = useState(false);
+    const [isError,setIsError] = useState(false);
+    const [isShowActivity,setIsShowActivity] = useState(true);
 
 
     useEffect(() => {
-        setData(props.route.params.section.data[1]);
+        setData(props.route.params.section.data[0]);
         setTitle(props.route.params.section.title);
         setCardData(props.route.params.section.data);
     },[])
@@ -57,27 +60,24 @@ const CourseContentPlay = (props) => {
 
 
     const onCardContentPress = (item) => {
-        if(item.contentType === 'text' || item.contentType === 'link'){
+        if(item.contentType === 'text' || item.contentType === 'link' || item.contentType === 'application'){
             Linking.openURL(item.videoURL)
-        }else {
+        } else {
             setData(item)
         }
     }
 
 
     const renderVideo = (item) => {
-        ApiHelper.consoleBox('Data ==>',props.route.params.section.data[1].videoURL)
         return(
             <Video
-                source={{uri: 'https://www.youtube.com/watch?v=QM2RTUBq8jc'}}
+                source={{uri: item}}
                 controls={Platform.OS === 'ios'}
                 repeat={true}
                 muted={true}
-                style={styles.backgroundVideo}
+                style={{width:wp(95), height:hp(25)}}
                 playInBackground={false}
                 resizeMode={'cover'}
-                // poster={require('../../../assets/images/dummy.png')}
-                // onBuffer={() => alert()}
             />
         )
     }
@@ -102,17 +102,32 @@ const CourseContentPlay = (props) => {
                     <View style={styles.headingView}>
                         <Text style={styles.titleText} numberOfLines={1}>{title}</Text>
                     </View>
-                    {Data.contentType !== 'text' && Data.contentType !== 'link' &&
+                    {Data.contentType !== 'text' && Data.contentType !== 'link' && Data.contentType !== 'application' &&
                     <View style={styles.videoSection}>
                         {Data.contentType === 'image' ?
-                            <Image source={{uri: Data.videoURL}} style={styles.announceImage}/> :
+                            <View style={{justifyContent:'center',alignItems:'center'}}>
+                                <ImageBackground
+                                    source={{uri: Data.videoURL}}
+                                    style={{height:hp(28),justifyContent:'center',alignItems:'center',width:wp(95)}}
+                                    imageStyle={{height:hp(32),justifyContent:'center',alignItems:'center',width:wp(95)}}
+                                    resizeMode={'cover'}
+                                    onLoadEnd={() => setIsLoaded(true)}
+                                    onError={() => setIsError(true)}
+                                >
+                                    {
+                                        (isLoaded && !isError) ? null :
+                                            (isShowActivity && !isError) &&
+                                            <ActivityIndicator
+                                                size={'small'}
+                                                color={colors.button_text}
+                                            />
+                                    }
+                                </ImageBackground>
+                            </View> :
                             (Data.contentType === 'video' ?
-
-                                <View style={{height:hp(32),width:wp(100)}}>
-                                    <Text style={{color:'white'}}>{Data.videoURL}</Text>
+                                <View style={{height:hp(32),justifyContent:'center',alignItems:'center',width:wp(100)}}>
                                     {renderVideo(Data.videoURL)}
-                                  </View>
-
+                                </View>
                                 :null)}
                     </View>}
                 </View>

@@ -5,14 +5,17 @@ import {
     View,
     Text,
     Modal,
+    Alert,
     Linking,
-    Platform,
     FlatList,
+    Platform,
     TouchableOpacity,
+    PermissionsAndroid,
 } from "react-native";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import Toast from "react-native-simple-toast";
+import {useIsFocused} from "@react-navigation/native";
 import {
     heightPercentageToDP as hp,
     widthPercentageToDP as wp
@@ -43,6 +46,7 @@ let page = 1;
 
 const AllResourcesScreen = ({navigation}) => {
 
+    const isFocused = useIsFocused();
     const token = useSelector((state) => state.ApiData.token);
     let resource = useSelector(state => state.ApiData.resource);
     const [loading, setLoading] = useState(false);
@@ -72,7 +76,7 @@ const AllResourcesScreen = ({navigation}) => {
 
 
     useEffect(() => {
-        return navigation.addListener('focus', () => {
+        // return navigation.addListener('focus', () => {
             if(resource) {
                 setLockModal(false);
                 setCatText('All Resources');
@@ -81,25 +85,34 @@ const AllResourcesScreen = ({navigation}) => {
                  isFreeKey='';
                  isFree='';
                  page = 1;
-                getAllResources(true);
+                getAllResources(true,false);
                 getCategories();
             } else {
                 setLockModal(true);
             }
-        });
-    }, [navigation]);
+        // });
+    }, [isFocused]);
 
 
-
-    const getAllResources = (bool) => {
+    const getAllResources = (bool, doRefresh) => {
         setLoading(bool);
-        let url = `/api/v1/resources/?size=10&page=${page}&${isFreeKey}=${isFree}&categoryId=${categoryId}&title=%${title}%`
+        let url = `/api/v1/resources/?size=100&page=${page}&${isFreeKey}=${isFree}&categoryId=${categoryId}&title=%${title}%`
         ApiHelper.getResourceData(token, url,(response) => {
             if (response.isSuccess) {
+                console.log('Data',response)
                 if (response.response.data.code === 200) {
                     ApiHelper.consoleBox("Success of Resources ==>", response.response.data);
-                    setCoursesData([...coursesData,...response.response.data.data.docs]);
-                    setPageLength(response.response.data.data.pages);
+                    if(doRefresh)
+                    {
+                        setCoursesData(response.response.data.data.docs);
+                        setPageLength(1);
+                    }
+                    else
+                    {
+                        setCoursesData(response.response.data.data.docs);
+                        setPageLength(response.response.data.data.pages);
+                    }
+
                     setLoading(false);
                 } else {
                     console.log("Error inner ==>", response.response.data);
@@ -114,7 +127,7 @@ const AllResourcesScreen = ({navigation}) => {
                     //         routes: [{name: LOGIN_SCREEN}],
                     //     }),
                     // );
-                    Toast.show('Session Expired',Toast.LONG);
+                    Toast.show('Session Expired...',Toast.LONG);
                 }
             }
         });
@@ -148,7 +161,7 @@ const AllResourcesScreen = ({navigation}) => {
     };
 
 
-    const downloadDocument = (items,value) => {
+    const downloadFile = (items,value) => {
         if(value === 'download'){
             Toast.show('Downloading ...',Toast.LONG);
             var date = new Date();
@@ -193,39 +206,6 @@ const AllResourcesScreen = ({navigation}) => {
                     .catch((errorMessage) => {
                         Toast.show('Download Failed',Toast.LONG);
                     });
-            } else {
-                // const { fs } = RNFetchBlob;
-                // RNFetchBlob
-                //     .config({
-                //         fileCache : true,
-                //         addAndroidDownloads: {
-                //             useDownloadManager: true,
-                //             notification: true,
-                //             title: items.title,
-                //             path: Platform.OS === "ios" ? fs.dirs.DocumentDir : fs.dirs.DCIMDir + "/me_" + "." + items.contentType,
-                //             description: "Downloading file.",
-                //         },
-                //     })
-                //     .fetch('GET', linking[0], {
-                //     })
-                //     .then((res) => {
-                //         console.log('Downloaded ====>', res.path())
-                //     })
-                //     .catch((error) => {
-                //         console.log('error', error)
-                //
-                //     })
-                config(configOptions)
-                    .fetch('GET', linking[0])
-                    .then((res) => {
-                        // RNFetchBlob.android.actionViewIntent(res.path());
-                        Toast.show('File download successfully',Toast.LONG);
-                    })
-                    .catch((errorMessage, statusCode) => {
-                        console.log('Error',errorMessage)
-                        Toast.show('Download Failed',Toast.LONG);
-                        // Toast.show(errorMessage,Toast.LONG);
-                    });
             }
         } else if (value === 'link'){
             Linking.openURL(items.url)
@@ -239,25 +219,109 @@ const AllResourcesScreen = ({navigation}) => {
     };
 
 
+    const checkPermission = async (title,value) => {
+        if (Platform.OS === 'ios') {
+            downloadFile(title,value);
+        } else {
+            if (value === 'download') {
+                try {
+                    const granted = await PermissionsAndroid.request(
+                        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                        {
+                            title: 'Storage Permission Required',
+                            message:
+                                'Acadify needs access to your storage to download File',
+                        }
+                    );
+                    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                        downloadAndroidFile(title, value);
+                        console.log('Storage Permission Granted.');
+                    } else {
+                        Alert.alert('Error', 'Storage Permission Not Granted');
+                    }
+                } catch (err) {
+                    console.log("++++" + err);
+                }
+            } else if (value === 'link') {
+                Linking.openURL(title.url)
+            } else if (value > 0) {
+                navigation.navigate(BUY_RESOURCES, {
+                    fromResource: true,
+                    price: value * 100,
+                    resourceId: title.id,
+                })
+            }
+        }
+    };
+
+
+    const downloadAndroidFile = (title,value) => {
+        Toast.show('Downloading ...',Toast.LONG);
+        let date = new Date();
+        let FILE_URL = title.url;
+        let file_ext = getFileExtention(FILE_URL);
+        file_ext = '.' + file_ext[0];
+        const { config, fs } = RNFetchBlob;
+        let RootDir = fs.dirs.DownloadDir;
+        let options = {
+            fileCache: true,
+            addAndroidDownloads: {
+                path:
+                    RootDir+
+                    '/file_' +
+                    Math.floor(date.getTime() + date.getSeconds() / 2) +
+                    file_ext,
+                description: 'downloading file...',
+                notification: true,
+                title:title.url,
+                useDownloadManager: true,
+            },
+        };
+        config(options)
+            .fetch('GET', FILE_URL)
+            .then(res => {
+                console.log('File Download response ==> ', JSON.stringify(res));
+            });
+    };
+
+
+    const getFileExtention = fileUrl => {
+        return /[.]/.exec(fileUrl) ?
+            /[^.]+$/.exec(fileUrl) : undefined;
+    };
+
+
     const onSelectType = (text) => {
+        setCoursesData([])
+        let doRefresh = false;
         if(text === 'All Resources'){
+            if(isFree!='')
+            {
+                doRefresh = true;
+            }
             isFreeKey= ''
             isFree= ''
             page = 1;
-            setCoursesData([])
-            getAllResources(true);
+            getAllResources(true, doRefresh);
         } else if(text === 'Services'){
+            if(isFree!='SERVICES')
+            {
+                doRefresh = true;
+            }
+
             isFreeKey='resourceType'
             isFree='SERVICES'
             page = 1;
-            setCoursesData([])
-            getAllResources(true);
+            getAllResources(true, doRefresh);
         } else if(text === 'Documents'){
+            if(isFree!='DOCUMENTS')
+            {
+                doRefresh = true;
+            }
             isFreeKey='resourceType'
             isFree='DOCUMENTS'
             page = 1;
-            setCoursesData([])
-            getAllResources(true);
+            getAllResources(true, doRefresh);
         }
     };
 
@@ -277,7 +341,7 @@ const AllResourcesScreen = ({navigation}) => {
                 createdAt={date}
                 index={index}
                 contentType={item.contentType}
-                onPressContent={(title,value) => downloadDocument(title,value)}
+                onPressContent={(title,value) => checkPermission(title,value)}
             />
         );
     }
@@ -286,7 +350,7 @@ const AllResourcesScreen = ({navigation}) => {
     const LoadMoreRandomData = () => {
         if(page < pageLength) {
             page = page + 1;
-            getAllResources(true)
+            getAllResources(true,false)
         }
     }
 
@@ -329,17 +393,17 @@ const AllResourcesScreen = ({navigation}) => {
                                         <DropArrow/>
                                     </View>
                                 </TouchableOpacity>
-                                <View style={styles.filterIcons}>
-                                    <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Searched')}>
-                                        <Search/>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        activeOpacity={0.7}
-                                        onPress={() => setModalVisible(!modalVisible)}
-                                    >
-                                        <Filter/>
-                                    </TouchableOpacity>
-                                </View>
+                                {/*<View style={styles.filterIcons}>*/}
+                                {/*    <TouchableOpacity activeOpacity={0.7} onPress={() => console.log('Searched')}>*/}
+                                {/*        <Search/>*/}
+                                {/*    </TouchableOpacity>*/}
+                                {/*    <TouchableOpacity*/}
+                                {/*        activeOpacity={0.7}*/}
+                                {/*        onPress={() => setModalVisible(!modalVisible)}*/}
+                                {/*    >*/}
+                                {/*        <Filter/>*/}
+                                {/*    </TouchableOpacity>*/}
+                                {/*</View>*/}
                             </View>
                         )
                     }}

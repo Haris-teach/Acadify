@@ -35,10 +35,12 @@ import {SET_USER_RESOURCE} from "../../../../redux/store/actions/ApiData";
 
 const LoginScreen = (props) => {
   const dispatch = useDispatch();
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("hussain41.cs@gmail.com");
-  const [password, setPassword] = useState("Password@1");
+  // const [email, setEmail] = useState('');
+  // const [password, setPassword] = useState('');
+  // const [email, setEmail] = useState("hussain41.cs@gmail.com");
+  // const [password, setPassword] = useState("Password@2");
+  const [email, setEmail] = useState("useram@mailinator.com");
+  const [password, setPassword] = useState("Dvorak123!");
   const [loading, setLoading]   = useState(false);
 
 
@@ -65,8 +67,9 @@ const LoginScreen = (props) => {
         if (response.response.data.status === 200) {
           setRights(response.response.data.data)
           if(response.response.data.data.user.userType === 2){
-            ApiHelper.consoleBox("Login Response ===>", response.response.data.data);
+            // ApiHelper.consoleBox("Login Response ===>", response.response.data.data);
             dispatch(ApiDataActions.SetLoginData(response.response.data.data));
+            dispatch(ApiDataActions.SetLoginCard(response.response.data.data.card));
             dispatch(ApiDataActions.SetUserToken(response.response.data.data.token));
             setData(JSON.stringify(response.response.data.data))
             props.navigation.dispatch(

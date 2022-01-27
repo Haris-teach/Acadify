@@ -97,8 +97,8 @@ const styles = StyleSheet.create({
   },
   leftBox: {
     height: hp(12),
-    width: wp(70),
-    paddingLeft: wp(23),
+    width: wp(67),
+    paddingLeft: wp(20),
     justifyContent: 'flex-end',
   },
   rightBox: {

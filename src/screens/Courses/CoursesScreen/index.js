@@ -101,11 +101,11 @@ const DashboardScreen = (props) => {
   const getUserProfile = (bool) => {
     setLoading(bool);
     let tempArray = [];
-    let url = `/api/v1/courses/?page=${page}&size=10&${isFreeKey}=${isFree}&categoryId=${categoryId}&title=%${title}%`;
+    let url = `/api/v1/courses/?page=${page}&size=90&${isFreeKey}=${isFree}&categoryId=${categoryId}&title=%${title}%`;
     ApiHelper.getCoursesData(token,url,(response) => {
       if (response.isSuccess) {
         if (response.response.data.code === 200) {
-          ApiHelper.consoleBox("data ==>", response.response.data);
+          ApiHelper.consoleBox("courses ==>", response);
           response.response.data.data.docs.map((value) => {
             if(value.CoursePayeds.length > 0){
               if(value.CoursePayeds[0].paid === true){
@@ -284,33 +284,34 @@ const DashboardScreen = (props) => {
                                 <View style={styles.dropArrow}>
                                   <DropArrow/>
                                 </View>
-                              </TouchableOpacity> :
-                              <View style={styles.searchText}>
-                                <SearchIcon/>
-                                <TextInput
-                                    style={{width:wp(50),color:'white',paddingHorizontal:wp(3),height:hp(4.5)}}
-                                    onChangeText={(e) => openValue(e)}
-                                    value={title}
-                                />
-                                <TouchableOpacity
-                                    style={{height:hp(4.5),justifyContent:'center'}}
-                                    onPress={() => setSearch(false)}
-                                >
-                                  <Image source={images.crossImage} style={{height:hp(2),width:wp(5),resizeMode:'cover'}}/>
-                                </TouchableOpacity>
-                              </View>
+                              </TouchableOpacity> : null
+                              // <View style={styles.searchText}>
+                              //   <SearchIcon/>
+                              //   <TextInput
+                              //       style={{width:wp(50),color:'white',paddingHorizontal:wp(3),height:hp(4.5)}}
+                              //       onChangeText={(e) => openValue(e)}
+                              //       value={title}
+                              //   />
+                              //   <TouchableOpacity
+                              //       style={{height:hp(4.5),justifyContent:'center'}}
+                              //       onPress={() => setSearch(false)}
+                              //   >
+                              //     <Image source={images.crossImage} style={{height:hp(2),width:wp(5),resizeMode:'cover'}}/>
+                              //   </TouchableOpacity>
+                              // </View>
                           }
-                      <View style={styles.filterIcons}>
-                        {!search && <TouchableOpacity
-                            activeOpacity={0.7}
-                            onPress={() => setSearch(true)}
-                        >
-                          <Search/>
-                        </TouchableOpacity>}
-                        <TouchableOpacity activeOpacity={0.7} onPress={() => setModalVisible(!modalVisible)}>
-                          <Filter/>
-                        </TouchableOpacity>
-                      </View>
+                      {/*<View style={styles.filterIcons}>*/}
+                      {/*  {!search && */}
+                      {/*  <TouchableOpacity*/}
+                      {/*      activeOpacity={0.7}*/}
+                      {/*      onPress={() => setSearch(true)}*/}
+                      {/*  >*/}
+                      {/*    <Search/>*/}
+                      {/*  </TouchableOpacity>}*/}
+                      {/*  <TouchableOpacity activeOpacity={0.7} onPress={() => setModalVisible(!modalVisible)}>*/}
+                      {/*    <Filter/>*/}
+                      {/*  </TouchableOpacity>*/}
+                      {/*</View>*/}
                     </View>
                 )
               }}

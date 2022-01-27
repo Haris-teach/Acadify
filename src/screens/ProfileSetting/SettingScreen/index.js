@@ -18,10 +18,10 @@ import styles from './style';
 import SettingTabComponent from "../../../components/SettingTabComponent";
 import {
     BILLING_LISTING,
-    LOGIN_SCREEN,
     PASSWORD_UPDATE,
     PAYMENT_SCREEN,
     PROFILE_SCREEN,
+    LOGIN_SCREEN,
 } from "../../../constants/navigators";
 import colors from "../../../assets/colors/colors";
 import images from "../../../assets/images/images";

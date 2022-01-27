@@ -4,6 +4,7 @@ const BASE_URL = "https://api.stagingaia.com";
 // const BASE_URL = "http://192.168.0.21:5001"; //Usama
 const BASE_URL_STRIPE = "https://api.stripe.com/v1";
 const STRIPE_PUBLISHABLE_KEY = "pk_test_p70ntuGAVS0fwxQrqHagViMn00ndsuW2zD";
+// const STRIPE_PUBLISHABLE_KEY = "pk_live_lI9hJ044r9Pd2uqFwctf4BRS00OCyTO4Vf";
 
 
 class ApiServices {
@@ -602,7 +603,7 @@ class ApiServices {
   getJourney = (token,callback) => {
     var config = {
       method: 'get',
-      url: BASE_URL + '/api/v1/journey/alljourney/?size=30',
+      url: BASE_URL + '/api/v1/journey/alljourney/?size=100',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -627,7 +628,7 @@ class ApiServices {
   getGoals = (token,callback) => {
     var config = {
       method: 'get',
-      url: BASE_URL + '/api/v1/goals/user',
+      url: BASE_URL + '/api/v1/goals/user/?size=100',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'

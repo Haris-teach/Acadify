@@ -8,7 +8,7 @@ import {
   Platform,
   StatusBar,
   ImageBackground,
-  Text,
+  Text, Alert, Keyboard,
 } from 'react-native';
 import {TextInput} from 'react-native-paper';
 import {
@@ -31,7 +31,7 @@ import Button from '../../../components/Button/Button';
 import AppHeader from '../../../components/AppHeader';
 import AppLoading from '../../../components/AppLoading';
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
-import {MY_TAB} from "../../../constants/navigators";
+import {LOGIN_SCREEN, MY_TAB} from "../../../constants/navigators";
 
 const AddCardScreen = props => {
 
@@ -70,7 +70,9 @@ const AddCardScreen = props => {
     console.log('Token', token);
     if (token.error) {
       setLoading(false);
-      Toast.show(token.error.code,Toast.LONG);
+      setTimeout(() => {
+        Toast.show(token.error.code,Toast.LONG);
+      },200)
     }else{
       console.log('Token', token.id);
       startSignUp(token.id)
@@ -84,22 +86,19 @@ const AddCardScreen = props => {
       if (response.isSuccess) {
         setLoading(false);
         if (response.response.data.code === 200) {
-          dispatch(ApiDataActions.SetUserToken(response.response.data.token));
-          dispatch(ApiDataActions.SetLoginData(response.response.data.data));
-          setData(JSON.stringify(response.response.data.data));
           setLoading(false);
-          props.navigation.dispatch(
-              CommonActions.reset({
-                index: 0,
-                routes: [{name: MY_TAB}],
-              }),
-          );
+          Keyboard.dismiss();
+          onSignUp()
         } else {
           console.log('Error inner ==>', response.response);
           if(response.response.data.status === 400){
-            Toast.show(response.response.data.message, Toast.LONG);
+            setTimeout(() => {
+              Toast.show(response.response.data.message, Toast.LONG);
+            },200)
           } else {
-            Toast.show(response.response.data.error.email, Toast.LONG);
+            setTimeout(() => {
+              Toast.show(response.response.data.error.email, Toast.LONG);
+            },200)
           }
         }
       } else {
@@ -109,12 +108,42 @@ const AddCardScreen = props => {
     });
   }
 
-  const setData = async(value) => {
-    try {
-      await AsyncStorage.setItem('user',value);
-    }catch (e) {
-      console.log('Error',e)
-    }
+
+  const onSignUp = () => {
+    Alert.alert(
+        "Account created",
+        "Account successfully created",
+        [
+          { text: "OK", onPress: () => {
+              props.navigation.dispatch(
+                  CommonActions.reset({
+                    index: 0,
+                    routes: [{name: LOGIN_SCREEN}],
+                  }),
+              );
+            }}
+        ],
+        {cancelable:false}
+    );
+  }
+
+
+  const setRights = (data) => {
+    data.user.UserRights.map((value) => {
+      if(value.access === 'resources'){
+        dispatch(ApiDataActions.SetUserResource(true));
+      } else if(value.access === 'goals'){
+        dispatch(ApiDataActions.SetUserGoal(true));
+      } else if(value.access === 'journey'){
+        dispatch(ApiDataActions.SetUserJourney(true));
+      } else if(value.access === 'courses'){
+        dispatch(ApiDataActions.SetUserCourse(true));
+      } else if(value.access === 'zoom'){
+        dispatch(ApiDataActions.SetUserZoom(true));
+      } else if(value.access === 'forum'){
+        dispatch(ApiDataActions.SetUserForum(true));
+      }
+    })
   }
 
   return (

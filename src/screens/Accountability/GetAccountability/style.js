@@ -38,7 +38,8 @@ const styles = StyleSheet.create({
         width:wp(30),
         flexDirection:'row',
         alignItems:'center',
-        justifyContent:'space-between',
+        justifyContent:'flex-end',
+        // justifyContent:'space-between', //actual
     },
     activityView:{
         height:hp(5),

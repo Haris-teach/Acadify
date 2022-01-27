@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  SET_CARD,
   SET_DASHBOARD,
   SET_LOGIN_DATA,
   SET_SIGNUP_DATA,
@@ -16,6 +17,7 @@ const initialState = {
   loginData: '',
   signUpData: '',
   token:'',
+  card:'',
 
   forum:false,
   goal:false,
@@ -59,6 +61,9 @@ const ApiData = (state = initialState, action) => {
       return state;
     case SET_DASHBOARD:
       state.dashboard = action.response;
+      return state;
+      case SET_CARD:
+      state.card = action.response;
       return state;
 
     default:

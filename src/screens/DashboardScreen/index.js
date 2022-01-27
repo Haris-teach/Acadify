@@ -108,6 +108,7 @@ const CourseScreen = ({navigation}) => {
     const getDashboardData = () => {
         ApiHelper.getDashboardData(token,(resp) => {
             if(resp.isSuccess){
+                // console.log('Response',resp.response)
                 setLoading(false);
                 setSortData(resp.response.data.data)
                 setItems(resp.response.data.courses)
@@ -284,7 +285,6 @@ const CourseScreen = ({navigation}) => {
                                         />
                                 }
                             </ImageBackground>
-                            {/*<Image source={images.profile_placeHolder} style={styles.imageStyle}/>*/}
                         </View>
                     </View>
 
@@ -405,28 +405,30 @@ const CourseScreen = ({navigation}) => {
                                    </View>
                                </View>
                             )
-                        } else if(value.name === 'forum' && value.itemCount > 0 && forumItems.length > 0){
-                            return(
-                                <View style={[styles.courseView,{height:hp(25)}]}>
-                                    <View style={styles.courseTitle}>
-                                        <Text style={[styles.userNameText,styles.headerText]}>Forum</Text>
-                                        <Text style={[styles.userNameText,styles.showAll]} onPress={() => navigation.navigate(FORUM)}>Show all</Text>
-                                    </View>
-                                    <View style={styles.videoSection}>
-                                        <Carousel
-                                            data={forumItems}
-                                            keyExtractor={(item) => item.id}
-                                            renderItem={({item}) => _renderForumItems(item)}
-                                            autoplay={true}
-                                            activeSlideAlignment={'start'}
-                                            loop={true}
-                                            sliderWidth={wp(90)}
-                                            itemWidth={wp(90)}
-                                        />
-                                    </View>
-                                </View>
-                            )
-                        } else if(value.name === 'courses' && value.itemCount > 0 && items.length > 0 ){
+                        }
+                        // else if(value.name === 'forum' && value.itemCount > 0 && forumItems.length > 0){
+                        //     return(
+                        //         <View style={[styles.courseView,{height:hp(25)}]}>
+                        //             <View style={styles.courseTitle}>
+                        //                 <Text style={[styles.userNameText,styles.headerText]}>Forum</Text>
+                        //                 <Text style={[styles.userNameText,styles.showAll]} onPress={() => navigation.navigate(FORUM)}>Show all</Text>
+                        //             </View>
+                        //             <View style={styles.videoSection}>
+                        //                 <Carousel
+                        //                     data={forumItems}
+                        //                     keyExtractor={(item) => item.id}
+                        //                     renderItem={({item}) => _renderForumItems(item)}
+                        //                     autoplay={true}
+                        //                     activeSlideAlignment={'start'}
+                        //                     loop={true}
+                        //                     sliderWidth={wp(90)}
+                        //                     itemWidth={wp(90)}
+                        //                 />
+                        //             </View>
+                        //         </View>
+                        //     )
+                        // }
+                        else if(value.name === 'courses' && value.itemCount > 0 && items.length > 0 ){
                             return (
                                 <View style={styles.courseView}>
                                     <View style={styles.courseTitle}>
@@ -446,7 +448,6 @@ const CourseScreen = ({navigation}) => {
                                         />
                                     </View>
                                 </View>
-
                             )
                         }else if(value.name === 'videos' && value.itemCount > 0 && video.length > 0 ){
                             return (

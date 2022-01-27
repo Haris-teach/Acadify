@@ -54,7 +54,7 @@ export default class AppHeaderNative extends Component {
                         onPress={() => this.props.onPressTask()}
                     >
                         <Calendar height={20} width={20}/>
-                        <Text style={{fontSize:wp(2.5),marginTop:wp(1),color:colors.white}}>Task</Text>
+                        <Text style={{fontSize:wp(2.5),marginTop:wp(1),color:colors.white}}>Tasks</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.iconStyle}

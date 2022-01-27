@@ -16,7 +16,7 @@ import {
     heightPercentageToDP as hp,
     widthPercentageToDP  as wp,
 } from 'react-native-responsive-screen';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
 //================================ Local Imported Files ======================================//
 
@@ -28,10 +28,12 @@ import ApiHelper from '../../../api/ApiHelper';
 import Button from '../../../components/Button/Button';
 import AppHeader from '../../../components/AppHeader';
 import AppLoading from '../../../components/AppLoading';
+import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
 
 
 const AddNewCardScreen = props => {
 
+    const dispatch = useDispatch();
     const tokens = useSelector((state) => state.ApiData.token);
     const [cardNumber, setCardNumber] = useState('');
     const [cvc, setCvc] = useState('');
@@ -82,6 +84,7 @@ const AddNewCardScreen = props => {
             if(response.isSuccess){
                 if(response.response.data.code === 200){
                     ApiHelper.consoleBox('Add card response ===>',response.response)
+                    dispatch(ApiDataActions.SetLoginCard(response.response.data.card.data[0]));
                     setLoading(false)
                     setTimeout(() =>{
                         Toast.show('Card Added Successfully',Toast.LONG)

@@ -250,7 +250,8 @@ const CourseDetailScreen = ({navigation,route}) => {
                     </ScrollView>
                 </View>)}
 
-            {showBtn === true && loading !== true ? <View style={styles.btnView}>
+            {showBtn === true && loading !== true ?
+                <View style={styles.btnView}>
                 <Button
                     buttonText={btnTitle}
                     onPress={() => _onPressButton()}

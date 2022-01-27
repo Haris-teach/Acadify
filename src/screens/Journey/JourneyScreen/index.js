@@ -17,19 +17,19 @@ import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-nativ
 import styles from './style';
 import {ADD_JOURNEY, PLAN_SCREEN} from "../../../constants/navigators";
 import ApiHelper from "../../../api/ApiHelper";
+import images from "../../../assets/images/images";
 import Add from "../../../assets/images/addIcon.svg";
 import AppHeaderNative from "../../../components/AppHeaderNative";
 import AppLoading from "../../../components/AppLoading";
-import JourneyComponent from "../../../components/JourneyComponent";
 import AppHeader from "../../../components/AppHeader";
-import images from "../../../assets/images/images";
 import Button from "../../../components/Button/Button";
+import JourneyComponent from "../../../components/JourneyComponent";
+
 
 const JourneyScreen = (props) => {
 
     const isFocused = useIsFocused();
     const token = useSelector(state => state.ApiData.token);
-    console.log('Token',token)
     let journey = useSelector(state => state.ApiData.journey);
     const [lockModal, setLockModal] = useState(false);
     const [loading,setLoading] = useState(false);
@@ -51,7 +51,7 @@ const JourneyScreen = (props) => {
         ApiHelper.getJourney(token,(response) => {
             if(response.isSuccess){
                 if(response.response.data.code === 200){
-                    // console.log('Response of Journey',response.response.data.data.docs)
+                    console.log('Response of Journey',response.response.data.data.docs)
                     setData(response.response.data.data.docs)
                     setLoading(false);
                 }

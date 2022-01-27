@@ -4,7 +4,6 @@ const images = {
   card_icon: require('../images/card.png'),
   placeHolder: require('../images/placeholder.png'),
   profile_placeHolder:require('../images/dummy_profile.jpeg'),
-
   visa:require('./visa.png'),
   master:require('./master.png'),
   diner:require('./diner.png'),

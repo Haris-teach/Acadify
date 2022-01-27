@@ -85,7 +85,7 @@ const SignUpScreen = props => {
         email: email,
         password: password,
         userName: `${firstName} ${lastName}`,
-        phoneNumber: phoneNumber,
+        phone: phoneNumber,
       };
       dispatch(ApiDataActions.SetSignUpData(data));
       props.navigation.navigate(PLAN_SCREEN,{fromChange:false});

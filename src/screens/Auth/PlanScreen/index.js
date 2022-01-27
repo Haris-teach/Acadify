@@ -7,7 +7,7 @@ import {
     FlatList,
     StatusBar,
     ScrollView,
-    TouchableOpacity,
+    TouchableOpacity, Alert,
 } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {widthPercentageToDP} from 'react-native-responsive-screen';
@@ -21,7 +21,7 @@ import styles from './style';
 import colors from '../../../assets/colors/colors';
 import images from "../../../assets/images/images";
 import ApiHelper from '../../../api/ApiHelper';
-import {CREDIT_CARD, MY_TAB} from '../../../constants/navigators';
+import {CREDIT_CARD, LOGIN_SCREEN, MY_TAB} from '../../../constants/navigators';
 import AppLoading from '../../../components/AppLoading';
 import Button from '../../../components/Button/Button';
 import AppHeader from '../../../components/AppHeader';
@@ -105,16 +105,13 @@ const PlanScreen = props => {
             ApiHelper.onSignUpApi(stripeId, data, response => {
                 if (response.isSuccess) {
                     if (response.response.data.code === 200) {
+                        setLoading(false);
+                        addFreeData()
                         dispatch(ApiDataActions.SetUserToken(response.response.data.data.token));
                         dispatch(ApiDataActions.SetLoginData(response.response.data.data));
+                        dispatch(ApiDataActions.SetLoginCard(response.response.data.data.card));
                         setData(JSON.stringify(response.response.data.data));
-                        setLoading(false);
-                        props.navigation.dispatch(
-                            CommonActions.reset({
-                                index: 0,
-                                routes: [{name: MY_TAB}],
-                            }),
-                        );
+                        getFreeData()
                     } else {
                         setLoading(false);
                         console.log('Error ==>', response.response);
@@ -129,6 +126,25 @@ const PlanScreen = props => {
             });
         }
     };
+
+
+    const getFreeData = () => {
+            Alert.alert(
+                "Account created",
+                "Account successfully created",
+                [
+                    { text: "OK", onPress: () => {
+                            props.navigation.dispatch(
+                                CommonActions.reset({
+                                    index: 0,
+                                    routes: [{name: LOGIN_SCREEN}],
+                                }),
+                            );
+                        }}
+                ],
+                {cancelable:false}
+            );
+    }
 
 
     const updatePlan = () => {
@@ -196,6 +212,16 @@ const PlanScreen = props => {
         dispatch(ApiDataActions.SetUserCourse(false));
         dispatch(ApiDataActions.SetUserZoom(false));
         dispatch(ApiDataActions.SetUserForum(false));
+    }
+
+
+    const addFreeData = () => {
+        dispatch(ApiDataActions.SetUserResource(true));
+        dispatch(ApiDataActions.SetUserGoal(true));
+        dispatch(ApiDataActions.SetUserJourney(true));
+        dispatch(ApiDataActions.SetUserCourse(true));
+        dispatch(ApiDataActions.SetUserZoom(true));
+        dispatch(ApiDataActions.SetUserForum(true));
     }
 
 

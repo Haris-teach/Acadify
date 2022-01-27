@@ -2,7 +2,7 @@
 
 import React, {useState} from "react";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
-import {View, StyleSheet, Text, Image} from "react-native";
+import {View, StyleSheet, Text, Image, TouchableOpacity} from "react-native";
 
 //================================ Local Imported Files ======================================//
 
@@ -19,16 +19,16 @@ const ForumMainComponent = (props) => {
 
     const [index,setIndex] = useState('');
 
-    const onPress = (value) => {
-        props.onPressCard()
-    }
 
     return (
-        <View style={index !== props.index ? styles.container : [styles.container,{backgroundColor:'#1F1F1F',borderRadius:wp(6)}]}>
-
+        <TouchableOpacity
+            style={index !== props.index ? styles.container : [styles.container,{backgroundColor:'#1F1F1F',borderRadius:wp(6)}]}
+            activeOpacity={0.7}
+            onPress={() => props.onPressContent()}
+        >
             <View style={styles.headingView}>
-                <Image source={props.image !== null ? {uri:props.image} : images.placeHolder} style={{height:hp(4),width:hp(4),resizeMode:'cover',borderRadius:hp(4)}}/>
-                <Text style={[styles.titleText,{paddingLeft:wp(2),alignSelf:'center',width:wp(29)}]} numberOfLines={1}>{props.title}</Text>
+                <Image source={props.image !== 'null' ? {uri:props.image} : images.placeHolder} style={{height:hp(4),width:hp(4),resizeMode:'cover',borderRadius:hp(4)}}/>
+                <Text style={[styles.titleText,{paddingLeft:wp(2),alignSelf:'center',width:wp(29)}]} numberOfLines={1}>{props.name}</Text>
                 <View style={styles.dateView}>
                     <Clock height={12} width={12}/>
                     <Text style={[styles.titleText,{fontSize:12,marginLeft:wp(2)}]}>{props.time}</Text>
@@ -42,7 +42,7 @@ const ForumMainComponent = (props) => {
             <View style={styles.headingCenterView}>
                 <View style={{ height:hp(9),width:wp(80),justifyContent:"center"}}>
                     <Text style={[styles.titleText,{paddingLeft:wp(2),fontWeight:'700',width:wp(60)}]} numberOfLines={1}>{props.title}</Text>
-                    <Text style={[styles.titleText,{paddingLeft:wp(2),fontWeight:'700',color:'#D1D1D1',width:wp(60)}]} numberOfLines={2}>{props.question}</Text>
+                    <Text style={[styles.titleText,{paddingLeft:wp(2),fontSize:wp(3),fontWeight:'700',color:'#D1D1D1',width:wp(60)}]} numberOfLines={2}>{props.question}</Text>
                 </View>
             </View>
 
@@ -56,7 +56,7 @@ const ForumMainComponent = (props) => {
                     <Text style={[styles.titleText,{fontSize:wp(4),color:'#A5A5A5',fontWeight:'700',marginLeft:wp(1.5),width:wp(15)}]} numberOfLines={1}>{props.likes.length} Likes</Text>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 };
 
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
         borderBottomWidth:0.25,
         width: wp(90),
         borderBottomColor:'#929292',
-        height: hp(19),
+        maxHeight: hp(19),
         borderRadius:wp(4),
         marginVertical: wp(2),
         backgroundColor:colors.image_background
@@ -81,13 +81,13 @@ const styles = StyleSheet.create({
     headingCenterView:{
         flexDirection:'row',
         alignItems:'center',
-        height:hp(8),
+        maxHeight:hp(8),
         width:wp(90),
         paddingHorizontal:wp(5),
     },
     titleText:{
         width:wp(40),
-        fontSize:16,
+        fontSize:wp(4),
         fontWeight:'500',
         color:colors.white,
         fontFamily:fonts.semi,

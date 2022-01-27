@@ -19,24 +19,21 @@ import SignUpScreen from "./screens/Auth/SignUpScreen";
 import ForgotPasswordScreen from "./screens/Auth/ForgotPassword";
 import LandingScreen from "./screens/Auth/LandingScreen";
 import {
+    FORUM,
+    MY_TAB,
+    JOURNEY,
     ADD_CARD,
     ADD_GOAL,
     ADD_JOURNEY,
     ALL_RESOURCES,
     BILLING_LISTING,
     BUY_RESOURCES,
-    COURSE_CONTENT_PLAY,
     COURSE_DETAILS,
     COURSE_SCREEN,
     CREATE_TASK,
     CREDIT_CARD,
-    DASHBOARD_SCREEN,
-    EDIT_ACCOUNTABILITY,
-    EDIT_PROFILE_SCREEN,
     EDIT_TASK,
     FORGOT_PASSWORD,
-    GET_ACCOUNTABILITY,
-    JOURNEY,
     LANDING_SCREEN,
     LOGIN_SCREEN,
     MY_DRAWER,
@@ -48,15 +45,19 @@ import {
     TASK_LISTING,
     VIDEO_SCREEN,
     CALENDAR_TASK,
-    MY_TAB,
     NOTIFICATION,
     LIVE_EVENTS,
-    FORUM,
     SPLASH_SCREEN,
     EVENTS_DETAILS,
     PAYMENT_SCREEN,
+    DASHBOARD_SCREEN,
+    GET_ACCOUNTABILITY,
+    EDIT_ACCOUNTABILITY,
+    EDIT_PROFILE_SCREEN,
+    COURSE_CONTENT_PLAY,
     ADD_NEW_CARD_SCREEN,
-    CHAT_THREAD_LISTING
+    CHAT_THREAD_LISTING,
+    FORUM_DETAIL_LISTING
 } from "./constants/navigators";
 import PlanScreen from "./screens/Auth/PlanScreen";
 import CardScreen from "./screens/Auth/CardScreen";
@@ -89,6 +90,7 @@ import PaymentScreen from "./screens/ProfileSetting/PaymentMethod";
 import BillingListing from "./screens/ProfileSetting/Billing";
 import AddNewCardScreen from "./screens/ProfileSetting/AddNewCard";
 import ChatThreadListing from "./screens/Chat/ChatThread/ChatThread";
+import ForumDetailListing from "./screens/Forum/ForumDetailScreen";
 import MenuBar from "./components/MenuBar";
 
 //================================ Bottom Icons ======================================//
@@ -153,6 +155,7 @@ const MyNewStack = () => {
             <RootStack.Screen name={PAYMENT_SCREEN} component={PaymentScreen}/>
             <RootStack.Screen name={ADD_NEW_CARD_SCREEN} component={AddNewCardScreen}/>
             <RootStack.Screen name={CHAT_THREAD_LISTING} component={ChatThreadListing}/>
+            <RootStack.Screen name={FORUM_DETAIL_LISTING} component={ForumDetailListing}/>
         </RootStack.Navigator>
     );
 };
