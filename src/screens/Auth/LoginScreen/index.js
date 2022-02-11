@@ -30,8 +30,7 @@ import {
 import AppLoading from "../../../components/AppLoading";
 import ApiHelper from "../../../api/ApiHelper";
 import * as ApiDataActions from "../../../../redux/store/actions/ApiData";
-import {SET_USER_RESOURCE} from "../../../../redux/store/actions/ApiData";
-
+import { SET_USER_RESOURCE } from "../../../../redux/store/actions/ApiData";
 
 const LoginScreen = (props) => {
   const dispatch = useDispatch();
@@ -41,8 +40,7 @@ const LoginScreen = (props) => {
   // const [password, setPassword] = useState("Password@2");
   const [email, setEmail] = useState("useram@mailinator.com");
   const [password, setPassword] = useState("Dvorak123!");
-  const [loading, setLoading]   = useState(false);
-
+  const [loading, setLoading] = useState(false);
 
   const onPressLogin = () => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -57,32 +55,36 @@ const LoginScreen = (props) => {
     }
   };
 
-
   const onLoginApi = () => {
     setLoading(true);
     ApiHelper.onLoginApi(email, password, (response) => {
+      //console.log("RESPONSE:   ", response.response.data.data.token);
       if (response.isSuccess) {
         dispatch(ApiDataActions.SetLoginData(response.response.data.data));
         setLoading(false);
         if (response.response.data.status === 200) {
-          setRights(response.response.data.data)
-          if(response.response.data.data.user.userType === 2){
+          setRights(response.response.data.data);
+          if (response.response.data.data.user.userType === 2) {
             // ApiHelper.consoleBox("Login Response ===>", response.response.data.data);
             dispatch(ApiDataActions.SetLoginData(response.response.data.data));
-            dispatch(ApiDataActions.SetLoginCard(response.response.data.data.card));
-            dispatch(ApiDataActions.SetUserToken(response.response.data.data.token));
-            setData(JSON.stringify(response.response.data.data))
+            dispatch(
+              ApiDataActions.SetLoginCard(response.response.data.data.card)
+            );
+            dispatch(
+              ApiDataActions.SetUserToken(response.response.data.data.token)
+            );
+            setData(JSON.stringify(response.response.data.data));
             props.navigation.dispatch(
-                CommonActions.reset({
-                  index: 0,
-                  routes: [{ name: MY_TAB }],
-                })
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: MY_TAB }],
+              })
             );
             setPassword("");
             setEmail("");
-          }else {
+          } else {
             setTimeout(() => {
-              Toast.show('Invalid Credentials', Toast.LONG);
+              Toast.show("Invalid Credentials", Toast.LONG);
             }, 200);
           }
         } else {
@@ -94,40 +96,37 @@ const LoginScreen = (props) => {
         setLoading(false);
         console.log("Error ==>", response.response.response.data);
         setTimeout(() => {
-          Toast.show('502 Bad Gateway', Toast.LONG);
+          Toast.show("502 Bad Gateway", Toast.LONG);
         }, 200);
       }
     });
   };
 
-
-  const setData = async(value) => {
+  const setData = async (value) => {
     try {
-      await AsyncStorage.setItem('user',value);
-    }catch (e) {
-      console.log('Error',e)
+      await AsyncStorage.setItem("user", value);
+    } catch (e) {
+      console.log("Error", e);
     }
-  }
-
+  };
 
   const setRights = (data) => {
     data.user.UserRights.map((value) => {
-      if(value.access === 'resources'){
+      if (value.access === "resources") {
         dispatch(ApiDataActions.SetUserResource(true));
-      } else if(value.access === 'goals'){
+      } else if (value.access === "goals") {
         dispatch(ApiDataActions.SetUserGoal(true));
-      } else if(value.access === 'journey'){
+      } else if (value.access === "journey") {
         dispatch(ApiDataActions.SetUserJourney(true));
-      } else if(value.access === 'courses'){
+      } else if (value.access === "courses") {
         dispatch(ApiDataActions.SetUserCourse(true));
-      } else if(value.access === 'zoom'){
+      } else if (value.access === "zoom") {
         dispatch(ApiDataActions.SetUserZoom(true));
-      } else if(value.access === 'forum'){
+      } else if (value.access === "forum") {
         dispatch(ApiDataActions.SetUserForum(true));
       }
-    })
-  }
-
+    });
+  };
 
   return (
     <KeyboardAvoidingView
